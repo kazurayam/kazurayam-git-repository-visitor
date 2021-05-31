@@ -34,7 +34,7 @@ def status(wt, verbose=True) -> str:
     os.chdir(wt)
     output = subprocess.run(['git', 'status'], stdout=PIPE, stderr=STDOUT)
     if verbose:
-        print("\n% git add")
+        print("\n% git status")
         print_git_msg(output)
     return get_git_msg(output)
 
