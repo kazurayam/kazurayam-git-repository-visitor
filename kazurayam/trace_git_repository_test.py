@@ -1,6 +1,6 @@
 import os
 from . import fileutils
-from . import gitcommands as git
+from . import gitcommands as GIT
 
 
 def test_trace(basedir):
@@ -12,7 +12,20 @@ def test_trace(basedir):
     fileutils.write_file(wt, "src/greeting", "Hello, world!\n")
     fileutils.write_file(wt, "src/hello.pl", "print(\"Bon jour!\")\n")
     assert os.path.exists(f)
-    git.add(wt, '.', True)
-    git.commit(wt, "initial commit", True)
+    GIT.init(wt, True)
+    GIT.add(wt, '.', True)
+    GIT.status(wt)
+    GIT.commit(wt, "initial commit", True)
+    #
+    o = GIT.revparse(wt, "HEAD")
+    head_hash = o.strip()
+    head_hash7 = head_hash[0:7]
+    GIT.catfile_t(wt, head_hash7)
+    o = GIT.catfile_p(wt, head_hash7)
+    tree_hash = o.splitlines()[0].split()[1]
+    tree_hash7 = tree_hash[0:7]
+    GIT.lstree(wt, tree_hash7)
+
+
 
 
