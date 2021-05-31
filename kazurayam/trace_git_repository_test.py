@@ -1,6 +1,6 @@
 import os
-from pathlib import Path
 from . import fileutils
+from . import gitcommands as git
 
 
 def test_trace(basedir):
@@ -12,3 +12,7 @@ def test_trace(basedir):
     fileutils.write_file(wt, "src/greeting", "Hello, world!\n")
     fileutils.write_file(wt, "src/hello.pl", "print(\"Bon jour!\")\n")
     assert os.path.exists(f)
+    git.add(wt, '.', True)
+    git.commit(wt, "initial commit", True)
+
+
