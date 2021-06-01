@@ -1,11 +1,11 @@
 import os
 from . import fileutils
 from . import gitcommands as GIT
-from . import trace_git_repository
+from . import graph_git_repository
 
 
-def test_trace(basedir):
-    wt = os.path.join(basedir, 'test_trace')
+def test_visualize(basedir):
+    wt = os.path.join(basedir, 'test_visualize')
     fileutils.init_dir(wt)
     os.chdir(wt)
     #
@@ -20,7 +20,7 @@ def test_trace(basedir):
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "initial commit", True)
-    trace_git_repository.trace(wt)
+    graph_git_repository.visualize(wt)
     GIT.lsfiles_stage(wt)
     #
     f = fileutils.write_file(wt, "src/good-luck.pl", "print('Good Luck!')\n")
@@ -30,5 +30,5 @@ def test_trace(basedir):
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "added src/good-luck.pl", True)
-    trace_git_repository.trace(wt)
+    graph_git_repository.visualize(wt)
     GIT.lsfiles_stage(wt)

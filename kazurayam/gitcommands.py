@@ -88,3 +88,18 @@ def lstree(wt, gitobject: str, verbose=True) -> str:
         print("\n% git ls-tree", gitobject)
         print_git_msg(output)
     return get_git_msg(output)
+
+
+def lsfiles_stage(wt, verbose=True) -> str:
+    """
+    execute `get ls-file --stage` command
+    this command shows the content of the Index
+    :param wt:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'ls-files', '--stage'], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git ls-files --stage")
+        print_git_msg(output)
+    return get_git_msg(output)
