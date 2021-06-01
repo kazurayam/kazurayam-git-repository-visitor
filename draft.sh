@@ -1,0 +1,1 @@
+dot -Tpng -o tmp/draft.png kazurayam/draft.dot

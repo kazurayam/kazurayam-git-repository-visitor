@@ -1,0 +1,56 @@
+// Git Repository graph
+digraph main {
+	node [fontname=arial fontsize=10 height=0.3 shape=note style=filled fillcolor=white]
+	edge [arrowhead=normal constraint=true]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	master [label=master shape=doubleoctagon]
+
+	"556104c37a18ba1a591acf9ed3d9a7dfe15b4444" [label="commit:556104c" shape=ellipse]
+	"556104c/259f232" [label="tree:259f232
+/" shape=folder]
+	"556104c/b25c15b" [label="blob:b25c15b
+.gitignore" ]
+	"556104c/259f232" -> "556104c/b25c15b" [arrowhead=onormal]
+	"556104c/aadb69a" [label="blob:aadb69a
+README.md"]
+	"556104c/259f232" -> "556104c/aadb69a" [arrowhead=onormal]
+	"556104c_b70edaa" [label="tree:b70edaa
+src" shape=folder]
+	"556104c/dbaae7c" [label="blob:dbaae7c
+good-luck.pl"]
+	"556104c_b70edaa" -> "556104c/dbaae7c" [arrowhead=onormal]
+	"556104c/bb694a5" [label="blob:bb694a5
+greeting"]
+	"556104c_b70edaa" -> "556104c/bb694a5" [arrowhead=onormal]
+	"556104c/f7cf60e" [label="blob:f7cf60e
+hello.pl"]
+	"556104c_b70edaa" -> "556104c/f7cf60e" [arrowhead=onormal]
+	"556104c/259f232" -> "556104c_b70edaa"
+	"556104c37a18ba1a591acf9ed3d9a7dfe15b4444" -> "556104c/259f232"
+
+	"3420170e8c317d4fdbd29465bc79a9a1466ab10f" [label="commit:3420170" shape=ellipse]
+	"3420170/8521eb4" [label="tree:8521eb4
+/" shape=folder]
+	"3420170/b25c15b" [label="blob:b25c15b
+.gitignore"]
+	"3420170/8521eb4" -> "3420170/b25c15b" [arrowhead=onormal]
+	"3420170/aadb69a" [label="blob:aadb69a
+README.md"]
+	"3420170/8521eb4" -> "3420170/aadb69a" [arrowhead=onormal]
+	"3420170/a44866b" [label="tree:a44866b
+src" shape=folder]
+	"3420170/bb694a5" [label="blob:bb694a5
+greeting"]
+	"3420170/a44866b" -> "3420170/bb694a5" [arrowhead=onormal]
+	"3420170/f7cf60e" [label="blob:f7cf60e
+hello.pl"]
+	"3420170/a44866b" -> "3420170/f7cf60e" [arrowhead=onormal]
+	"3420170/8521eb4" -> "3420170/a44866b"
+	"3420170e8c317d4fdbd29465bc79a9a1466ab10f" -> "3420170/8521eb4"
+	"556104c37a18ba1a591acf9ed3d9a7dfe15b4444" -> "3420170e8c317d4fdbd29465bc79a9a1466ab10f" [style=dotted]
+	master -> "556104c37a18ba1a591acf9ed3d9a7dfe15b4444" [label=HEAD style=dotted]
+
+	{ rank=same "556104c37a18ba1a591acf9ed3d9a7dfe15b4444" "3420170e8c317d4fdbd29465bc79a9a1466ab10f" }
+
+    "556104c/b25c15b" [fillcolor="lightgrey"]
+}

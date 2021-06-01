@@ -9,11 +9,11 @@ class GitRepositoryVisualizer:
 
     def visualize(self, wt: str):
         g = Digraph("main", comment="Git Repository graph")
-        g.attr('graph', layout="dot", rank="max", randir="LR",
-               splines="ortho", ranksep="0.5", nodesep="0.3")
+        g.attr('graph', layout="dot", rank="max", rankdir="LR",
+               splines="ortho", ranksep="0.5", nodesep="0.5")
         g.node_attr.update(shape="note", height="0.3",
                             fontname="arial", fontsize="10")
-        g.edge_attr.update(constraint="true", arrowhead="normal")
+        g.edge_attr.update(constraint="true", arrowhead="onormal")
         g.node("master", "master", shape="doubleoctagon")
         # grasp the hash of the commit object aliased to HEAD of the current branch (master)
         o = GIT.revparse(wt, "HEAD")
@@ -23,6 +23,7 @@ class GitRepositoryVisualizer:
         return g
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
+        commits = [the_commit_hash]
         g.node(the_commit_hash, "commit:" + the_commit_hash[0:7], shape="ellipse")
         # look into the commit object
         GIT.catfile_t(wt, the_commit_hash)
@@ -47,27 +48,35 @@ added src/good-luck.pl
                 parent_commit_hash = line.split()[1]
                 self.visualize_commit(wt, parent_commit_hash, g)
                 g.edge(the_commit_hash,
-                       parent_commit_hash, style="dotted")
+                       parent_commit_hash, constraint="false", style="dotted")
+                commits.append(parent_commit_hash)
+        # emit cluster_commits
+        with g.subgraph(name="cluster_commits",) as c:
+            c.attr(rank='same', color="white")
+            for h in commits:
+                c.node(h)
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
-        g.node(node_id(commit_hash, tree_hash),
+        tree_node_id = node_id(commit_hash, tree_hash)
+        hub_node_id = tree_node_id + "__"
+        g.node(tree_node_id,
                "tree:" + tree_hash[0:7] + "\n" + fname,
                shape="folder")
+        g.node(hub_node_id, shape="point", width="0.1")
+        g.edge(tree_node_id, hub_node_id, arrowhead="none")
         o = GIT.lstree(wt, tree_hash)
         for line in o.splitlines():
             (mode, object_type, object_hash, file_name) = tuple(line.split())
             if object_type == "tree":
                 self.visualize_tree(wt, commit_hash, object_hash, file_name, g)  # trace the tree recursively
-                g.edge(node_id(commit_hash, tree_hash),
-                       node_id(commit_hash, object_hash))
+                g.edge(hub_node_id, node_id(commit_hash, object_hash))
             elif object_type == "blob":
                 blob_hash7 = object_hash[0:7]
                 GIT.catfile_blob(wt, blob_hash7)
-                g.node(node_id(commit_hash, object_hash),
-                       "blob:" + object_hash[0:7] + "\n" + file_name)
-                g.edge(node_id(commit_hash, tree_hash),
-                       node_id(commit_hash, object_hash), arrowhead="onormal")
+                g.node(node_id(commit_hash, object_hash), "blob:" + object_hash[0:7] + "\n" + file_name)
+                g.edge(hub_node_id,
+                       node_id(commit_hash, object_hash))
 
 
 def node_id(commit_hash, object_hash):
-    return commit_hash[0:7] + "/" + object_hash[0:7]
+    return commit_hash[0:7] + "_" + object_hash[0:7]
