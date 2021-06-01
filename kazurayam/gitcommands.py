@@ -53,7 +53,7 @@ def commit(wt, msg, verbose=False):
 def catfile_t(wt, gitobject: str, verbose=True) -> str:
     output = subprocess.run(['git', 'cat-file', '-t', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
-        print("\n> git cat-file -t", gitobject)
+        print("\n% git cat-file -t", gitobject)
         print_git_msg(output)
     return get_git_msg(output)
 
@@ -61,7 +61,15 @@ def catfile_t(wt, gitobject: str, verbose=True) -> str:
 def catfile_p(wt, gitobject: str, verbose=True) -> str:
     output = subprocess.run(['git', 'cat-file', '-p', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
-        print("\n> git cat-file -p", gitobject)
+        print("\n% git cat-file -p", gitobject)
+        print_git_msg(output)
+    return get_git_msg(output)
+
+
+def catfile_blob(wt, gitobject: str, verbose=True) -> str:
+    output = subprocess.run(['git', 'cat-file', 'blob', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git cat-file blob", gitobject)
         print_git_msg(output)
     return get_git_msg(output)
 
@@ -69,7 +77,7 @@ def catfile_p(wt, gitobject: str, verbose=True) -> str:
 def revparse(wt, gitobject: str, verbose=True) -> str:
     output = subprocess.run(['git', 'rev-parse', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
-        print("\n> git rev-parse", gitobject)
+        print("\n% git rev-parse", gitobject)
         print_git_msg(output)
     return get_git_msg(output)
 
@@ -77,6 +85,6 @@ def revparse(wt, gitobject: str, verbose=True) -> str:
 def lstree(wt, gitobject: str, verbose=True) -> str:
     output = subprocess.run(['git', 'ls-tree', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
-        print("\n> git ls-tree", gitobject)
+        print("\n% git ls-tree", gitobject)
         print_git_msg(output)
     return get_git_msg(output)
