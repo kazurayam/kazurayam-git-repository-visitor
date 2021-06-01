@@ -1,7 +1,9 @@
 import os
+from io import StringIO
+from graphviz import Digraph
 from . import fileutils
 from . import gitcommands as GIT
-from . import graph_git_repository
+from . import visualize_git_repository
 
 
 def test_visualize(basedir):
@@ -20,8 +22,9 @@ def test_visualize(basedir):
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "initial commit", True)
-    graph_git_repository.visualize(wt)
-    GIT.lsfiles_stage(wt)
+    visualizer1 = visualize_git_repository.GitRepositoryVisualizer()
+    g1: Digraph = visualizer1.visualize(wt)
+    g1.render(os.path.join(basedir, "git-repository-1"), format="png")
     #
     f = fileutils.write_file(wt, "src/good-luck.pl", "print('Good Luck!')\n")
     print("\n", "-" * 72)
@@ -30,5 +33,7 @@ def test_visualize(basedir):
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "added src/good-luck.pl", True)
-    graph_git_repository.visualize(wt)
-    GIT.lsfiles_stage(wt)
+    visualizer2 = visualize_git_repository.GitRepositoryVisualizer()
+    g2: Digraph = visualizer2.visualize(wt)
+    g2.render(os.path.join(basedir, "git-repository-2"), format="png")
+
