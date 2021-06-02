@@ -5,6 +5,7 @@ from . import gitcommands as GIT
 class GitRepositoryVisualizer:
 
     def __init__(self):
+        self.commits = []
         self.object_commit_links = {}
 
     def visualize(self, wt: str):
@@ -26,8 +27,7 @@ class GitRepositoryVisualizer:
         return g
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
-        commits = [the_commit_hash]
-        g.node(the_commit_hash, "commit: " + the_commit_hash[0:7], shape="ellipse")
+        self.commits.append(the_commit_hash)
         # look into the commit object
         GIT.catfile_t(wt, the_commit_hash)
         o = GIT.catfile_p(wt, the_commit_hash[0:7])
@@ -39,12 +39,17 @@ committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
 
 added src/good-luck.pl
         """
+        commit_message = get_commit_message(o)
+        g.node(the_commit_hash,
+               "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
+               shape="ellipse")
         # process the linked tree object
         tree_hash = o.splitlines()[0].split()[1]
         # now look into a tree object to trace its internal down
         self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
         g.edge(the_commit_hash,
-               node_id(the_commit_hash, tree_hash))
+               node_id(the_commit_hash, tree_hash),
+               weight="2")
         # process the commit objects as parent
         for line in o.splitlines():
             if line.startswith("parent"):
@@ -52,11 +57,10 @@ added src/good-luck.pl
                 self.visualize_commit(wt, parent_commit_hash, g)
                 g.edge(the_commit_hash,
                        parent_commit_hash, constraint="false", style="dotted")
-                commits.append(parent_commit_hash)
         # emit cluster_commits
-        with g.subgraph(name="cluster_commits",) as c:
+        with g.subgraph(name="cluster_commits") as c:
             c.attr(rank='same', color="white")
-            for h in commits:
+            for h in self.commits:
                 c.node(h)
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
@@ -98,3 +102,28 @@ added src/good-luck.pl
 
 def node_id(commit_hash, object_hash):
     return commit_hash[0:7] + "_" + object_hash[0:7]
+
+
+def get_commit_message(commit_content: str) -> str:
+    """
+
+    :param commit_content: like
+tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
+parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
+author kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+
+added src/good-luck.pl
+
+    :return: commit message, e.g, "added src/good-luck.pl"
+    """
+    for line in commit_content.splitlines():
+        if line.startswith("tree") or \
+            line.startswith("parent") or \
+            line.startswith("author") or \
+            line.startswith("committer") :
+            pass
+        elif len(line.strip()) == 0:
+            pass
+        else:
+            return line.strip()

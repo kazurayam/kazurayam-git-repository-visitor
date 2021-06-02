@@ -15,8 +15,7 @@ def test_visualize(basedir):
     #
     fileutils.write_file(wt, '.gitignore', '*~\n')
     fileutils.write_file(wt, "README.md", "# Read me please\n")
-    fileutils.write_file(wt, "src/greeting", "How do you do?\n")
-    fileutils.write_file(wt, "src/hello.pl", "print(\"Hello, world!\")\n")
+    fileutils.write_file(wt, "src/greeting.pl", "print(\"Hello, world!\");\n")
     #
     GIT.add(wt, '.', True)
     GIT.status(wt)
@@ -26,14 +25,25 @@ def test_visualize(basedir):
     g1: Digraph = visualizer1.visualize(wt)
     g1.render(os.path.join(basedir, "git-repository-1"), format="png")
     #
-    f = fileutils.write_file(wt, "src/good-luck.pl", "print('Good Luck!')\n")
+    f = fileutils.write_file(wt, "README.md", "# Read me more carefully\n")
     print("\n", "-" * 72)
-    print("% added src/good-luck.pl")
+    print("% modified README")
     GIT.add(wt, '.', True)
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
-    GIT.commit(wt, "added src/good-luck.pl", True)
+    GIT.commit(wt, "modified README.md", True)
     visualizer2 = visualize_git_repository.GitRepositoryVisualizer()
     g2: Digraph = visualizer2.visualize(wt)
     g2.render(os.path.join(basedir, "git-repository-2"), format="png")
+    #
+    f = fileutils.write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
+    print("\n", "-" * 72)
+    print("% add doc/TODO.txt")
+    GIT.add(wt, '.', True)
+    GIT.status(wt)
+    GIT.lsfiles_stage(wt)
+    GIT.commit(wt, "add doc/TODO.txt", True)
+    visualizer3 = visualize_git_repository.GitRepositoryVisualizer()
+    g3: Digraph = visualizer3.visualize(wt)
+    g3.render(os.path.join(basedir, "git-repository-3"), format="png")
 
