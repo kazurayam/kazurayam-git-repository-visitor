@@ -1,10 +1,10 @@
-# Gitレポジトリの内部構造をGraphvizでグラフ化した
+# Gitレポジトリの内部構造をGraphvizでグラフ化してみた
 
 ## 解決すべき問題
 
 わたしは毎日Gitを使う。まず`git init`する。そのあと`git add xxx`して`git status`して`git commit -m "xxx"`するのを繰り返す。ときどき`git log`したり`git status`もする。これら高級なgitコマンドだけでGitのメリットを享受できる。わたしはずっとそうやってきた。しかしGitが内部にどういうデータ構造を持っているのか、どういう動作をしているのか、皆目わからないまま何年も過ごしてきた。
 
-ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事はとても示唆的だった。`git status`のような高級なコマンドが見せるGitではなくて、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしながら、この記事が示す図は概念的・抽象的すぎた。commitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、わたしは納得できなかった。
+ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしながら、この記事が示す図は概念的・抽象的であっていまいちよくわからなかった。commitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、この記事だけでわたしは納得できなかった。
 
 いま自分の手元にあるこのプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出しそれを図に写し取りたい。そういうツールを作れないか？
 
@@ -14,14 +14,13 @@
 
 2. グラフを描くツールとして[Graphviz](https://graphviz.org/)がある。
 
-3. gitコマンドとgraphvizを武器として利用するツールをPython言語で作ろう。
+3. gitコマンドとgraphvizを武器として利用するツールをPython言語で組み立てよう。
 
-わたしが作るツールの名前は `visualize_git_repository` としました。
-
+ツールの名前を `visualize_git_repository` として、開発しました。
 
 ## 説明
 
-ひとつ小さなプロジェクトを作った。gitレポジトリを作って、ファイルをコミットした。そして `visualize_git_repository` を実行してgitオブジェクトのツリーがどのように変化していくかを図にしてみた。以下、説明します。
+ひとつ小さなプロジェクトを作り、`git init`していくつかファイルをコミットした。そして `visualize_git_repository` を実行してgitオブジェクトのツリーがどういう形に構築されたかを図にしてみた。コミットを計3回やって、そのつどツリーの形がどのように変化していくかを観察した。以下、その次第をレポートします。
 
 ### 1回目のcommitをするまで
 
@@ -39,7 +38,6 @@
 
 ```
 % git init
-...
 ```
 
 ファイル3つをGitレポジトリのindexに登録しました。
@@ -62,7 +60,7 @@ new file:   .gitignore
 new file:   README.md
 new file:   src/greeting.pl
 ```
-まだ一度もgit commitをしたことがないこと、git commitすれば3つのファイルがレポジトリに追加されることがわかります。
+まだ一度もgit commitをしたことがないこと、git commitすれば3つのファイルがレポジトリに追加されるはずだとわかります。
 
 `git ls-files --stage`コマンドを実行すると、この時点でindexがどのような内容になっているかを読み出すことができます。
 ```
@@ -146,13 +144,15 @@ commitオブジェクトを読み出した一行目にtreeオブジェクトのb
 print("How do you do?");
 ```
 
+はい、`greeting.pl`ファイルの中身はたしかにこうでした。
+
 一回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
 ![graph-1](docs/images/git-repository-1.png)
 
 この図をみてわたしはこのように理解しました。
 
-1. commitオブジェクトはプロジェクトのルートディレクトリ `/` に対応するtreeオブジェクトへのポインタを持っている。
+1. commitオブジェクトはかならずプロジェクトのルートディレクトリ `/` に対応するtreeオブジェクトへのポインタを持っている。
 2. commitオブジェクトは個々のファイル（`README.md`とか）へのポインタを持っていない。
 3. commitオブジェクトからルートディレクトリ `/` に対応するtreeオブジェクトを探り、そのtreeを起点としてツリーをたどればプロジェクトのすべてのファイルのblobオブジェクトに到達することができる。
 
@@ -238,6 +238,12 @@ initial commit
 
 % git cat-file blob b371df9
 print("How do you do?");
+
+
+
+![graph-2](docs/images/git-repository-2.png)
+
+
 
  ------------------------------------------------------------------------
 % add doc/TODO.txt
@@ -357,13 +363,9 @@ print("How do you do?");
 
 
 
-![graph-1](docs/images/git-repository-1.png)
-
-![graph-2](docs/images/git-repository-2.png)
-
 ![graph-3](docs/images/git-repository-3.png)
 
-## この図を見てわたしが驚いたこと
+## わたしが驚いたこと
 
 ### commitオブジェクトはルートディレクトリのtreeオブジェクトを指している
 
