@@ -1,0 +1,272 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.8.5, pytest-6.2.4, py-1.10.0, pluggy-0.13.1
+rootdir: /Users/kazuakiurayama/github/visualizing-git-repository
+collected 1 item
+
+kazurayam/visualize_git_repository_test.py 
+% git init
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /Users/kazuakiurayama/github/visualizing-git-repository/tmp/test_visualize/.git/
+
+% git add .
+
+
+% git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   .gitignore
+	new file:   README.md
+	new file:   src/greeting.pl
+
+% git ls-files --stage
+100644 b25c15b81fae06e1c55946ac6270bfdb293870e8 0	.gitignore
+100644 aadb69a077c74818e3aff608c0c60c56c6c7c6c9 0	README.md
+100644 b371df9d9194821c4a54f0e3a77f89bbcee62f7e 0	src/greeting.pl
+
+% git commit -m "initial commit"
+[master (root-commit) eba6db4] initial commit
+ 3 files changed, 3 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+ create mode 100644 src/greeting.pl
+
+% git rev-parse HEAD
+eba6db414f7045bd5bce871f0cb183673def2c0c
+
+% git cat-file -t eba6db414f7045bd5bce871f0cb183673def2c0c
+commit
+
+% git cat-file -p eba6db4
+tree c9b82148b2a37422ec497b1b6aff179410052d31
+author kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+
+initial commit
+
+% git ls-tree c9b82148b2a37422ec497b1b6aff179410052d31
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob aadb69a077c74818e3aff608c0c60c56c6c7c6c9	README.md
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob aadb69a
+# Read me please
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+
+ ------------------------------------------------------------------------
+% modified README
+
+% git add .
+
+
+% git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   README.md
+
+% git ls-files --stage
+100644 b25c15b81fae06e1c55946ac6270bfdb293870e8 0	.gitignore
+100644 5a7954106794a54e6fc251a0c85b417baf39a87f 0	README.md
+100644 b371df9d9194821c4a54f0e3a77f89bbcee62f7e 0	src/greeting.pl
+
+% git commit -m "modified README.md"
+[master 3de57bc] modified README.md
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+% git rev-parse HEAD
+3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
+
+% git cat-file -t 3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
+commit
+
+% git cat-file -p 3de57bc
+tree bd4ab230c988560dade3777a5f729cc62792d701
+parent eba6db414f7045bd5bce871f0cb183673def2c0c
+author kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
+
+modified README.md
+
+% git ls-tree bd4ab230c988560dade3777a5f729cc62792d701
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob 5a7954106794a54e6fc251a0c85b417baf39a87f	README.md
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob 5a79541
+# Read me more carefully
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+
+% git cat-file -t eba6db414f7045bd5bce871f0cb183673def2c0c
+commit
+
+% git cat-file -p eba6db4
+tree c9b82148b2a37422ec497b1b6aff179410052d31
+author kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+
+initial commit
+
+% git ls-tree c9b82148b2a37422ec497b1b6aff179410052d31
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob aadb69a077c74818e3aff608c0c60c56c6c7c6c9	README.md
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob aadb69a
+# Read me please
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+
+ ------------------------------------------------------------------------
+% add doc/TODO.txt
+
+% git add .
+
+
+% git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   doc/TODO.txt
+
+% git ls-files --stage
+100644 b25c15b81fae06e1c55946ac6270bfdb293870e8 0	.gitignore
+100644 5a7954106794a54e6fc251a0c85b417baf39a87f 0	README.md
+100644 de13371a889dad1d6ead2cc440086db40ac8690e 0	doc/TODO.txt
+100644 b371df9d9194821c4a54f0e3a77f89bbcee62f7e 0	src/greeting.pl
+
+% git commit -m "add doc/TODO.txt"
+[master 851aa8d] add doc/TODO.txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 doc/TODO.txt
+
+% git rev-parse HEAD
+851aa8d6b19c19df6589e69ade43d2537b24c124
+
+% git cat-file -t 851aa8d6b19c19df6589e69ade43d2537b24c124
+commit
+
+% git cat-file -p 851aa8d
+tree 39e990facd1efd19301e1f28377c63f28c4f238a
+parent 3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
+author kazurayam <kazuaki.urayama@gmail.com> 1622613360 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613360 +0900
+
+add doc/TODO.txt
+
+% git ls-tree 39e990facd1efd19301e1f28377c63f28c4f238a
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob 5a7954106794a54e6fc251a0c85b417baf39a87f	README.md
+040000 tree b2298cc3a3956d2c430fd9c061d73c02fa62b078	doc
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob 5a79541
+# Read me more carefully
+
+% git ls-tree b2298cc3a3956d2c430fd9c061d73c02fa62b078
+100644 blob de13371a889dad1d6ead2cc440086db40ac8690e	TODO.txt
+
+% git cat-file blob de13371
+Sleep well tonight.
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+
+% git cat-file -t 3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
+commit
+
+% git cat-file -p 3de57bc
+tree bd4ab230c988560dade3777a5f729cc62792d701
+parent eba6db414f7045bd5bce871f0cb183673def2c0c
+author kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
+
+modified README.md
+
+% git ls-tree bd4ab230c988560dade3777a5f729cc62792d701
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob 5a7954106794a54e6fc251a0c85b417baf39a87f	README.md
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob 5a79541
+# Read me more carefully
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+
+% git cat-file -t eba6db414f7045bd5bce871f0cb183673def2c0c
+commit
+
+% git cat-file -p eba6db4
+tree c9b82148b2a37422ec497b1b6aff179410052d31
+author kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+committer kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
+
+initial commit
+
+% git ls-tree c9b82148b2a37422ec497b1b6aff179410052d31
+100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
+100644 blob aadb69a077c74818e3aff608c0c60c56c6c7c6c9	README.md
+040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+
+% git cat-file blob b25c15b
+*~
+
+% git cat-file blob aadb69a
+# Read me please
+
+% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
+100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
+
+% git cat-file blob b371df9
+print("How do you do?");
+.
+
+============================== 1 passed in 3.35s ===============================

@@ -1,0 +1,33 @@
+// Git Repository graph
+digraph main {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
+	edge [arrowhead=onormal constraint=true]
+	graph [layout=dot nodesep=0.5 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	master [label=master shape=doubleoctagon width=0.3]
+	eba6db414f7045bd5bce871f0cb183673def2c0c [label="commit: eba6db4
+initial commit" shape=ellipse]
+	eba6db4_c9b8214 [label="tree: c9b8214
+/" shape=folder]
+	eba6db4_c9b8214__ [shape=point width=0.1]
+	eba6db4_c9b8214 -> eba6db4_c9b8214__ [arrowhead=none]
+	eba6db4_b25c15b [label="blob: b25c15b
+.gitignore"]
+	eba6db4_c9b8214__ -> eba6db4_b25c15b
+	eba6db4_aadb69a [label="blob: aadb69a
+README.md"]
+	eba6db4_c9b8214__ -> eba6db4_aadb69a
+	eba6db4_3365c4a [label="tree: 3365c4a
+src/" shape=folder]
+	eba6db4_3365c4a__ [shape=point width=0.1]
+	eba6db4_3365c4a -> eba6db4_3365c4a__ [arrowhead=none]
+	eba6db4_b371df9 [label="blob: b371df9
+greeting.pl"]
+	eba6db4_3365c4a__ -> eba6db4_b371df9
+	eba6db4_c9b8214__ -> eba6db4_3365c4a
+	eba6db414f7045bd5bce871f0cb183673def2c0c -> eba6db4_c9b8214 [weight=2]
+	subgraph cluster_commits {
+		color=white rank=same
+		eba6db414f7045bd5bce871f0cb183673def2c0c
+	}
+	master -> eba6db414f7045bd5bce871f0cb183673def2c0c [label=HEAD style=dotted]
+}

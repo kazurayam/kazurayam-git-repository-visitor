@@ -15,7 +15,7 @@ def test_visualize(basedir):
     #
     fileutils.write_file(wt, '.gitignore', '*~\n')
     fileutils.write_file(wt, "README.md", "# Read me please\n")
-    fileutils.write_file(wt, "src/greeting.pl", "print(\"Hello, world!\");\n")
+    fileutils.write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
     #
     GIT.add(wt, '.', True)
     GIT.status(wt)
