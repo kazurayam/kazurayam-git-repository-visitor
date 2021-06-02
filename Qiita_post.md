@@ -1,26 +1,26 @@
-# Gitレポジトリの内部構造をGraphvizでグラフ化してみた
+# Gitレポジトリの内部構造をGraphvizで描画してみた
 
 ## 解決すべき問題
 
-わたしは毎日Gitを使います。まず`git init`する。そのあと`git add xxx`して`git status`して`git commit -m "xxx"`するのを繰り返す。`git log`したり`git status`もする。これら高級なgitコマンドだけでGitのメリットを十分に享受できる。わたしはずっとそうやってきました。しかしGitの内部のデータ構造がどうなっているのか、わからないまま何年も過ごしてきました。
+わたしは毎日Gitを使います。まず`git init`する。そのあと`git add xxx`して`git status`して`git commit -m "xxx"`するのを繰り返す。`git log`したり`git status`もする。これら高級なgitコマンドだけでGitのメリットを十分に享受できる。わたしはずっとそうやってきました。しかしGitの内部のデータ構造がどうなっているのかわからないままうかうかと何年も過ごしてきました。
 
-ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしながら、この記事が示す図は概念的・抽象的であっていまいちよくわからなかった。commitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、この記事の説明でわたしは納得できなかった。
+ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしながら、この記事が示す図は概念的・抽象的であっていまいちよくわからなかった。commitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、この記事の説明では理解できなかった。
 
-いま自分の手元にあるプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出し、それを図に写し取ることができる、そういうツールを作れないか？
+いま自分の手元にあるプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出し図に描画する、そういうツールを作りたい。
 
 ## 解決方法
 
-1. `git cat-file`、`git revparse`、`git ls-tree`、`git ls-files`などの低レベルなgitコマンドをコマンドラインから実行すればgitレポジトリの内容を読み取ることができる。これらのコマンドがSTDOUTに出力したテキストをparseすれば、commitオブジェクトのhashやtreeオブジェクトの内容など、gitレポジトリの内容をすべて把握することができる。gitが生成するバイナリファイルを解析する必要はない。
+1. `git cat-file`、`git revparse`、`git ls-tree`、`git ls-files`などの低レベルなgitコマンドをコマンドラインから実行すればgitレポジトリの内容を読み取ることができる。これらのコマンドがSTDOUTに出力したテキストをparseすれば、commitオブジェクトのhashやtreeオブジェクトの内容など、gitレポジトリの内容をすべて把握することができる。gitが生成するバイナリファイルをじかにREADして解析する必要はない。
 
 2. グラフを描くツールとして[Graphviz](https://graphviz.org/)がある。
 
-3. gitコマンドとGraphvizを武器として利用するツールをPython言語で組み立てよう。
+3. gitコマンドとGraphvizを利用してGitレポジトリの内部データ構造をPNG画像に描画するツールをPython言語で組み立てよう。
 
 こういうツールを開発しました。名前は `visualize_git_repository` としました。
 
 ## 説明
 
-ひとつ小さなプロジェクトを作り、`git init`してた。そしていくつかファイルをaddしてcommitしたあとで `visualize_git_repository` を実行してgitオブジェクトのツリーを図にする。これを計3回やってgitツリーの形がどのように変化していくかを観察した。以下、その次第をレポートします。gi
+ひとつ小さなプロジェクトを作り、`git init`した。そしていくつかファイルをaddしてcommitしたあとで `visualize_git_repository` を実行してgitオブジェクトのツリーを図にする。これを計3回やってgitツリーの形がどのように変化していくかを観察した。以下、その次第をレポートします。
 
 ### 1回目のcommit
 
@@ -60,18 +60,22 @@ new file:   .gitignore
 new file:   README.md
 new file:   src/greeting.pl
 ```
+
 まだ一度もgit commitをしたことがないこと、git commitすれば3つのファイルがレポジトリに追加されるはずだとわかります。
 
 `git ls-files --stage`コマンドを実行すると、この時点でindexがどのような内容になっているかを読み出すことができます。
+
 ```
 % git ls-files --stage
 100644 b25c15b81fae06e1c55946ac6270bfdb293870e8 0	.gitignore
 100644 aadb69a077c74818e3aff608c0c60c56c6c7c6c9 0	README.md
 100644 b371df9d9194821c4a54f0e3a77f89bbcee62f7e 0	src/greeting.pl
 ```
+
 git addしたときに3つのファイルに対応するblobオブジェクトが生成された。そのblobのhashが3つ、indexのなかに列挙されています。各blobに対応するファイルのパスも示されています。たとえば `src/greeting.pl` のようにルートディレクトリを基底とする相対パスが示されています。
 
 `git commit`しました。
+
 ```
 % git commit -m "initial commit"
 [master (root-commit) eba6db4] initial commit
@@ -96,6 +100,7 @@ commit
 ```
 
 HEADが指し示すところのcommitオブジェクトの内容をプリントしてみました。
+
 ```
 % git cat-file -p eba6db4
 tree c9b82148b2a37422ec497b1b6aff179410052d31
@@ -118,6 +123,7 @@ commitオブジェクトを読み出した一行目にtreeオブジェクトのb
 ここにはルートディレクトリの直下にある2つのファイル `.gitignore` と `README.md`に対応するblobオブジェクトのhashが列挙されており、そしてサブディレクトリ `src` に対応するtreeオブジェクトのhashが示されています。
 
 `.gitignore`ファイルのblobの中身を読み出してみましょう。
+
 ```
 % git cat-file blob b25c15b
 *~
@@ -161,7 +167,7 @@ print("How do you do?");
 
 ### 2回目のcommit
 
-1回目のcommitで追加済みのファイル `README.md` の内容を変更しましょう。変更した `README.md` を `git add` して `git commit` しましょう。2回目のcommitによってGitレポジトリの形がどのように変化するでしょうか？
+つづいて1回目のcommitで追加済みのファイル `README.md` の内容を変更しましょう。変更した `README.md` を `git add` して `git commit` しましょう。2回目のcommitによってGitレポジトリの形がどのように変化するでしょうか？
 
 まず `README.md` ファイルをちょっと書きかえました。
 
@@ -241,8 +247,7 @@ modified README.md
 
 プロジェクトのルートディレクトリ `/` の直下にある2つのファイルと1つのディレクトリ `src` のhashが列挙されています。この形式は、1回目のcommitオブジェクトからポイントされているtreeオブジェクトと同じ形式です。しかしhash値に注目してみると相違があることに気づきます。今回内容を変更した `README.md` ファイルのhash値が変わっています。しかし変更のない `.gitignore`ファイルに対応するblobオブジェクトと `src`ディレクトリに対応するtreeオブジェクトのhashは変わっていません。
 
-2回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値と、
-1回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値が同じであるということは、つまり`.git/objects/`ディレクトリの下に存在している物理的に同一のオブジェクト・ファイルが参照されているということを意味します。
+2回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値と、1回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値が同じであるということは、つまり`.git/objects/`ディレクトリの下に存在している物理的に同一のオブジェクト・ファイルが参照されているということを意味します。
 
 gitは2回目のコミットで変更されたファイルについては当然ながら新しく作られたオブジェクト・ファイルを参照するものの、変更がないかぎりは前回ないしそれ以前のコミットにおいて作られたオブジェクト・ファイルを名前で参照する。だから変更のないファイルを無駄にコピーするということが無いのですね。
 
@@ -260,7 +265,7 @@ gitは2回目のコミットで変更されたファイルについては当然�
 4. commitオブジェクトはparentをもっていて親commitへのリンクを保持している。最新のcommitからリンクをたどって最初のcommitにまで遡ることができるようになっている。
 5. 2回目のcommitオブジェクトもプロジェクトのルートディレクトリ `/` に対応するtreeオブジェクトへのポインタをもっている。そしてルートオブジェクトのtreeオブジェクトを起点としてツリーを辿ることによりすべてファイルのblobオブジェクトに到達することができる。この構造は1回目のcommitオブジェクトとまったく同一である。
 6. ルートディレクトリ `/` に対応するtreeオブジェクトを起点とするツリーからプロジェクトのすべてのファイル、すべてのディレクトリに到達することができるようになっている。コミットしたときに追加・変更・削除されたファイルが差分として列挙されてcommitオブジェクトのなかにメモされるような形式ではない。
-7. たくさんのファイルが含まれるgitレポジトリにおいて、ファイルを1つだけ変更し`git add`して`git commit`したとしよう。このときどれだけの数のcommitオブジェクト、treeオブジェクト、blobオブジェクトがgitレポジトリのなかに生まれるだろうか？ --- commitオブジェクトが新しく1個できる。blobオブジェクトが新しく1個できる。treeオブジェクトが最低2個できる。もしもサブディレクトリが `/src/main/java/my/Hello.java` のように複数の階層に渡っているなら中間のディレクトリの数だけ（3つとか）treeオブジェクトが増えるだろう。プロジェクトが大きくてたくさんのファイルが含まれていたとしても、コミットによって生成されるデータの量は小さい。ファイルを無駄にコピーすることがいっさい無いからだ。
+7. 数百個とかたくさんのファイルが含まれるプロジェクトにおいて、ファイルを1つだけ変更し`git add`して`git commit`したとしよう。このときどれだけの数のcommitオブジェクト、treeオブジェクト、blobオブジェクトがgitレポジトリのなかに追加されるだろうか？ --- commitオブジェクトが新しく1個できる。blobオブジェクトが新しく1個できる。treeオブジェクトが最低2個できる。もしもサブディレクトリが `/src/main/java/my/Hello.java` のように複数の階層に渡っているなら中間のディレクトリの数だけ（3つとか）treeオブジェクトが増えるだろう。プロジェクトが大きくてたくさんのファイルが含まれていたとしても、コミットによって生成されるデータの量は小さい。ファイルを無駄にコピーすることがいっさい無いからだ。
 
 
 ### 3回目のcommit
@@ -268,12 +273,14 @@ gitは2回目のコミットで変更されたファイルについては当然�
 最後にもう一度。新しいディレクトリ `doc` を追加しファイル `doc/TODO.txt` を追加してみよう。Gitレポジトリにどんな変化が起きるだろうか？
 
 ファイルを追加しよう。
+
 ```
 % cd $project
 % echo `Sleep well tonight.` > doc/TODO.txt
 ```
 
 indexに追加しよう。
+
 ```
 % git add .
 ```
@@ -366,14 +373,14 @@ Sleep well tonight.
 
 #### 3回目の図から読み取れること
 
-8. 1回目と2回目のコミットの図から読み取ったgitの動き方についての理解がそのまま3回目にもあてはまる。今後、どれだけたくさんコミットを重ねても、どれだけファイルの数が増えても大丈夫だ。Gitは同じ仕組みで管理しちゃうだろう。
+8. 1回目と2回目のコミットの図から読み取ったgitの動き方についての理解がそのまま3回目にもあてはまる。今後、どれだけたくさんコミットを重ねても、どれだけファイルの数が増えても大丈夫だ。Gitは同じ仕組みでcommitとtreeとblobを管理しちゃうだろう。
 
 ## まとめ
 
-冒頭述べたようにわたしは記事 [【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) を読んだものの、Gitの内部のデータ構造がどんな形をしているのか理解できなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作ろうと試行錯誤するうちにGitのデータ構造をじっとにらみつづけた。あげくGitのデザインをようやく理解することができた。
+冒頭述べたようにわたしは記事 [【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) を読んだものの、Gitの内部のデータ構造がどんな形をしているのか理解できなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにGitのデータ構造に目を凝らした。そしてようやくGitのデータ構造を理解することができた。
 
-今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](kazurayam/visualize_git_repository.pl) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらいづれライブラリ化してPyPIで公開したいと考えています。
+今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository.py) と [kazurayam/visualize_git_repository_test.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository_test.py) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらライブラリ化してPyPIで公開したいと考えています。
 
 
-- date: 3 June 2021
+- date: June 2021
 - author: kazurayam
