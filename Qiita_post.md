@@ -22,13 +22,13 @@
 
 ひとつ小さなプロジェクトを作り、`git init`していくつかファイルをコミットした。そして `visualize_git_repository` を実行してgitオブジェクトのツリーがどういう形に構築されたかを図にしてみた。コミットを計3回やって、そのつどツリーの形がどのように変化していくかを観察した。以下、その次第をレポートします。
 
-### 1回目のcommitをするまで
+### 1回目のcommit
 
 プロジェクトのディレクトリを適当な場所に作りました。そのなかにファイルを3つ作りました。
 
 ```
-% mkdir project
-% cd project
+% mkdir $project
+% cd $project
 % echo '*~' > .gitignore
 % echo '# Readme please'> README.md
 % echo 'prinln("How do you do?");' > src/greeting.pl
@@ -146,47 +146,79 @@ print("How do you do?");
 
 はい、`greeting.pl`ファイルの中身はたしかにこうでした。
 
-一回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
+1回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
 ![graph-1](docs/images/git-repository-1.png)
 
-この図をみてわたしはこのように理解しました。
+この図をみてわたしは下記のことを理解しました。
+
+#### 1回目のまとめ
 
 1. commitオブジェクトはかならずプロジェクトのルートディレクトリ `/` に対応するtreeオブジェクトへのポインタを持っている。
 2. commitオブジェクトは個々のファイル（`README.md`とか）へのポインタを持っていない。
 3. commitオブジェクトからルートディレクトリ `/` に対応するtreeオブジェクトを探り、そのtreeを起点としてツリーをたどればプロジェクトのすべてのファイルのblobオブジェクトに到達することができる。
 
 
-### 2回目のcommitをするまで
+### 2回目のcommit
 
+1回目のcommitで追加済みのファイル `README.md` の内容を変更しましょう。変更した `README.md` を `git add` して `git commit` しましょう。2回目のcommitによってGitレポジトリの形がどのように変化するでしょうか？
 
+まず `README.md` ファイルをちょっと書きかえました。
 
-% modified README
+```
+% cd $project
+% echo '# Read me more carefully' > modified README
+```
 
+変更ぶんをindexに登録しましょう。
+
+```
 % git add .
+```
 
+`git status`コマンドを実行すると
 
+```
 % git status
 On branch master
 Changes to be committed:
 (use "git restore --staged <file>..." to unstage)
 modified:   README.md
+```
 
+`README.md`ファイル1個だけ変更があって次回commitすればレポジトリに反映されるだろうと教えてくれました。
+
+念のためにindexのいまの状態を読み出してみましょう。
+
+```
 % git ls-files --stage
 100644 b25c15b81fae06e1c55946ac6270bfdb293870e8 0	.gitignore
 100644 5a7954106794a54e6fc251a0c85b417baf39a87f 0	README.md
 100644 b371df9d9194821c4a54f0e3a77f89bbcee62f7e 0	src/greeting.pl
+```
 
+indexには3つのファイルに対応する3行が列挙されています。今回変更された `README.md` だけがindexに書かれるのではなくて、indexにはその時点でプロジェクトに存在しているファイルすべてのblobが列挙されるようです。
+
+>ここでわたしは驚きました。わたしは`git status`コマンドがindexを単純に読み出すコマンドだと思っていました。`git status`コマンドが`README.md`ファイルひとつだけmodifiedだと通知するのをみて、indexにはREADME.mdについて1行だけ書いてあるものと思い込んでいました。ところがそうではなかった。`git status`コマンドはindexを読み出すだけのコマンドはなくてもっと複雑なデータ処理をした結果を見せているようです。
+
+では2回目のコミットをしましょう。
+
+```
 % git commit -m "modified README.md"
 [master 3de57bc] modified README.md
 1 file changed, 1 insertion(+), 1 deletion(-)
+```
 
+2回目のコミットのあとHEADが指すところのcommitオブジェクトのhashを調べましょう。
+
+```
 % git rev-parse HEAD
 3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
+```
 
-% git cat-file -t 3de57bc90ad3e77db3b1df4dc897ea268f4bb5be
-commit
+2回目のcommitオブジェクトのhashを指定してcommitオブジェクトの中身をprintしてみましょう。
 
+```
 % git cat-file -p 3de57bc
 tree bd4ab230c988560dade3777a5f729cc62792d701
 parent eba6db414f7045bd5bce871f0cb183673def2c0c
@@ -194,58 +226,38 @@ author kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
 committer kazurayam <kazuaki.urayama@gmail.com> 1622613359 +0900
 
 modified README.md
+```
 
+この2回目のcommitオブジェクトには `parent` で始まる行があります。`parent`=親コミット=1回前のcommitのhashが記録されています。parent行があることによって2回目のcommitから1回目のcommitへ遡ることができるようになっています。
+
+2回目のcommitオブジェクトにも `tree` で始まる行があります。そのtreeオブジェクトのhashを指定して中身をprintしてみましょう。
+
+```
 % git ls-tree bd4ab230c988560dade3777a5f729cc62792d701
 100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
 100644 blob 5a7954106794a54e6fc251a0c85b417baf39a87f	README.md
 040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
+```
 
-% git cat-file blob b25c15b
-*~
+プロジェクトのルートディレクトリ `/` の直下にある2つのファイルと1つのディレクトリ `src` のhashが列挙されています。この形式は、1回目のcommitオブジェクトからポイントされているtreeオブジェクトと同じ形式です。しかしhash値に注目してみると相違があることに気づきます。今回内容を変更した `README.md` ファイルのhash値が変わっています。しかし変更のない `.gitignore`ファイルに対応するblobオブジェクトと `src`ディレクトリに対応するtreeオブジェクトのhashは変わっていません。
 
-% git cat-file blob 5a79541
-# Read me more carefully
+2回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値と、
+1回目のcommitオブジェクトからポイントされている `.gitignore` ファイルのblobオブジェクトのhash値が同じであるということは、つまり`.git/objects/`ディレクトリの下に存在している物理的に同一のオブジェクト・ファイルが参照されているということを意味します。
 
-% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
-100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
-
-% git cat-file blob b371df9
-print("How do you do?");
-
-% git cat-file -t eba6db414f7045bd5bce871f0cb183673def2c0c
-commit
-
-% git cat-file -p eba6db4
-tree c9b82148b2a37422ec497b1b6aff179410052d31
-author kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
-committer kazurayam <kazuaki.urayama@gmail.com> 1622613358 +0900
-
-initial commit
-
-% git ls-tree c9b82148b2a37422ec497b1b6aff179410052d31
-100644 blob b25c15b81fae06e1c55946ac6270bfdb293870e8	.gitignore
-100644 blob aadb69a077c74818e3aff608c0c60c56c6c7c6c9	README.md
-040000 tree 3365c4adc895a4c382b97ec206be94f7ee3883e4	src
-
-% git cat-file blob b25c15b
-*~
-
-% git cat-file blob aadb69a
-# Read me please
-
-% git ls-tree 3365c4adc895a4c382b97ec206be94f7ee3883e4
-100644 blob b371df9d9194821c4a54f0e3a77f89bbcee62f7e	greeting.pl
-
-% git cat-file blob b371df9
-print("How do you do?");
+gitは2回目のコミットで変更されたファイルについては当然ながら新しく作られたオブジェクト・ファイルを参照するものの、変更がないかぎりは前回ないしそれ以前のコミットにおいて作られたオブジェクト・ファイルを名前で参照する。だから変更のないファイルを無駄にコピーするということが無いのですね。
 
 
+2回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
 ![graph-2](docs/images/git-repository-2.png)
 
 
 
  ------------------------------------------------------------------------
+
+
+### 3回目のcommit
+
 % add doc/TODO.txt
 
 % git add .
@@ -362,6 +374,7 @@ initial commit
 print("How do you do?");
 
 
+3回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
 ![graph-3](docs/images/git-repository-3.png)
 
