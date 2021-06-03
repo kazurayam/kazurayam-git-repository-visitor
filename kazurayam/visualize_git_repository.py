@@ -56,7 +56,10 @@ added src/good-luck.pl
                 parent_commit_hash = line.split()[1]
                 self.visualize_commit(wt, parent_commit_hash, g)
                 g.edge(the_commit_hash,
-                       parent_commit_hash, constraint="false", style="dotted", weight="0")
+                       parent_commit_hash,
+                       constraint="false",
+                       style="dotted",
+                       weight="0")
         # emit cluster_commits
         with g.subgraph(name="cluster_commits") as c:
             c.attr(rank='same', color="white")

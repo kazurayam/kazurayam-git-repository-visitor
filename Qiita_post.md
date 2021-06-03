@@ -383,7 +383,7 @@ Sleep well tonight.
 
 ## まとめ
 
-冒頭述べたように、わたしは長年Gitを使いつつGitのデータ構造がどんな形をしているのか理解できていなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目からたくさんのウロコが落ちました。
+わたしは長年Gitを使いつつGitの内部のデータ構造がどんな形をしているのか理解していなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目からたくさんのウロコが落ちました。
 
 今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository.py) と [kazurayam/visualize_git_repository_test.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository_test.py) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらライブラリ化してPyPIで公開したいと考えています。
 
