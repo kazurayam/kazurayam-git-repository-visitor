@@ -10,7 +10,7 @@
 
 ## 解決方法
 
-1. `git cat-file`、`git revparse`、`git ls-tree`、`git ls-files`などの低レベルなgitコマンドをコマンドラインから実行すればgitレポジトリの内容を読み取ることができる。これらのコマンドがSTDOUTに出力したテキストをparseすれば、commitオブジェクトのhashやtreeオブジェクトの内容など、gitレポジトリの内容をすべて把握することができる。gitが生成するバイナリファイルをじかにREADして解析する必要はない。
+1. `git cat-file`、`git revparse`、`git ls-tree`、`git ls-files`などの低レベルなgitコマンドをコマンドラインから実行すればgitレポジトリの内容を読み取ることができる。これらのコマンドがSTDOUTに出力したテキストをparseすれば、commitオブジェクトとtreeオブジェクトとblobオブジェクトにかんする情報をすべて把握することができる。gitが生成したバイナリファイルをじかに読む必要はない。
 
 2. グラフを描くツールとして[Graphviz](https://graphviz.org/)がある。
 
