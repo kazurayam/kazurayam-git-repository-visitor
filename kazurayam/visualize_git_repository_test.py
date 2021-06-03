@@ -46,4 +46,15 @@ def test_visualize(basedir):
     visualizer3 = visualize_git_repository.GitRepositoryVisualizer()
     g3: Digraph = visualizer3.visualize(wt)
     g3.render(os.path.join(basedir, "git-repository-3"), format="png")
+    #
+    f = fileutils.write_file(wt, "doc/design.txt", "Bustard!\n")
+    print("\n", "-" * 72)
+    print("% add doc/ReleaseNote-1.txt")
+    GIT.add(wt, '.', True)
+    GIT.status(wt)
+    GIT.lsfiles_stage(wt)
+    GIT.commit(wt, "add doc/design.txt", True)
+    visualizer4 = visualize_git_repository.GitRepositoryVisualizer()
+    g4: Digraph = visualizer4.visualize(wt)
+    g4.render(os.path.join(basedir, "git-repository-4"), format="png")
 

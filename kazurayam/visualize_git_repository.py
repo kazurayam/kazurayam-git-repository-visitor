@@ -56,7 +56,7 @@ added src/good-luck.pl
                 parent_commit_hash = line.split()[1]
                 self.visualize_commit(wt, parent_commit_hash, g)
                 g.edge(the_commit_hash,
-                       parent_commit_hash, constraint="false", style="dotted")
+                       parent_commit_hash, constraint="false", style="dotted", weight="0")
         # emit cluster_commits
         with g.subgraph(name="cluster_commits") as c:
             c.attr(rank='same', color="white")
@@ -71,7 +71,7 @@ added src/good-luck.pl
                "tree: " + tree_hash[0:7] + "\n" + fname + "/",
                shape="folder")
         g.node(hub_node_id, shape="point", width="0.1")
-        g.edge(tree_node_id, hub_node_id, arrowhead="none")
+        g.edge(tree_node_id, hub_node_id, arrowhead="none", weight="4")
         o = GIT.lstree(wt, tree_hash)
         for line in o.splitlines():
             (mode, object_type, object_hash, file_name) = tuple(line.split())
