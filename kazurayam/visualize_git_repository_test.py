@@ -1,5 +1,4 @@
 import os
-from io import StringIO
 from graphviz import Digraph
 from . import fileutils
 from . import gitcommands as GIT
@@ -46,4 +45,3 @@ def test_visualize(basedir):
     visualizer3 = visualize_git_repository.GitRepositoryVisualizer()
     g3: Digraph = visualizer3.visualize(wt)
     g3.render(os.path.join(basedir, "git-repository-3"), format="png")
-    #

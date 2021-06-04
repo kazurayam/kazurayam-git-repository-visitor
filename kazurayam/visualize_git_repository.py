@@ -11,7 +11,7 @@ class GitRepositoryVisualizer:
     def visualize(self, wt: str):
         g = Digraph("main", comment="Git Repository graph")
         g.attr('graph', layout="dot", rank="max", rankdir="LR",
-               splines="ortho", ranksep="0.5", nodesep="0.5")
+               splines="ortho", ranksep="0.5", nodesep="0.3")
         g.node_attr.update(shape="note", height="0.3", style="filled", fillcolor="white",
                             fontname="arial", fontsize="10")
         g.edge_attr.update(constraint="true", arrowhead="onormal",
