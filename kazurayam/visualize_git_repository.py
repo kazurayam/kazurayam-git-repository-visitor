@@ -15,7 +15,6 @@ class GitRepositoryVisualizer:
         g.node_attr.update(shape="note", height="0.3", style="filled", fillcolor="white",
                             fontname="arial", fontsize="10")
         g.edge_attr.update(constraint="true", arrowhead="onormal")
-        g.node("master", "master", shape="doubleoctagon", width="0.3")
         # grasp the hash of the commit object aliased to HEAD of the current branch (master)
         o = GIT.revparse(wt, "HEAD")
         commit_hash = o.strip()
@@ -23,7 +22,8 @@ class GitRepositoryVisualizer:
         #
         self.grayout_duplicating_nodes(g)
         #
-        g.edge("master", commit_hash, style="dotted", label="HEAD")
+        g.node("master", "master", shape="doubleoctagon", width="0.3")
+        g.edge("master", commit_hash, constraint="false", style="dotted", xlabel="HEAD", weight="2")
         return g
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
