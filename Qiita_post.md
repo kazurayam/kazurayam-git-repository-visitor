@@ -1,13 +1,13 @@
-# Gitレポジトリの内部構造をGraphvizで描画してみた
+# Gitレポジトリの内部のデータ構造をGraphvizで描画してみた
 
 ## 解決すべき問題
 
 わたしは毎日Gitを使います。まず`git init`する。そのあと`git add xxx`して`git status`して`git commit -m "xxx"`するのを繰り返す。`git log`したり`git status`もする。これら高級なgitコマンドだけでGitのメリットを十分に享受できる。わたしはずっとそうやってきました。しかしGitの内部のデータ構造がどうなっているのかわからなかった。そのままうかうかと何年も過ごしてきました。
 
-ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしこの記事が示す図は抽象的でいまいちよくわからなかった。commitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、具体的な例を見たいとおもった。
+ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしこの記事が示す図は抽象的でいまいちよくわからなかった。とくにGitの基本の基であるcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、具体的な例を見たいとおもった。
 
 
-いま自分の手元にあるプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出し図に描画する、そういうツールを作りたい。
+いま自分の手元にあるプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出し図示してくれる、そういうツールを作りたい。
 
 ## 解決方法
 
@@ -259,7 +259,7 @@ gitは2回目のコミットで変更されたファイルについては当然�
 
 
 
-このグラフのなかで、２回目のcommitからポイントされたツリーのなかで、背景を灰色に塗った矩形がいくつかあるのに注目してください。たとえば`.gitignore` ファイルを見てみましょう。2回目のcommitにおいて `.gitignore`ファイルのblobオブジェクトのhashは b25c15b です。いっぽう1回目のcommitからたどれる `.gitignore` ファイルのblobオブジェクトのhash値も同じ b25c15c です。2回目のコミットツリーに存在している `.gitignore`のblob はじつは1回目のコミットツリーと物理的に同じblobオブジェクトを指しているわけです。２回目のコミットにおいて `.gitignore` ファイルは変更が無かったからこうなっている。このことを背景色を灰色にすることで図示しています。
+このグラフのなかで、２回目のcommitからポイントされたツリーのなかで、背景を灰色に塗った矩形がいくつかあるのに注目してください。たとえば`.gitignore` ファイルを見てみましょう。2回目のcommitにおいて `.gitignore`ファイルのblobオブジェクトのhashは b25c15b です。いっぽう1回目のcommitからたどれる `.gitignore` ファイルのblobオブジェクトのhash値も同じ b25c15c です。2回目のコミットツリーに存在している `.gitignore`のblob はじつは1回目のコミットツリーと物理的に同じblobオブジェクトを指しているわけです。２回目のコミットにおいて `.gitignore` ファイルに変更が無かったということを背景色を灰色にすることで図示しています。
 
 2回目のcommitの後の図を眺めて、わたしは次のことを理解しました。
 
@@ -378,12 +378,12 @@ Sleep well tonight.
 
 #### 3回目の図から読み取れること
 
-9. 1回目と2回目のコミットの図から読み取ったgitの動き方についての理解がそのまま3回目にもあてはまる。今後、どれだけたくさんコミットを重ねても、どれだけファイルの数が増えても大丈夫だ。Gitは同じ仕組みでcommitとtreeとblobを管理しちゃうだろう。
+9. 1回目と2回目のコミットの図から読み取ったgitの動き方についての理解がそのまま3回目にもあてはまる。今後、どれだけたくさんコミットを重ねても、どれだけファイルの数が増えても大丈夫だ。Gitは同じ仕組みでcommitとtreeとblobを管理できる。
 
 
 ## まとめ
 
-わたしは長年Gitを使いつつGitの内部のデータ構造がどんな形をしているのか理解していなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目からたくさんのウロコが落ちました。
+わたしは長年Gitを使いつつGitの内部のデータ構造がどんな形をしているのか理解していなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目からウロコがたくさんぼろぼろと落ちました。
 
 今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository.py) と [kazurayam/visualize_git_repository_test.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository_test.py) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらライブラリ化してPyPIで公開したいと考えています。
 
