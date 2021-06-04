@@ -176,10 +176,10 @@ print("How do you do?");
 
 1回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
-![graph-1](docs/images/git-repository-1.png)
+![graph-1](docs/images/figure-1.1.png)
 
 
-#### 1回目のグラフから読み取れること
+#### 1回目のグラフから読みとれること
 
 この図をみてわたしは下記のことを理解しました。
 
@@ -278,14 +278,14 @@ gitは2回目のコミットで変更されたファイルについては当然�
 
 2回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
-![graph-2](docs/images/git-repository-2.png)
+![graph-2](docs/images/figure-1.2.png)
 
 
 
 このグラフのなかで、２回目のcommitからポイントされたツリーのなかで、背景を灰色に塗った矩形がいくつかあるのに注目してください。たとえば`.gitignore` ファイルを見てみましょう。2回目のcommitにおいて `.gitignore`ファイルのblobオブジェクトのhashは b25c15b です。いっぽう1回目のcommitからたどれる `.gitignore` ファイルのblobオブジェクトのhash値も同じ b25c15c です。2回目のコミットツリーに存在している `.gitignore`のblob はじつは1回目のコミットツリーと物理的に同じblobオブジェクトを指しているわけです。２回目のコミットにおいて `.gitignore` ファイルに変更が無かったということを矩形の背景を灰色にすることで図示しています。
 
 
-#### ２回目のグラフから読み取れること
+#### ２回目のグラフから読みとれること
 
 2回目のcommitの後のグラフを眺めて、わたしは次のことを理解しました。
 
@@ -398,9 +398,9 @@ Sleep well tonight.
 
 3回目のgit commitが完了した時点で `visualize_git_repository` ツールを実行しました。ツールが生成したグラフがこれです。
 
-![graph-3](docs/images/git-repository-3.png)
+![graph-3](docs/images/figure-1.3.png)
 
-#### 3回目のグラフから読み取れること
+#### 3回目のグラフから読みとれること
 
 3回目のcommitの後のグラフを眺めて、わたしは次のことを理解しました。
 

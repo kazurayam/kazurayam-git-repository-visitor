@@ -22,7 +22,7 @@ def test_visualize(basedir):
     GIT.commit(wt, "initial commit", True)
     visualizer1 = visualize_git_repository.GitRepositoryVisualizer()
     g1: Digraph = visualizer1.visualize(wt)
-    g1.render(os.path.join(basedir, "git-repository-1"), format="png")
+    g1.render(os.path.join(basedir, "figure-1.1"), format="png")
     #
     f = fileutils.write_file(wt, "README.md", "# Read me more carefully\n")
     print("\n", "-" * 72)
@@ -33,7 +33,7 @@ def test_visualize(basedir):
     GIT.commit(wt, "modified README.md", True)
     visualizer2 = visualize_git_repository.GitRepositoryVisualizer()
     g2: Digraph = visualizer2.visualize(wt)
-    g2.render(os.path.join(basedir, "git-repository-2"), format="png")
+    g2.render(os.path.join(basedir, "figure-1.2"), format="png")
     #
     f = fileutils.write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
     print("\n", "-" * 72)
@@ -44,4 +44,4 @@ def test_visualize(basedir):
     GIT.commit(wt, "add doc/TODO.txt", True)
     visualizer3 = visualize_git_repository.GitRepositoryVisualizer()
     g3: Digraph = visualizer3.visualize(wt)
-    g3.render(os.path.join(basedir, "git-repository-3"), format="png")
+    g3.render(os.path.join(basedir, "figure-1.3"), format="png")
