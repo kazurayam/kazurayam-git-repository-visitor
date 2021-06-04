@@ -1,64 +1,58 @@
 // Git Repository graph
 digraph main {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
-	edge [arrowhead=onormal constraint=true]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.5 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	master [label=master shape=doubleoctagon width=0.3]
-	"3de57bc90ad3e77db3b1df4dc897ea268f4bb5be" [label="commit: 3de57bc
+	master -> "3482a248d8d91eecd353ad43f5ecd7085990a552" [constraint=false style=dotted weight=2 xlabel=HEAD]
+	"3482a248d8d91eecd353ad43f5ecd7085990a552" [label="commit: 3482a24
 modified README.md" shape=ellipse]
-	"3de57bc_bd4ab23" [label="tree: bd4ab23
+	"3482a24_bd4ab23" [label="tree: bd4ab23
 /" shape=folder]
-	"3de57bc_bd4ab23__" [shape=point width=0.1]
-	"3de57bc_bd4ab23" -> "3de57bc_bd4ab23__" [arrowhead=none]
-	"3de57bc_b25c15b" [label="blob: b25c15b
+	"3482a24_bd4ab23__" [shape=point width=0.1]
+	"3482a24_bd4ab23" -> "3482a24_bd4ab23__" [arrowhead=none weight=4]
+	"3482a24_b25c15b" [label="blob: b25c15b
 .gitignore"]
-	"3de57bc_bd4ab23__" -> "3de57bc_b25c15b"
-	"3de57bc_5a79541" [label="blob: 5a79541
+	"3482a24_bd4ab23__" -> "3482a24_b25c15b"
+	"3482a24_5a79541" [label="blob: 5a79541
 README.md"]
-	"3de57bc_bd4ab23__" -> "3de57bc_5a79541"
-	"3de57bc_3365c4a" [label="tree: 3365c4a
+	"3482a24_bd4ab23__" -> "3482a24_5a79541"
+	"3482a24_3365c4a" [label="tree: 3365c4a
 src/" shape=folder]
-	"3de57bc_3365c4a__" [shape=point width=0.1]
-	"3de57bc_3365c4a" -> "3de57bc_3365c4a__" [arrowhead=none]
-	"3de57bc_b371df9" [label="blob: b371df9
+	"3482a24_3365c4a__" [shape=point width=0.1]
+	"3482a24_3365c4a" -> "3482a24_3365c4a__" [arrowhead=none weight=4]
+	"3482a24_b371df9" [label="blob: b371df9
 greeting.pl"]
-	"3de57bc_3365c4a__" -> "3de57bc_b371df9"
-	"3de57bc_bd4ab23__" -> "3de57bc_3365c4a"
-	"3de57bc90ad3e77db3b1df4dc897ea268f4bb5be" -> "3de57bc_bd4ab23" [weight=2]
-	eba6db414f7045bd5bce871f0cb183673def2c0c [label="commit: eba6db4
+	"3482a24_3365c4a__" -> "3482a24_b371df9"
+	"3482a24_bd4ab23__" -> "3482a24_3365c4a"
+	"3482a248d8d91eecd353ad43f5ecd7085990a552" -> "3482a24_bd4ab23" [weight=2]
+	"00fd2a78bc9bc1933a3755675451c19491a40be0" [label="commit: 00fd2a7
 initial commit" shape=ellipse]
-	eba6db4_c9b8214 [label="tree: c9b8214
+	"00fd2a7_c9b8214" [label="tree: c9b8214
 /" shape=folder]
-	eba6db4_c9b8214__ [shape=point width=0.1]
-	eba6db4_c9b8214 -> eba6db4_c9b8214__ [arrowhead=none]
-	eba6db4_b25c15b [label="blob: b25c15b
+	"00fd2a7_c9b8214__" [shape=point width=0.1]
+	"00fd2a7_c9b8214" -> "00fd2a7_c9b8214__" [arrowhead=none weight=4]
+	"00fd2a7_b25c15b" [label="blob: b25c15b
 .gitignore"]
-	eba6db4_c9b8214__ -> eba6db4_b25c15b
-	eba6db4_aadb69a [label="blob: aadb69a
+	"00fd2a7_c9b8214__" -> "00fd2a7_b25c15b"
+	"00fd2a7_aadb69a" [label="blob: aadb69a
 README.md"]
-	eba6db4_c9b8214__ -> eba6db4_aadb69a
-	eba6db4_3365c4a [label="tree: 3365c4a
+	"00fd2a7_c9b8214__" -> "00fd2a7_aadb69a"
+	"00fd2a7_3365c4a" [label="tree: 3365c4a
 src/" shape=folder]
-	eba6db4_3365c4a__ [shape=point width=0.1]
-	eba6db4_3365c4a -> eba6db4_3365c4a__ [arrowhead=none]
-	eba6db4_b371df9 [label="blob: b371df9
+	"00fd2a7_3365c4a__" [shape=point width=0.1]
+	"00fd2a7_3365c4a" -> "00fd2a7_3365c4a__" [arrowhead=none weight=4]
+	"00fd2a7_b371df9" [label="blob: b371df9
 greeting.pl"]
-	eba6db4_3365c4a__ -> eba6db4_b371df9
-	eba6db4_c9b8214__ -> eba6db4_3365c4a
-	eba6db414f7045bd5bce871f0cb183673def2c0c -> eba6db4_c9b8214 [weight=2]
-	subgraph cluster_commits {
-		color=white rank=same
-		"3de57bc90ad3e77db3b1df4dc897ea268f4bb5be"
-		eba6db414f7045bd5bce871f0cb183673def2c0c
-	}
-	"3de57bc90ad3e77db3b1df4dc897ea268f4bb5be" -> eba6db414f7045bd5bce871f0cb183673def2c0c [constraint=false style=dotted]
-	subgraph cluster_commits {
-		color=white rank=same
-		"3de57bc90ad3e77db3b1df4dc897ea268f4bb5be"
-		eba6db414f7045bd5bce871f0cb183673def2c0c
-	}
-	"3de57bc_b25c15b" [fillcolor=lightgrey]
-	"3de57bc_3365c4a" [fillcolor=lightgrey]
-	"3de57bc_b371df9" [fillcolor=lightgrey]
-	master -> "3de57bc90ad3e77db3b1df4dc897ea268f4bb5be" [label=HEAD style=dotted]
+	"00fd2a7_3365c4a__" -> "00fd2a7_b371df9"
+	"00fd2a7_c9b8214__" -> "00fd2a7_3365c4a"
+	"00fd2a78bc9bc1933a3755675451c19491a40be0" -> "00fd2a7_c9b8214" [weight=2]
+	"3482a248d8d91eecd353ad43f5ecd7085990a552"
+	"00fd2a78bc9bc1933a3755675451c19491a40be0"
+	"3482a248d8d91eecd353ad43f5ecd7085990a552" -> "00fd2a78bc9bc1933a3755675451c19491a40be0" [constraint=false style=dotted weight=0]
+	"3482a248d8d91eecd353ad43f5ecd7085990a552"
+	"00fd2a78bc9bc1933a3755675451c19491a40be0"
+	"3482a24_b25c15b" [fillcolor=lightgrey]
+	"3482a24_3365c4a" [fillcolor=lightgrey]
+	"3482a24_b371df9" [fillcolor=lightgrey]
 }
