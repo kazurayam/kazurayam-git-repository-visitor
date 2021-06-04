@@ -14,16 +14,19 @@ class GitRepositoryVisualizer:
                splines="ortho", ranksep="0.5", nodesep="0.5")
         g.node_attr.update(shape="note", height="0.3", style="filled", fillcolor="white",
                             fontname="arial", fontsize="10")
-        g.edge_attr.update(constraint="true", arrowhead="onormal")
+        g.edge_attr.update(constraint="true", arrowhead="onormal",
+                           fontname="arial", fontsize="10")
         # grasp the hash of the commit object aliased to HEAD of the current branch (master)
         o = GIT.revparse(wt, "HEAD")
         commit_hash = o.strip()
+        #
+        g.node("master", "master", shape="doubleoctagon", width="0.3")
+        g.edge("master", commit_hash, constraint="false", style="dotted", xlabel="HEAD", weight="2")
+        # draw the Tree
         self.visualize_commit(wt, commit_hash, g)
         #
         self.grayout_duplicating_nodes(g)
         #
-        g.node("master", "master", shape="doubleoctagon", width="0.3")
-        g.edge("master", commit_hash, constraint="false", style="dotted", xlabel="HEAD", weight="2")
         return g
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
@@ -61,10 +64,12 @@ added src/good-luck.pl
                        style="dotted",
                        weight="0")
         # emit cluster_commits
-        with g.subgraph(name="cluster_commits") as c:
-            c.attr(rank='same', color="white")
-            for h in self.commits:
-                c.node(h)
+        #with g.subgraph(name="cluster_commits") as c:
+        #    c.attr(rank='same', color="white")
+        #    for h in self.commits:
+        #        c.node(h)
+        for h in self.commits:
+            g.node(h)
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
         self.remember_link(commit_hash, tree_hash)
