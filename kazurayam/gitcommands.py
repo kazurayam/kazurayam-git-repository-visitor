@@ -4,8 +4,11 @@ from subprocess import PIPE, STDOUT
 
 
 def get_git_msg(output) -> str:
-    msg = output.stdout.decode("ascii").strip()
-    return msg
+    try:
+        msg = output.stdout.decode("ascii").strip()
+        return msg
+    except UnicodeDecodeError:
+        return "!!!! binary file, unable to decode as ascii characters !!!!"
 
 
 def print_git_msg(output):

@@ -24,7 +24,7 @@
 
 わたしは毎日Gitを使います。まず`git init`する。そのあと`git add xxx`して`git status`して`git commit -m "xxx"`するのを繰り返す。`git log`したり`git status`もする。これら高級なgitコマンドだけでGitのメリットを十分に享受できる。わたしはずっとそうやってきました。しかしGitの内部のデータ構造がどうなっているのか、わかっていなかった。そのままうかうかと何年も過ごしてきました。
 
-ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしこの記事が示す図は抽象的でいまいちよくわからなかった。とくにGitの基本の基であるcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、具体的な例を見たいとおもった。
+ある日、[【翻訳】Gitをボトムアップから理解する](http://keijinsonyaban.blogspot.com/2011/05/git.html#ct3) という記事を読んだ。原著者は[John Wiegley](http://newartisans.com/2008/04/git-from-the-bottom-up/) さん、日本語訳 by O-Showさん。この記事は示唆に満ちていた。`git status`のような高級なコマンドだけではなく、`git cat-file`などの低レベルなgitコマンドを駆使すればGitレポジトリの内部のデータ構造を目視できることを教えてくれた。しかしこの記事が示す図は抽象的でよくわからなかった。とくにGitの基本の基であるcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るツリーがどういう構造をしているのか、わからなかった。概念図ではなく具体的な例を図にしたものを見たいとおもった。
 
 いま自分の手元にあるプロジェクトの `.git` ディレクトリのなかにあるcommitオブジェクトとtreeオブジェクトとblobオブジェクトのツリーの実物を読み出し図示してくれる、そういうツールがほしい。
 
@@ -409,7 +409,7 @@ Sleep well tonight.
 
 ## まとめ
 
-わたしは長年Gitを使いつつGitの内部のデータ構造がどんな形をしているのか理解していなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目から鱗が落ちました。
+わたしは長年Gitを使ってきたのにGitの内部のデータ構造がどんな形をしているのか理解していなかった。今回、gitレポジトリの中身をGraphvizで描画するツールを作るためにcommitオブジェクトとtreeオブジェクトとblobオブジェクトから成るデータ構造に目を凝らした。そしてようやく理解することができた。目から鱗が落ちました。
 
 今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository.py) と [kazurayam/visualize_git_repository_test.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository_test.py) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらライブラリ化してPyPIで公開したいと考えています。
 
