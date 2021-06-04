@@ -1,7 +1,24 @@
 # Gitレポジトリの内部のデータ構造をGraphvizで描画してみた
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [解決すべき問題](#%E8%A7%A3%E6%B1%BA%E3%81%99%E3%81%B9%E3%81%8D%E5%95%8F%E9%A1%8C)
+- [解決方法](#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95)
+- [説明](#%E8%AA%AC%E6%98%8E)
+  - [1回目のcommit](#1%E5%9B%9E%E7%9B%AE%E3%81%AEcommit)
+    - [1回目のグラフ](#1%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95)
+    - [1回目のグラフから読み取れること](#1%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95%E3%81%8B%E3%82%89%E8%AA%AD%E3%81%BF%E5%8F%96%E3%82%8C%E3%82%8B%E3%81%93%E3%81%A8)
+  - [2回目のcommit](#2%E5%9B%9E%E7%9B%AE%E3%81%AEcommit)
+    - [2回目のグラフ](#2%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95)
+    - [２回目のグラフから読み取れること](#%EF%BC%92%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95%E3%81%8B%E3%82%89%E8%AA%AD%E3%81%BF%E5%8F%96%E3%82%8C%E3%82%8B%E3%81%93%E3%81%A8)
+  - [3回目のcommit](#3%E5%9B%9E%E7%9B%AE%E3%81%AEcommit)
+    - [3回目のグラフ](#3%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95)
+    - [3回目のグラフから読み取れること](#3%E5%9B%9E%E7%9B%AE%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%95%E3%81%8B%E3%82%89%E8%AA%AD%E3%81%BF%E5%8F%96%E3%82%8C%E3%82%8B%E3%81%93%E3%81%A8)
+- [まとめ](#%E3%81%BE%E3%81%A8%E3%82%81)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 解決すべき問題
 
