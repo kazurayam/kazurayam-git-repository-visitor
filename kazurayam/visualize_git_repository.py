@@ -16,34 +16,32 @@ class GitRepositoryVisualizer:
                             fontname="arial", fontsize="10")
         g.edge_attr.update(constraint="true", arrowhead="onormal",
                            fontname="arial", fontsize="10")
+        #
+        g.node("HEAD", "HEAD", shape="doublecircle", width="0.5", fixedsize="true")
+
         # process branches
-        commit_hash = self.visualize_branches(wt, g)
+        branch_name = self.visualize_current_branch(wt, g)
 
         # place HEAD node and draw edge to the commit object
-        g.node("HEAD", "HEAD", shape="doublecircle", width="0.4")
-        g.edge("HEAD", commit_hash, constraint="false", style="dashed")
+        g.edge("HEAD", branch_name, constraint="false", minlen="1")
+
         # gray out the duplicating blobs and trees
         self.grayout_duplicating_nodes(g)
         # done
         return g
 
-    def visualize_branches(self, wt: str, g:Digraph) -> str:
-        o = GIT.showref_heads(wt)
-        for head in o.splitlines():
-            ref = head.split()[1]
-            branch_name = ref.split('/')[2]
-            # "master", "develop" etc
-
-            # grasp the hash of the commit object aliased to the branch
-            o = GIT.revparse(wt, branch_name)
-            commit_hash = o.strip()
-            #
-            g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-            g.edge(branch_name, commit_hash, constraint="false", style="dashed", weight="2", minlen="2")
-            # draw the great tree
-            self.visualize_commit(wt, commit_hash, g)
+    def visualize_current_branch(self, wt: str, g:Digraph) -> str:
+        branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
+        # grasp the hash of the commit object aliased to the branch
+        o = GIT.revparse(wt, branch_name)
+        commit_hash = o.strip()
         #
-        return GIT.revparse(wt, 'HEAD').strip()
+        g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
+        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1")
+        # draw the great tree
+        self.visualize_commit(wt, commit_hash, g)
+        #
+        return branch_name
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
         self.commits.append(the_commit_hash)

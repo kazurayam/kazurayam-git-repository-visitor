@@ -3,30 +3,30 @@ digraph main {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	master [label=master shape=doubleoctagon width=0.3]
-	master -> "1f56106da3fcaa824fea9427637a612f48d8fccd" [constraint=false minlen=2 style=dashed weight=2]
-	"1f56106da3fcaa824fea9427637a612f48d8fccd" [label="commit: 1f56106
+	master -> "39826d4e0c8b46e5d8eda8e9dac9b14cf4d80078" [constraint=false minlen=1 weight=2]
+	"39826d4e0c8b46e5d8eda8e9dac9b14cf4d80078" [label="commit: 39826d4
 initial commit" shape=ellipse]
-	"1f56106_c9b8214" [label="tree: c9b8214
+	"39826d4_c9b8214" [label="tree: c9b8214
 /" shape=folder]
-	"1f56106_c9b8214__" [shape=point width=0.1]
-	"1f56106_c9b8214" -> "1f56106_c9b8214__" [arrowhead=none weight=4]
-	"1f56106_b25c15b" [label="blob: b25c15b
+	"39826d4_c9b8214__" [shape=point width=0.1]
+	"39826d4_c9b8214" -> "39826d4_c9b8214__" [arrowhead=none weight=4]
+	"39826d4_b25c15b" [label="blob: b25c15b
 .gitignore"]
-	"1f56106_c9b8214__" -> "1f56106_b25c15b"
-	"1f56106_aadb69a" [label="blob: aadb69a
+	"39826d4_c9b8214__" -> "39826d4_b25c15b"
+	"39826d4_aadb69a" [label="blob: aadb69a
 README.md"]
-	"1f56106_c9b8214__" -> "1f56106_aadb69a"
-	"1f56106_3365c4a" [label="tree: 3365c4a
+	"39826d4_c9b8214__" -> "39826d4_aadb69a"
+	"39826d4_3365c4a" [label="tree: 3365c4a
 src/" shape=folder]
-	"1f56106_3365c4a__" [shape=point width=0.1]
-	"1f56106_3365c4a" -> "1f56106_3365c4a__" [arrowhead=none weight=4]
-	"1f56106_b371df9" [label="blob: b371df9
+	"39826d4_3365c4a__" [shape=point width=0.1]
+	"39826d4_3365c4a" -> "39826d4_3365c4a__" [arrowhead=none weight=4]
+	"39826d4_b371df9" [label="blob: b371df9
 greeting.pl"]
-	"1f56106_3365c4a__" -> "1f56106_b371df9"
-	"1f56106_c9b8214__" -> "1f56106_3365c4a"
-	"1f56106da3fcaa824fea9427637a612f48d8fccd" -> "1f56106_c9b8214" [weight=2]
-	"1f56106da3fcaa824fea9427637a612f48d8fccd"
-	HEAD [label=HEAD shape=doublecircle width=0.4]
-	HEAD -> "1f56106da3fcaa824fea9427637a612f48d8fccd" [constraint=false style=dashed]
+	"39826d4_3365c4a__" -> "39826d4_b371df9"
+	"39826d4_c9b8214__" -> "39826d4_3365c4a"
+	"39826d4e0c8b46e5d8eda8e9dac9b14cf4d80078" -> "39826d4_c9b8214" [weight=2]
+	"39826d4e0c8b46e5d8eda8e9dac9b14cf4d80078"
+	HEAD -> master [constraint=false minlen=1]
 }

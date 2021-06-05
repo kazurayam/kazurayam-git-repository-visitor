@@ -72,11 +72,9 @@ def test_2_new_branch(basedir):
     operate_initial_commit(wt)
     GRV().visualize(wt).render(os.path.join(gr, "figure-2.1"), format="png")
     #
-    GIT.branch(wt, "develop")
+    GIT.branch_new(wt, "develop")
+    GIT.checkout(wt, "develop")
     GRV().visualize(wt).render(os.path.join(gr, "figure-2.2"), format="png")
     #
-    GIT.checkout(wt, "develop")
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")
-    #
     operate_modify_readme(wt)
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.4"), format="png")
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")
