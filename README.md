@@ -3,7 +3,7 @@
 **Table of Contents**
 
 - [Visualizing Git Repository with Graphviz via Python](#visualizing-git-repository-with-graphviz-via-python)
-  - [Qiita](#qiita)
+  - [投稿](#%E6%8A%95%E7%A8%BF)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
