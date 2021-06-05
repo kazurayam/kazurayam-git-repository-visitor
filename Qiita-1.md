@@ -414,5 +414,20 @@ Sleep well tonight.
 今回作ったPythonコードの中核は [kazurayam/visualize_git_repository.pl](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository.py) と [kazurayam/visualize_git_repository_test.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/visualize_git_repository_test.py) です。まだ洗練が足りないので、ここではコードにかんする説明を省略します。もっとよいコードにできたらライブラリ化してPyPIで公開したいと考えています。
 
 
+## 今後
+
+いろいろ見たいことがある。
+
+- masterブランチからdevelopブランチを作ったらGraphvizはどういう図を描くだろう?
+- developブランチをmasterブランチにmergeするという操作を絵にしたらどうなるんだろう？
+- mergeするんじゃなくてdevelopブランチをmasterの先頭にrebaseするという操作を絵にしたらどうなるんだろう?
+- マージしようとしてconflictが起きない場合と起きる場合の違いを絵にしたらどうなるんだろう
+- tagを絵に書き加えたらどういう図になるんだろう?
+- git addしたらindexがどう変化するのか?
+- git addしたあと続けてgit commitしたらオブジェクトツリーがどう変化していくのか？
+
+以前、Gitまだわかりませんという同僚諸君にGitを説明しようとしたとき、彼らがひと目見てなるほどと理解できるような図を自分で描きたいと思った。しかし描けなくて困り果てたっけ。visualize_git_repositoryツールを育てれば図示できそうなきがする。
+
+
 - date: June 2021
 - author: kazurayam

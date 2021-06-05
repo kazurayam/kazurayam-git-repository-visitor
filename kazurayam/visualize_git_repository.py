@@ -21,7 +21,8 @@ class GitRepositoryVisualizer:
         commit_hash = o.strip()
         #
         g.node("master", "master", shape="doubleoctagon", width="0.3")
-        g.edge("master", commit_hash, constraint="false", style="dotted", xlabel="HEAD", weight="2")
+        g.edge("master", commit_hash, constraint="false", style="dashed",
+               xlabel="HEAD", weight="2", minlen="2")
         # draw the Tree
         self.visualize_commit(wt, commit_hash, g)
         #
