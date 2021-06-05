@@ -426,8 +426,7 @@ Sleep well tonight.
 - git addしたらindexがどう変化するのか?
 - git addしたあと続けてgit commitしたらオブジェクトツリーがどう変化していくのか？
 
-以前、Gitまだわかりませんという同僚諸君にGitを説明しようとしたとき、彼らがひと目見てなるほどと理解できるような図を自分で描きたいと思った。しかし描けなくて困り果てたっけ。visualize_git_repositoryツールを育てれば図示できそうなきがする。
-
+以前、Gitまだわかりませんという同僚諸君にGitを説明しようとしたとき、彼らがひと目見てなるほどと理解できるような図を自力で描きたいと思った。しかし描けなかった。visualize_git_repositoryツールを育てれば良い図が描けそうです。
 
 - date: June 2021
 - author: kazurayam
