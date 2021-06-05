@@ -16,7 +16,7 @@ class GitRepositoryVisualizer:
                             fontname="arial", fontsize="10")
         g.edge_attr.update(constraint="true", arrowhead="onormal",
                            fontname="arial", fontsize="10")
-        #
+        # process branches
         commit_hash = self.visualize_branches(wt, g)
 
         # place HEAD node and draw edge to the commit object
@@ -32,13 +32,14 @@ class GitRepositoryVisualizer:
         for head in o.splitlines():
             ref = head.split()[1]
             branch_name = ref.split('/')[2]
+            # "master", "develop" etc
 
             # grasp the hash of the commit object aliased to the branch
             o = GIT.revparse(wt, branch_name)
             commit_hash = o.strip()
             #
-            g.node("master", "master", shape="doubleoctagon", width="0.3")
-            g.edge("master", commit_hash, constraint="false", style="dashed", weight="2", minlen="2")
+            g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
+            g.edge(branch_name, commit_hash, constraint="false", style="dashed", weight="2", minlen="2")
             # draw the great tree
             self.visualize_commit(wt, commit_hash, g)
         #
@@ -61,6 +62,9 @@ added src/good-luck.pl
         g.node(the_commit_hash,
                "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
                shape="ellipse")
+
+        #g.node(the_commit_hash, xlabel="Tag x.x.x")
+
         # process the tree object as '/'
         tree_hash = o.splitlines()[0].split()[1]
         # now look into a tree object to trace its internal down

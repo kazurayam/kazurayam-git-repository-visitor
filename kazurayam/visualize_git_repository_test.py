@@ -36,7 +36,7 @@ def operate_add_todo(wt):
     GIT.commit(wt, "add doc/TODO.txt", True)
 
 
-def test_1(basedir):
+def test_1_object_tree(basedir):
     """
     1. initial commit and make a graph
     2. modify README.md and make a graph
@@ -56,3 +56,27 @@ def test_1(basedir):
     #
     operate_add_todo(wt)
     GRV().visualize(wt).render(os.path.join(gr, "figure-1.3"), format="png")
+
+
+def test_2_new_branch(basedir):
+    """
+    1. initial commit; make a graph
+    2. create a new branch "develop"; make a graph
+    3. in the new branch, modify README.md, commit it; make a graph
+    :param basedir:
+    :return:
+    """
+    (wt, gr) = testutils.create_subject_dir(basedir, '2_new_branch')
+    GIT.init(wt, True)
+    #
+    operate_initial_commit(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.1"), format="png")
+    #
+    GIT.branch(wt, "develop")
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.2"), format="png")
+    #
+    GIT.checkout(wt, "develop")
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")
+    #
+    operate_modify_readme(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.4"), format="png")

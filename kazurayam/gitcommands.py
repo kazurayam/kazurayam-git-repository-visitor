@@ -126,3 +126,46 @@ b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
         print_git_msg(output)
     return get_git_msg(output)
 
+
+def branch_new(wt, branch_name: str, verbose=False) -> str:
+    """
+    execute `git branch <brancc_name>` command
+    :param wt:
+    :param branch_name: e.g, "develop", "main" etc
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'branch', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git branch", branch_name)
+        print_git_msg(output)
+    return get_git_msg(output)
+
+def branch_show_current(wt, verbose=True) -> str:
+    """
+    execute `git branch --show-current` command
+    this will show the current branch which you are on currently
+    :param wt:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'branch', '--show-current'], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git branch", "--show-current")
+        print_git_msg(output)
+    return get_git_msg(output)
+
+
+def checkout(wt, branch_name: str, verbose=False) -> str:
+    """
+    execute `git checkout <branch_name>` command
+    :param wt:
+    :param branch_name:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'checkout', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git checkout", branch_name)
+        print_git_msg(output)
+    return get_git_msg(output)
