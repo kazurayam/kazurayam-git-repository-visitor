@@ -7,7 +7,6 @@ from . import trace_git_repository
 def test_trace(basedir):
     wt = os.path.join(basedir, 'test_trace')
     fileutils.init_dir(wt)
-    os.chdir(wt)
     #
     GIT.init(wt, True)
     #
