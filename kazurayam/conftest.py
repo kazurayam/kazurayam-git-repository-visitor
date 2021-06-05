@@ -9,4 +9,4 @@ def basedir():
     base = os.path.join(project_dir, "./tmp")
     fileutils.init_dir(base)
     yield base
-    os.chdir(project_dir)
+
