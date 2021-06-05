@@ -4,27 +4,29 @@ digraph main {
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	master [label=master shape=doubleoctagon width=0.3]
-	master -> "1ec57979b2f53af4e5f69bcc06622181bd24edcd" [constraint=false style=dotted weight=2 xlabel=HEAD]
-	"1ec57979b2f53af4e5f69bcc06622181bd24edcd" [label="commit: 1ec5797
+	master -> "1f56106da3fcaa824fea9427637a612f48d8fccd" [constraint=false minlen=2 style=dashed weight=2]
+	"1f56106da3fcaa824fea9427637a612f48d8fccd" [label="commit: 1f56106
 initial commit" shape=ellipse]
-	"1ec5797_c9b8214" [label="tree: c9b8214
+	"1f56106_c9b8214" [label="tree: c9b8214
 /" shape=folder]
-	"1ec5797_c9b8214__" [shape=point width=0.1]
-	"1ec5797_c9b8214" -> "1ec5797_c9b8214__" [arrowhead=none weight=4]
-	"1ec5797_b25c15b" [label="blob: b25c15b
+	"1f56106_c9b8214__" [shape=point width=0.1]
+	"1f56106_c9b8214" -> "1f56106_c9b8214__" [arrowhead=none weight=4]
+	"1f56106_b25c15b" [label="blob: b25c15b
 .gitignore"]
-	"1ec5797_c9b8214__" -> "1ec5797_b25c15b"
-	"1ec5797_aadb69a" [label="blob: aadb69a
+	"1f56106_c9b8214__" -> "1f56106_b25c15b"
+	"1f56106_aadb69a" [label="blob: aadb69a
 README.md"]
-	"1ec5797_c9b8214__" -> "1ec5797_aadb69a"
-	"1ec5797_3365c4a" [label="tree: 3365c4a
+	"1f56106_c9b8214__" -> "1f56106_aadb69a"
+	"1f56106_3365c4a" [label="tree: 3365c4a
 src/" shape=folder]
-	"1ec5797_3365c4a__" [shape=point width=0.1]
-	"1ec5797_3365c4a" -> "1ec5797_3365c4a__" [arrowhead=none weight=4]
-	"1ec5797_b371df9" [label="blob: b371df9
+	"1f56106_3365c4a__" [shape=point width=0.1]
+	"1f56106_3365c4a" -> "1f56106_3365c4a__" [arrowhead=none weight=4]
+	"1f56106_b371df9" [label="blob: b371df9
 greeting.pl"]
-	"1ec5797_3365c4a__" -> "1ec5797_b371df9"
-	"1ec5797_c9b8214__" -> "1ec5797_3365c4a"
-	"1ec57979b2f53af4e5f69bcc06622181bd24edcd" -> "1ec5797_c9b8214" [weight=2]
-	"1ec57979b2f53af4e5f69bcc06622181bd24edcd"
+	"1f56106_3365c4a__" -> "1f56106_b371df9"
+	"1f56106_c9b8214__" -> "1f56106_3365c4a"
+	"1f56106da3fcaa824fea9427637a612f48d8fccd" -> "1f56106_c9b8214" [weight=2]
+	"1f56106da3fcaa824fea9427637a612f48d8fccd"
+	HEAD [label=HEAD shape=doublecircle width=0.4]
+	HEAD -> "1f56106da3fcaa824fea9427637a612f48d8fccd" [constraint=false style=dashed]
 }
