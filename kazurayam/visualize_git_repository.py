@@ -6,7 +6,7 @@ class GitRepositoryVisualizer:
 
     def __init__(self):
         self.commits = []
-        self.object_commit_links = {}
+        self.object_commit_reverse_links = {}
 
     def visualize(self, wt: str):
         g = Digraph("main", comment="Git Repository graph")
@@ -22,12 +22,15 @@ class GitRepositoryVisualizer:
         #
         g.node("master", "master", shape="doubleoctagon", width="0.3")
         g.edge("master", commit_hash, constraint="false", style="dashed",
-               xlabel="HEAD", weight="2", minlen="2")
+               weight="2", minlen="2")
         # draw the Tree
         self.visualize_commit(wt, commit_hash, g)
-        #
+        # HEAD label
+        g.node("HEAD", "HEAD", shape="doublecircle", width="0.4")
+        g.edge("HEAD", commit_hash, constraint="false", style="dashed")
+        # gray out the duplicating blobs and trees
         self.grayout_duplicating_nodes(g)
-        #
+        # done
         return g
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
@@ -47,14 +50,14 @@ added src/good-luck.pl
         g.node(the_commit_hash,
                "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
                shape="ellipse")
-        # process the linked tree object
+        # process the tree object as '/'
         tree_hash = o.splitlines()[0].split()[1]
         # now look into a tree object to trace its internal down
         self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
         g.edge(the_commit_hash,
                node_id(the_commit_hash, tree_hash),
                weight="2")
-        # process the commit objects as parent
+        # process parent commits recursively
         for line in o.splitlines():
             if line.startswith("parent"):
                 parent_commit_hash = line.split()[1]
@@ -64,11 +67,7 @@ added src/good-luck.pl
                        constraint="false",
                        style="dotted",
                        weight="0")
-        # emit cluster_commits
-        #with g.subgraph(name="cluster_commits") as c:
-        #    c.attr(rank='same', color="white")
-        #    for h in self.commits:
-        #        c.node(h)
+        # draw the commit objects
         for h in self.commits:
             g.node(h)
 
@@ -97,13 +96,13 @@ added src/good-luck.pl
                        node_id(commit_hash, object_hash))
 
     def remember_link(self, commit_hash, object_hash):
-        if not (object_hash in self.object_commit_links):
-            self.object_commit_links[object_hash] = []
-        self.object_commit_links[object_hash].append(commit_hash)
+        if not (object_hash in self.object_commit_reverse_links):
+            self.object_commit_reverse_links[object_hash] = []
+        self.object_commit_reverse_links[object_hash].append(commit_hash)
 
     def grayout_duplicating_nodes(self, g: Digraph):
-        for object_hash in self.object_commit_links.keys():
-            commit_hash_list = self.object_commit_links.get(object_hash)
+        for object_hash in self.object_commit_reverse_links.keys():
+            commit_hash_list = self.object_commit_reverse_links.get(object_hash)
             if len(commit_hash_list) > 1:
                 for commit_hash in commit_hash_list[:-1]:
                     g.node(node_id(commit_hash, object_hash), fillcolor="lightgrey")

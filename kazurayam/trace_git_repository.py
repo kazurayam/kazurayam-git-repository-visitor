@@ -6,7 +6,7 @@ def trace(wt: str):
     o = GIT.revparse(wt, "HEAD")
     head_hash = o.strip()
     head_hash7 = head_hash[0:7]
-    # cat the HEAD commit object
+    # cat the HEAD commit objectgi
     GIT.catfile_t(wt, head_hash7)
     o = GIT.catfile_p(wt, head_hash7)
     # grasp the hash of the tree object that is pointed by the HEAD commit object
