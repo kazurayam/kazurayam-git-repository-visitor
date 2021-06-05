@@ -1,46 +1,58 @@
 import os
 from graphviz import Digraph
-from . import fileutils
+from .fileutils import write_file
 from . import gitcommands as GIT
 from . import testutils
-from . import visualize_git_repository
+from .visualize_git_repository import GitRepositoryVisualizer as GRV
 
 
-def test_1(basedir):
-    (wt, gr) = testutils.create_subject_dir(basedir, '1_object_tree')
-    #
-    GIT.init(wt, True)
-    #
-    fileutils.write_file(wt, '.gitignore', '*~\n')
-    fileutils.write_file(wt, "README.md", "# Read me please\n")
-    fileutils.write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
-    #
+def operate_initial_commit(wt):
+    write_file(wt, '.gitignore', '*~\n')
+    write_file(wt, "README.md", "# Read me please\n")
+    write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
     GIT.add(wt, '.', True)
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "initial commit", True)
-    visualizer1 = visualize_git_repository.GitRepositoryVisualizer()
-    g1: Digraph = visualizer1.visualize(wt)
-    g1.render(os.path.join(gr, "figure-1.1"), format="png")
-    #
-    f = fileutils.write_file(wt, "README.md", "# Read me more carefully\n")
+
+
+def operate_modify_readme(wt):
+    f = write_file(wt, "README.md", "# Read me more carefully\n")
     print("\n", "-" * 72)
     print("% modified README")
     GIT.add(wt, '.', True)
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "modified README.md", True)
-    visualizer2 = visualize_git_repository.GitRepositoryVisualizer()
-    g2: Digraph = visualizer2.visualize(wt)
-    g2.render(os.path.join(gr, "figure-1.2"), format="png")
-    #
-    f = fileutils.write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
+
+
+def operate_add_todo(wt):
+    f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
     print("\n", "-" * 72)
     print("% add doc/TODO.txt")
     GIT.add(wt, '.', True)
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
     GIT.commit(wt, "add doc/TODO.txt", True)
-    visualizer3 = visualize_git_repository.GitRepositoryVisualizer()
-    g3: Digraph = visualizer3.visualize(wt)
-    g3.render(os.path.join(gr, "figure-1.3"), format="png")
+
+
+def test_1(basedir):
+    """
+    1. initial commit and make a graph
+    2. modify README.md and make a graph
+    3. add doc/TODO.txt and make a graph
+    on the master branch, without any branch manipulation
+    :param basedir:
+    :return:
+    """
+    (wt, gr) = testutils.create_subject_dir(basedir, '1_object_tree')
+    GIT.init(wt, True)
+    #
+    operate_initial_commit(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-1.1"), format="png")
+    #
+    operate_modify_readme(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-1.2"), format="png")
+    #
+    operate_add_todo(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-1.3"), format="png")

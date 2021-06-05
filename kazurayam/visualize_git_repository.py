@@ -18,6 +18,7 @@ class GitRepositoryVisualizer:
                            fontname="arial", fontsize="10")
         #
         commit_hash = self.visualize_branches(wt, g)
+
         # place HEAD node and draw edge to the commit object
         g.node("HEAD", "HEAD", shape="doublecircle", width="0.4")
         g.edge("HEAD", commit_hash, constraint="false", style="dashed")
@@ -27,16 +28,21 @@ class GitRepositoryVisualizer:
         return g
 
     def visualize_branches(self, wt: str, g:Digraph) -> str:
-        # grasp the hash of the commit object aliased to HEAD of the current branch (master)
-        o = GIT.revparse(wt, "HEAD")
-        commit_hash = o.strip()
+        o = GIT.showref_heads(wt)
+        for head in o.splitlines():
+            ref = head.split()[1]
+            branch_name = ref.split('/')[2]
+
+            # grasp the hash of the commit object aliased to the branch
+            o = GIT.revparse(wt, branch_name)
+            commit_hash = o.strip()
+            #
+            g.node("master", "master", shape="doubleoctagon", width="0.3")
+            g.edge("master", commit_hash, constraint="false", style="dashed", weight="2", minlen="2")
+            # draw the great tree
+            self.visualize_commit(wt, commit_hash, g)
         #
-        g.node("master", "master", shape="doubleoctagon", width="0.3")
-        g.edge("master", commit_hash, constraint="false", style="dashed",
-               weight="2", minlen="2")
-        # draw the great tree
-        self.visualize_commit(wt, commit_hash, g)
-        return commit_hash
+        return GIT.revparse(wt, 'HEAD').strip()
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
         self.commits.append(the_commit_hash)

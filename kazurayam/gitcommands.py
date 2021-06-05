@@ -106,3 +106,23 @@ def lsfiles_stage(wt, verbose=True) -> str:
         print("\n% git ls-files --stage")
         print_git_msg(output)
     return get_git_msg(output)
+
+
+def showref_heads(wt, verbose=True) -> str:
+    """
+    execute `git show-ref --heads` command
+    this command shows something like this:
+```
+b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/develop
+b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
+```
+    :param wt:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'show-ref', '--heads'], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git show-ref --heads")
+        print_git_msg(output)
+    return get_git_msg(output)
+
