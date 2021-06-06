@@ -23,7 +23,7 @@ class GitRepositoryVisualizer:
         branch_name = self.visualize_current_branch(wt, g)
 
         # place HEAD node and draw edge to the commit object
-        g.edge("HEAD", branch_name, constraint="false", minlen="1")
+        g.edge("HEAD", branch_name, constraint="true", minlen="1")
 
         # gray out the duplicating blobs and trees
         self.grayout_duplicating_nodes(g)
@@ -37,12 +37,13 @@ class GitRepositoryVisualizer:
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-        g.edge(branch_name, commit_hash, constraint="true", weight="2", minlen="1")
+        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1")
         # draw the great tree
         self.visualize_commit(wt, commit_hash, True, g)
         # draw the commit objects in a subgraph
         with g.subgraph(name="cluster_commits") as c:
             c.attr('graph', color="white")
+            c.node(branch_name)
             for h in self.commits:
                 c.node(h)
         #

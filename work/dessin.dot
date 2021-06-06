@@ -2,71 +2,66 @@
 digraph main {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
-	graph [layout=dot nodesep=0.5 rank=max rankdir=LR ranksep=0.8 splines=ortho]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	master [label=master shape=doubleoctagon width=0.3]
-	master -> c7161686601c6fa8cd76bd20f8209e0d483e85c3 [constraint=true minlen=1 weight=10]
-
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3 [label="commit: c716168
+	master -> e1da37634cde82a405719ba230a8f79bca2bfb69 [constraint=false minlen=1 weight=2]
+	e1da37634cde82a405719ba230a8f79bca2bfb69 [label="commit: e1da376
 Merge branch 'develop'" shape=ellipse]
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> c716168_39e990f [weight=2]
-	c716168_39e990f [label="tree: 39e990f
+	e1da37634cde82a405719ba230a8f79bca2bfb69 -> e1da376_39e990f [weight=2]
+	e1da376_39e990f [label="tree: 39e990f
 /" shape=folder]
-
-
-	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34" [label="commit: 945195e
-add doc/TODO.txt" shape=ellipse]
-	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34" -> "945195e_be633eb" [weight=2]
-	"945195e_be633eb" [label="tree: be633eb
-/" shape=folder]
-
-
-
-
-	"5ca015b0ea774ecc6beb18848dd4dbff787a6852" [label="commit: 5ca015b
-modified README.md" shape=ellipse]
-	"5ca015b0ea774ecc6beb18848dd4dbff787a6852" -> "5ca015b_bd4ab23" [weight=2]
-	"5ca015b_bd4ab23" [label="tree: bd4ab23
-/" shape=folder]
-	"5ca015b_bd4ab23__" [shape=point width=0.1]
-	"5ca015b_bd4ab23" -> "5ca015b_bd4ab23__" [arrowhead=none weight=4]
-	"5ca015b_b25c15b" [label="blob: b25c15b
+	e1da376_39e990f__ [shape=point width=0.1]
+	e1da376_39e990f -> e1da376_39e990f__ [arrowhead=none weight=4]
+	e1da376_b25c15b [label="blob: b25c15b
 .gitignore"]
-	"5ca015b_bd4ab23__" -> "5ca015b_b25c15b"
-	"5ca015b_5a79541" [label="blob: 5a79541
+	e1da376_39e990f__ -> e1da376_b25c15b
+	e1da376_5a79541 [label="blob: 5a79541
 README.md"]
-	"5ca015b_bd4ab23__" -> "5ca015b_5a79541"
-	"5ca015b_3365c4a" [label="tree: 3365c4a
+	e1da376_39e990f__ -> e1da376_5a79541
+	e1da376_b2298cc [label="tree: b2298cc
+doc/" shape=folder]
+	e1da376_b2298cc__ [shape=point width=0.1]
+	e1da376_b2298cc -> e1da376_b2298cc__ [arrowhead=none weight=4]
+	e1da376_de13371 [label="blob: de13371
+TODO.txt"]
+	e1da376_b2298cc__ -> e1da376_de13371
+	e1da376_39e990f__ -> e1da376_b2298cc
+	e1da376_3365c4a [label="tree: 3365c4a
 src/" shape=folder]
-	"5ca015b_3365c4a__" [shape=point width=0.1]
-	"5ca015b_3365c4a" -> "5ca015b_3365c4a__" [arrowhead=none weight=4]
-	"5ca015b_b371df9" [label="blob: b371df9
+	e1da376_3365c4a__ [shape=point width=0.1]
+	e1da376_3365c4a -> e1da376_3365c4a__ [arrowhead=none weight=4]
+	e1da376_b371df9 [label="blob: b371df9
 greeting.pl"]
-	"5ca015b_3365c4a__" -> "5ca015b_b371df9"
-	"5ca015b_bd4ab23__" -> "5ca015b_3365c4a"
+	e1da376_3365c4a__ -> e1da376_b371df9
+	e1da376_39e990f__ -> e1da376_3365c4a
 
 
-	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [label="commit: 6b82f4a
+
+
+	d4169cadd46b33a133f23c652e221a04cd8c8aea [label="commit: d4169ca
+add doc/TODO.txt" shape=ellipse]
+
+	d31df362a4482f3ca88fbad9e02d3a3462b12030 [label="commit: d31df36
+modified README.md" shape=ellipse]
+
+	"1af68ddd238033b91aec7137f4d924187f23d12e" [label="commit: 1af68dd
 initial commit" shape=ellipse]
-	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" -> "6b82f4a_c9b8214" [weight=2]
-	"6b82f4a_c9b8214" [label="tree: c9b8214
-/" shape=folder]
-
-	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34" -> "6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [constraint=false style=dotted weight=0]
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> "945195ef39a48f726cd3a5bdfbe873fcba7b0c34" [constraint=false style=dotted weight=0]
-
-	"5ca015b0ea774ecc6beb18848dd4dbff787a6852" -> "6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [constraint=false style=dotted weight=0]
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> "5ca015b0ea774ecc6beb18848dd4dbff787a6852" [constraint=false style=dotted weight=0]
-
-    HEAD -> master [constraint=false minlen=1]
-
-    subgraph cluster_commits {
-    color=white;
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3
-	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10"
-    	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34"
-	"5ca015b0ea774ecc6beb18848dd4dbff787a6852"
-    }
 
 
+	e1da37634cde82a405719ba230a8f79bca2bfb69 -> d31df362a4482f3ca88fbad9e02d3a3462b12030 [constraint=false style=dotted weight=0]
+	d31df362a4482f3ca88fbad9e02d3a3462b12030 -> "1af68ddd238033b91aec7137f4d924187f23d12e" [constraint=false style=dotted weight=0]
+    d4169cadd46b33a133f23c652e221a04cd8c8aea -> "1af68ddd238033b91aec7137f4d924187f23d12e" [constraint=false style=dotted weight=0]
+	e1da37634cde82a405719ba230a8f79bca2bfb69 -> d4169cadd46b33a133f23c652e221a04cd8c8aea [constraint=false style=dotted weight=0]
+
+	subgraph cluster_commits {
+		graph [color=white]
+		master
+		e1da37634cde82a405719ba230a8f79bca2bfb69
+		d4169cadd46b33a133f23c652e221a04cd8c8aea
+		d31df362a4482f3ca88fbad9e02d3a3462b12030
+		"1af68ddd238033b91aec7137f4d924187f23d12e"
+
+	}
+	HEAD -> master [constraint=true minlen=1]
 }

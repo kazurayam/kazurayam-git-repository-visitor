@@ -4,6 +4,7 @@ from . import fileutils
 from . import gitcommands as GIT
 from . import testutils
 
+
 @pytest.fixture(scope="module")
 def wt_with_initial_commit(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'gitcommands_test')
