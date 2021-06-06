@@ -1,3 +1,4 @@
+from collections import deque
 from graphviz import Digraph
 from . import gitcommands as GIT
 
@@ -8,7 +9,7 @@ class GitRepositoryVisualizer:
         self.commits = []
         self.object_commit_reverse_links = {}
 
-    def visualize(self, wt: str):
+    def visualize(self, wt: str) -> Digraph:
         g = Digraph("main", comment="Git Repository graph")
         g.attr('graph', layout="dot", rank="max", rankdir="LR",
                splines="ortho", ranksep="0.5", nodesep="0.3")
@@ -23,7 +24,7 @@ class GitRepositoryVisualizer:
         branch_name = self.visualize_current_branch(wt, g)
 
         # place HEAD node and draw edge to the commit object
-        g.edge("HEAD", branch_name, constraint="true", minlen="1")
+        g.edge("HEAD", branch_name, constraint="true", minlen="1", arrowhead="normal")
 
         # gray out the duplicating blobs and trees
         self.grayout_duplicating_nodes(g)
@@ -37,9 +38,9 @@ class GitRepositoryVisualizer:
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1")
+        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1", arrowhead="normal")
         # draw the great tree
-        self.visualize_commit(wt, commit_hash, True, g)
+        self.traverse_commits(wt, commit_hash, True, g)
         # draw the commit objects in a subgraph
         with g.subgraph(name="cluster_commits") as c:
             c.attr('graph', color="white")
@@ -49,47 +50,55 @@ class GitRepositoryVisualizer:
         #
         return branch_name
 
-    def visualize_commit(self, wt: str, the_commit_hash: str, in_detail: bool, g: Digraph) -> str:
+    def traverse_commits(self, wt: str, top_commit_hash: str, in_detail: bool, g: Digraph):
+        # create a Deque (Double-ended-queue)
+        dq = deque()
+        dq.append(top_commit_hash)
+        # repeat until the deque gets empty
+        while len(dq) > 0:
+            # pop a commit_hash from the top left of the deque
+            commit_hash = dq.popleft()
+            if commit_hash is not None:
+                self.visualize_commit(wt, commit_hash, in_detail, g)
+                # append following commits into the Deque
+                parent_commits = get_parent_commits(wt, commit_hash)
+                for parent in parent_commits:
+                    dq.append(parent)
+                if len(parent_commits) >= 2:
+                    in_detail = False
+
+    def visualize_commit(self, wt: str, the_commit_hash: str, in_detail: bool, g: Digraph):
         if the_commit_hash not in self.commits:
             self.commits.append(the_commit_hash)
-            # look into the commit object
-            GIT.catfile_t(wt, the_commit_hash)
-            o = GIT.catfile_p(wt, the_commit_hash[0:7])
-            """for example
-            tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
-            parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
-            author kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
-            committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
 
-            added src/good-luck.pl
-            """
+            # look into the commit object
+            o = GIT.catfile_p(wt, the_commit_hash[0:7])
             commit_message = get_commit_message(o)
             g.node(the_commit_hash,
                    "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
                    shape="ellipse")
             #g.node(the_commit_hash, xlabel="Tag x.x.x")
 
-            # now look into a tree object to trace its internal down
             if in_detail:
+                # now look into the root tree object `/` to trace its internal down
                 tree_hash = o.splitlines()[0].split()[1]
                 g.edge(the_commit_hash,
-                       node_id(the_commit_hash, tree_hash), weight="2")
+                       node_id(the_commit_hash, tree_hash), weight="2", style="dashed")
                 self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
             # select lines that start with "parent"
             parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
 
             # if this commit object is a merge commit?
-            # then print no detail of the merged commits
+            # then print no detail of the merged commits that follow this commit
             if len(parent_lines) >= 2:
                 in_detail = False
 
-            # process parent commits recursively,
+            # draw edge from this commit to the parent commits
             for line in parent_lines:
                 parent_commit_hash = line.split()[1]
-                self.visualize_commit(wt, parent_commit_hash, in_detail, g)
                 g.edge(the_commit_hash, parent_commit_hash,
-                       constraint="false", style="dotted", weight="0")
+                       constraint="false", arrowhead="normal")
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
         self.remember_link(commit_hash, tree_hash)
@@ -155,3 +164,19 @@ added src/good-luck.pl
             pass
         else:
             return line.strip()
+
+
+def get_parent_commits(wt: str, commit_hash) -> tuple:
+    o = GIT.catfile_p(wt, commit_hash[0:7])
+    """for example
+    tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
+    parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
+    author kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+    committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+
+    added src/good-luck.pl
+    """
+    # select lines that start with "parent"
+    parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
+    parent_commit_hashes = tuple([line.split()[1] for line in parent_lines])
+    return parent_commit_hashes
