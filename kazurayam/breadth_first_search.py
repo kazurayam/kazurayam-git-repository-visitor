@@ -4,26 +4,30 @@
 from collections import deque
 
 
-class Node:
+class Commit:
     def __init__(self, x):
         self.val = x
         self.left = None
         self.right = None
 
 
-def traverse(q: deque):
+def traverse(q: deque, callback):
     # キューが空になるまで繰り返す
     while len(q) > 0:
         # キューの先端（左端）からnodeを取り出す
         node = q.popleft()
 
         if node is not None:
-            print(node.val)
+            callback(node.val)
             # nodeの子要素をキューの末尾（右端）に入れる
             if node.left is not None:
                 q.append(node.left)
             if node.right is not None:
                 q.append(node.right)
+
+
+def printer(s: str):
+    print(s)
 
 
 def demo1():
@@ -33,13 +37,13 @@ def demo1():
     #   2   3
     #  / \ / \
     # 4  5 6  7
-    node1 = Node(1)
-    node2 = Node(2)
-    node3 = Node(3)
-    node4 = Node(4)
-    node5 = Node(5)
-    node6 = Node(6)
-    node7 = Node(7)
+    node1 = Commit(1)
+    node2 = Commit(2)
+    node3 = Commit(3)
+    node4 = Commit(4)
+    node5 = Commit(5)
+    node6 = Commit(6)
+    node7 = Commit(7)
     node1.left = node2
     node1.right = node3
     node2.left = node4
@@ -51,7 +55,7 @@ def demo1():
     # ルートノードをキューに入れる
     q.append(node1)
     # traverseする
-    traverse(q)
+    traverse(q, printer)
 
 
 def demo2():
@@ -61,11 +65,11 @@ def demo2():
     #   2   3
     #  /   /
     # 4    5
-    node1 = Node(1)
-    node2 = Node(2)
-    node3 = Node(3)
-    node4 = Node(4)
-    node5 = Node(5)
+    node1 = Commit(1)
+    node2 = Commit(2)
+    node3 = Commit(3)
+    node4 = Commit(4)
+    node5 = Commit(5)
     node1.left = node2
     node1.right = node3
     node2.left = node4
@@ -75,4 +79,4 @@ def demo2():
     # ルートノードをキューに入れる
     q.append(node1)
     # traverseする
-    traverse(q)
+    traverse(q, printer)
