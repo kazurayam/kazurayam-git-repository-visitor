@@ -67,10 +67,11 @@ class GitRepositoryVisualizer:
             #g.node(the_commit_hash, xlabel="Tag x.x.x")
             # process the tree object as '/'
             tree_hash = o.splitlines()[0].split()[1]
-            # now look into a tree object to trace its internal down
-            self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
             g.edge(the_commit_hash,
                    node_id(the_commit_hash, tree_hash), weight="2")
+
+            # now look into a tree object to trace its internal down
+            self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
             # select lines that start with "parent"
             parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
