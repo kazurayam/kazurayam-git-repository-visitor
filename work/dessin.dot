@@ -2,10 +2,10 @@
 digraph main {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
-	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	graph [layout=dot nodesep=0.5 rank=max rankdir=LR ranksep=0.8 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	master [label=master shape=doubleoctagon width=0.3]
-	master -> c7161686601c6fa8cd76bd20f8209e0d483e85c3 [constraint=false minlen=1 weight=2]
+	master -> c7161686601c6fa8cd76bd20f8209e0d483e85c3 [constraint=true minlen=1 weight=10]
 
 	c7161686601c6fa8cd76bd20f8209e0d483e85c3 [label="commit: c716168
 Merge branch 'develop'" shape=ellipse]
@@ -20,15 +20,6 @@ add doc/TODO.txt" shape=ellipse]
 	"945195e_be633eb" [label="tree: be633eb
 /" shape=folder]
 
-
-	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [label="commit: 6b82f4a
-initial commit" shape=ellipse]
-	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" -> "6b82f4a_c9b8214" [weight=2]
-	"6b82f4a_c9b8214" [label="tree: c9b8214
-/" shape=folder]
-
-	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34" -> "6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [constraint=false style=dotted weight=0]
-	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> "945195ef39a48f726cd3a5bdfbe873fcba7b0c34" [constraint=false style=dotted weight=0]
 
 
 
@@ -55,11 +46,27 @@ greeting.pl"]
 	"5ca015b_bd4ab23__" -> "5ca015b_3365c4a"
 
 
+	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [label="commit: 6b82f4a
+initial commit" shape=ellipse]
+	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" -> "6b82f4a_c9b8214" [weight=2]
+	"6b82f4a_c9b8214" [label="tree: c9b8214
+/" shape=folder]
+
+	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34" -> "6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [constraint=false style=dotted weight=0]
+	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> "945195ef39a48f726cd3a5bdfbe873fcba7b0c34" [constraint=false style=dotted weight=0]
+
 	"5ca015b0ea774ecc6beb18848dd4dbff787a6852" -> "6b82f4a25697fcf833de3a0bc355e5cfcea6cc10" [constraint=false style=dotted weight=0]
 	c7161686601c6fa8cd76bd20f8209e0d483e85c3 -> "5ca015b0ea774ecc6beb18848dd4dbff787a6852" [constraint=false style=dotted weight=0]
+
+    HEAD -> master [constraint=false minlen=1]
+
+    subgraph cluster_commits {
+    color=white;
 	c7161686601c6fa8cd76bd20f8209e0d483e85c3
-	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34"
 	"6b82f4a25697fcf833de3a0bc355e5cfcea6cc10"
+    	"945195ef39a48f726cd3a5bdfbe873fcba7b0c34"
 	"5ca015b0ea774ecc6beb18848dd4dbff787a6852"
-	HEAD -> master [constraint=false minlen=1]
+    }
+
+
 }

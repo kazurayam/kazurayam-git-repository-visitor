@@ -37,16 +37,18 @@ class GitRepositoryVisualizer:
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1")
+        g.edge(branch_name, commit_hash, constraint="true", weight="2", minlen="1")
         # draw the great tree
-        self.visualize_commit(wt, commit_hash, g)
-        # draw the commit objects
-        for h in self.commits:
-            g.node(h)
+        self.visualize_commit(wt, commit_hash, True, g)
+        # draw the commit objects in a subgraph
+        with g.subgraph(name="cluster_commits") as c:
+            c.attr('graph', color="white")
+            for h in self.commits:
+                c.node(h)
         #
         return branch_name
 
-    def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph) -> str:
+    def visualize_commit(self, wt: str, the_commit_hash: str, in_detail: bool, g: Digraph) -> str:
         if the_commit_hash not in self.commits:
             self.commits.append(the_commit_hash)
             # look into the commit object
@@ -71,22 +73,23 @@ class GitRepositoryVisualizer:
                    node_id(the_commit_hash, tree_hash), weight="2")
 
             # now look into a tree object to trace its internal down
-            self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
+            if in_detail:
+                self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
             # select lines that start with "parent"
             parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
-            # if this commit object has parents?
-            if len(parent_lines) >= 1:
-                # process parent commits recursively,
-                for line in o.splitlines():
-                    if line.startswith("parent"):
-                        parent_commit_hash = line.split()[1]
-                        self.visualize_commit(wt, parent_commit_hash, g)
-                        g.edge(the_commit_hash,
-                               parent_commit_hash,
-                               constraint="false", style="dotted", weight="0")
-            else:
-                pass
+
+            # if this commit object is a merge commit?
+            # then print no detail of the merged commits
+            if len(parent_lines) >= 2:
+                in_detail = False
+
+            # process parent commits recursively,
+            for line in parent_lines:
+                parent_commit_hash = line.split()[1]
+                self.visualize_commit(wt, parent_commit_hash, in_detail, g)
+                g.edge(the_commit_hash, parent_commit_hash,
+                       constraint="false", style="dotted", weight="0")
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
         self.remember_link(commit_hash, tree_hash)
