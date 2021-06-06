@@ -58,7 +58,7 @@ def test_1_object_tree(basedir):
     GRV().visualize(wt).render(os.path.join(gr, "figure-1.3"), format="png")
 
 
-def test_2_new_branch(basedir):
+def test_2_branch_and_merge(basedir):
     """
     1. initial commit; make a graph
     2. create a new branch "develop"; make a graph
@@ -66,7 +66,7 @@ def test_2_new_branch(basedir):
     :param basedir:
     :return:
     """
-    (wt, gr) = testutils.create_subject_dir(basedir, '2_new_branch')
+    (wt, gr) = testutils.create_subject_dir(basedir, '2_branch_and_merge')
     GIT.init(wt, True)
     #
     operate_initial_commit(wt)
@@ -78,3 +78,12 @@ def test_2_new_branch(basedir):
     #
     operate_modify_readme(wt)
     GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")
+    #
+    GIT.checkout(wt, "master")
+    operate_add_todo(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.4"), format="png")
+    #
+    GIT.merge(wt, "develop")
+    GRV().visualize(wt).render(os.path.join(gr, "figure-2.5"), format="png")
+
+

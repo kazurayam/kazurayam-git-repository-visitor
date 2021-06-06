@@ -44,45 +44,44 @@ class GitRepositoryVisualizer:
         return branch_name
 
     def visualize_commit(self, wt: str, the_commit_hash: str, g: Digraph):
-        self.commits.append(the_commit_hash)
-        # look into the commit object
-        GIT.catfile_t(wt, the_commit_hash)
-        o = GIT.catfile_p(wt, the_commit_hash[0:7])
-        """for example
-tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
-parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
-author kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
-committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+        if the_commit_hash not in self.commits:
+            self.commits.append(the_commit_hash)
 
-added src/good-luck.pl
-        """
-        commit_message = get_commit_message(o)
-        g.node(the_commit_hash,
-               "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
-               shape="ellipse")
+            # look into the commit object
+            GIT.catfile_t(wt, the_commit_hash)
+            o = GIT.catfile_p(wt, the_commit_hash[0:7])
+            """for example
+            tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
+            parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
+            author kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
+            committer kazurayam <kazuaki.urayama@gmail.com> 1622515817 +0900
 
-        #g.node(the_commit_hash, xlabel="Tag x.x.x")
+            added src/good-luck.pl
+            """
+            commit_message = get_commit_message(o)
+            g.node(the_commit_hash,
+                   "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
+                   shape="ellipse")
 
-        # process the tree object as '/'
-        tree_hash = o.splitlines()[0].split()[1]
-        # now look into a tree object to trace its internal down
-        self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
-        g.edge(the_commit_hash,
-               node_id(the_commit_hash, tree_hash),
-               weight="2")
-        # process parent commits recursively
-        for line in o.splitlines():
-            if line.startswith("parent"):
-                parent_commit_hash = line.split()[1]
-                self.visualize_commit(wt, parent_commit_hash, g)
-                g.edge(the_commit_hash,
-                       parent_commit_hash,
-                       constraint="false",
-                       style="dotted",
-                       weight="0")
-        # draw the commit objects
-        for h in self.commits:
-            g.node(h)
+            #g.node(the_commit_hash, xlabel="Tag x.x.x")
+
+            # process the tree object as '/'
+            tree_hash = o.splitlines()[0].split()[1]
+            # now look into a tree object to trace its internal down
+            self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
+            g.edge(the_commit_hash,
+                   node_id(the_commit_hash, tree_hash), weight="2")
+            # process parent commits recursively,
+            for line in o.splitlines():
+                if line.startswith("parent"):
+                    parent_commit_hash = line.split()[1]
+                    self.visualize_commit(wt, parent_commit_hash, g)
+                    g.edge(the_commit_hash,
+                           parent_commit_hash,
+                           constraint="false", style="dotted", weight="0")
+            # draw the commit objects
+            for h in self.commits:
+                g.node(h)
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
         self.remember_link(commit_hash, tree_hash)

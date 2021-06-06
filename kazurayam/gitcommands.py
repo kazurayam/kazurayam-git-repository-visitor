@@ -169,3 +169,18 @@ def checkout(wt, branch_name: str, verbose=False) -> str:
         print("\n% git checkout", branch_name)
         print_git_msg(output)
     return get_git_msg(output)
+
+
+def merge(wt, branch_name: str, verbose=False) -> str:
+    """
+    execute `git merge <branch_name>` command
+    :param wt:
+    :param branch_name:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'merge', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git merge", branch_name)
+        print_git_msg(output)
+    return get_git_msg(output)
