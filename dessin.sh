@@ -1,0 +1,1 @@
+dot -Tpng -o work/dessin.png work/dessin.dot
