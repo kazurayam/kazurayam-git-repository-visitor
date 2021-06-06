@@ -67,13 +67,12 @@ class GitRepositoryVisualizer:
                    "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
                    shape="ellipse")
             #g.node(the_commit_hash, xlabel="Tag x.x.x")
-            # process the tree object as '/'
-            tree_hash = o.splitlines()[0].split()[1]
-            g.edge(the_commit_hash,
-                   node_id(the_commit_hash, tree_hash), weight="2")
 
             # now look into a tree object to trace its internal down
             if in_detail:
+                tree_hash = o.splitlines()[0].split()[1]
+                g.edge(the_commit_hash,
+                       node_id(the_commit_hash, tree_hash), weight="2")
                 self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
             # select lines that start with "parent"
