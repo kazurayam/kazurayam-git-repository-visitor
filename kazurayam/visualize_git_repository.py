@@ -9,7 +9,7 @@ class GitRepositoryVisualizer:
         self.commits = []
         self.object_commit_reverse_links = {}
 
-    def visualize(self, wt: str) -> Digraph:
+    def visualize(self, wt: str, modifier=None) -> Digraph:
         g = Digraph("main", comment="Git Repository graph")
         g.attr('graph', layout="dot", rank="max", rankdir="LR",
                splines="ortho", ranksep="0.5", nodesep="0.3")
@@ -28,6 +28,11 @@ class GitRepositoryVisualizer:
 
         # gray out the duplicating blobs and trees
         self.grayout_duplicating_nodes(g)
+
+        # modify the generated Digraph using the specified callback function
+        if modifier is not None:
+            modifier(g)
+
         # done
         return g
 

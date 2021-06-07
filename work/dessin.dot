@@ -4,68 +4,34 @@ digraph main {
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
-	master [label=master shape=doubleoctagon width=0.3]
-	master -> d65fec48140f4e1753cdd050c25cbba247d01516 [arrowhead=normal constraint=false minlen=1 weight=2]
-	d65fec48140f4e1753cdd050c25cbba247d01516 [label="commit: d65fec4
-add doc/TODO.txt" shape=ellipse]
-	d65fec48140f4e1753cdd050c25cbba247d01516 -> d65fec4_be633eb [style=dashed weight=2]
-	d65fec4_be633eb [label="tree: be633eb
-/" shape=folder]
-	d65fec4_be633eb__ [shape=point width=0.1]
-	d65fec4_be633eb -> d65fec4_be633eb__ [arrowhead=none weight=4]
-	d65fec4_b25c15b [label="blob: b25c15b
-.gitignore"]
-	d65fec4_be633eb__ -> d65fec4_b25c15b
-	d65fec4_aadb69a [label="blob: aadb69a
-README.md"]
-	d65fec4_be633eb__ -> d65fec4_aadb69a
-	d65fec4_b2298cc [label="tree: b2298cc
-doc/" shape=folder]
-	d65fec4_b2298cc__ [shape=point width=0.1]
-	d65fec4_b2298cc -> d65fec4_b2298cc__ [arrowhead=none weight=4]
-	d65fec4_de13371 [label="blob: de13371
-TODO.txt"]
-	d65fec4_b2298cc__ -> d65fec4_de13371
-	d65fec4_be633eb__ -> d65fec4_b2298cc
-	d65fec4_3365c4a [label="tree: 3365c4a
-src/" shape=folder]
-	d65fec4_3365c4a__ [shape=point width=0.1]
-	d65fec4_3365c4a -> d65fec4_3365c4a__ [arrowhead=none weight=4]
-	d65fec4_b371df9 [label="blob: b371df9
-greeting.pl"]
-	d65fec4_3365c4a__ -> d65fec4_b371df9
-	d65fec4_be633eb__ -> d65fec4_3365c4a
-	d65fec48140f4e1753cdd050c25cbba247d01516 -> "3bf120a34baa526c4bde3a8b89397b2bccc497e4" [arrowhead=normal constraint=false minlen=2]
-	"3bf120a34baa526c4bde3a8b89397b2bccc497e4" [label="commit: 3bf120a
+	develop [label=develop shape=doubleoctagon width=0.3]
+	develop -> d764e6afbf7bcf0ebd6f6b90a1201ccdab5af07f [arrowhead=normal constraint=false minlen=1 weight=2]
+	d764e6afbf7bcf0ebd6f6b90a1201ccdab5af07f [label="commit: d764e6a
 initial commit" shape=ellipse]
-	"3bf120a34baa526c4bde3a8b89397b2bccc497e4" -> "3bf120a_c9b8214" [style=dashed weight=2]
-	"3bf120a_c9b8214" [label="tree: c9b8214
+	d764e6afbf7bcf0ebd6f6b90a1201ccdab5af07f -> d764e6a_c9b8214 [style=dashed weight=2]
+	d764e6a_c9b8214 [label="tree: c9b8214
 /" shape=folder]
-	"3bf120a_c9b8214__" [shape=point width=0.1]
-	"3bf120a_c9b8214" -> "3bf120a_c9b8214__" [arrowhead=none weight=4]
-	"3bf120a_b25c15b" [label="blob: b25c15b
+	d764e6a_c9b8214__ [shape=point width=0.1]
+	d764e6a_c9b8214 -> d764e6a_c9b8214__ [arrowhead=none weight=4]
+	d764e6a_b25c15b [label="blob: b25c15b
 .gitignore"]
-	"3bf120a_c9b8214__" -> "3bf120a_b25c15b"
-	"3bf120a_aadb69a" [label="blob: aadb69a
+	d764e6a_c9b8214__ -> d764e6a_b25c15b
+	d764e6a_aadb69a [label="blob: aadb69a
 README.md"]
-	"3bf120a_c9b8214__" -> "3bf120a_aadb69a"
-	"3bf120a_3365c4a" [label="tree: 3365c4a
+	d764e6a_c9b8214__ -> d764e6a_aadb69a
+	d764e6a_3365c4a [label="tree: 3365c4a
 src/" shape=folder]
-	"3bf120a_3365c4a__" [shape=point width=0.1]
-	"3bf120a_3365c4a" -> "3bf120a_3365c4a__" [arrowhead=none weight=4]
-	"3bf120a_b371df9" [label="blob: b371df9
+	d764e6a_3365c4a__ [shape=point width=0.1]
+	d764e6a_3365c4a -> d764e6a_3365c4a__ [arrowhead=none weight=4]
+	d764e6a_b371df9 [label="blob: b371df9
 greeting.pl"]
-	"3bf120a_3365c4a__" -> "3bf120a_b371df9"
-	"3bf120a_c9b8214__" -> "3bf120a_3365c4a"
+	d764e6a_3365c4a__ -> d764e6a_b371df9
+	d764e6a_c9b8214__ -> d764e6a_3365c4a
 	subgraph cluster_commits {
 		graph [color=white]
-		master
-		d65fec48140f4e1753cdd050c25cbba247d01516
-		"3bf120a34baa526c4bde3a8b89397b2bccc497e4"
+		develop
+		d764e6afbf7bcf0ebd6f6b90a1201ccdab5af07f
 	}
-	HEAD -> master [arrowhead=normal constraint=true minlen=1]
-	d65fec4_b25c15b [fillcolor=lightgrey]
-	d65fec4_aadb69a [fillcolor=lightgrey]
-	d65fec4_3365c4a [fillcolor=lightgrey]
-	d65fec4_b371df9 [fillcolor=lightgrey]
+	HEAD -> develop [arrowhead=normal constraint=true minlen=1]
+	develop [color=red]
 }

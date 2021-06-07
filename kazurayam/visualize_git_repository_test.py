@@ -74,7 +74,9 @@ def test_2_branch_and_merge(basedir):
     #
     GIT.branch_new(wt, "develop")
     GIT.checkout(wt, "develop")
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.2"), format="png")
+    GRV().visualize(wt,
+                    lambda g: g.node('develop', color="red")
+                    ).render(os.path.join(gr, "figure-2.2"), format="png")
     #
     operate_modify_readme(wt)
     GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")

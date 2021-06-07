@@ -1,0 +1,57 @@
+// Git Repository graph
+digraph main {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+	master [label=master shape=doubleoctagon width=0.3]
+	master -> dcf1146eb273ef562e531a2d8e4786673673dbf0 [arrowhead=normal constraint=false minlen=1 weight=2]
+	dcf1146eb273ef562e531a2d8e4786673673dbf0 [label="commit: dcf1146
+Merge branch 'develop'" shape=ellipse]
+	dcf1146eb273ef562e531a2d8e4786673673dbf0 -> dcf1146_39e990f [style=dashed weight=2]
+	dcf1146_39e990f [label="tree: 39e990f
+/" shape=folder]
+	dcf1146_39e990f__ [shape=point width=0.1]
+	dcf1146_39e990f -> dcf1146_39e990f__ [arrowhead=none weight=4]
+	dcf1146_b25c15b [label="blob: b25c15b
+.gitignore"]
+	dcf1146_39e990f__ -> dcf1146_b25c15b
+	dcf1146_5a79541 [label="blob: 5a79541
+README.md"]
+	dcf1146_39e990f__ -> dcf1146_5a79541
+	dcf1146_b2298cc [label="tree: b2298cc
+doc/" shape=folder]
+	dcf1146_b2298cc__ [shape=point width=0.1]
+	dcf1146_b2298cc -> dcf1146_b2298cc__ [arrowhead=none weight=4]
+	dcf1146_de13371 [label="blob: de13371
+TODO.txt"]
+	dcf1146_b2298cc__ -> dcf1146_de13371
+	dcf1146_39e990f__ -> dcf1146_b2298cc
+	dcf1146_3365c4a [label="tree: 3365c4a
+src/" shape=folder]
+	dcf1146_3365c4a__ [shape=point width=0.1]
+	dcf1146_3365c4a -> dcf1146_3365c4a__ [arrowhead=none weight=4]
+	dcf1146_b371df9 [label="blob: b371df9
+greeting.pl"]
+	dcf1146_3365c4a__ -> dcf1146_b371df9
+	dcf1146_39e990f__ -> dcf1146_3365c4a
+	dcf1146eb273ef562e531a2d8e4786673673dbf0 -> "691e28c978d35849f21273386788b1331def29dc" [arrowhead=normal constraint=false minlen=2]
+	dcf1146eb273ef562e531a2d8e4786673673dbf0 -> "0d760aedcf873c5ce80134816fd3d83c7bd1a2ed" [arrowhead=normal constraint=false minlen=2]
+	"691e28c978d35849f21273386788b1331def29dc" [label="commit: 691e28c
+add doc/TODO.txt" shape=ellipse]
+	"691e28c978d35849f21273386788b1331def29dc" -> "97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" [arrowhead=normal constraint=false minlen=2]
+	"0d760aedcf873c5ce80134816fd3d83c7bd1a2ed" [label="commit: 0d760ae
+modified README.md" shape=ellipse]
+	"0d760aedcf873c5ce80134816fd3d83c7bd1a2ed" -> "97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" [arrowhead=normal constraint=false minlen=2]
+	"97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" [label="commit: 97a5fa9
+initial commit" shape=ellipse]
+	subgraph cluster_commits {
+		graph [color=white]
+		master
+		dcf1146eb273ef562e531a2d8e4786673673dbf0
+		"691e28c978d35849f21273386788b1331def29dc"
+		"0d760aedcf873c5ce80134816fd3d83c7bd1a2ed"
+		"97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea"
+	}
+	HEAD -> master [arrowhead=normal constraint=true minlen=1]
+}
