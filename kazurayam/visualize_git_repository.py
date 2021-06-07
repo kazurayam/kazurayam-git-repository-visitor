@@ -98,7 +98,7 @@ class GitRepositoryVisualizer:
             for line in parent_lines:
                 parent_commit_hash = line.split()[1]
                 g.edge(the_commit_hash, parent_commit_hash,
-                       constraint="false", arrowhead="normal")
+                       constraint="false", arrowhead="normal", minlen="2")
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
         self.remember_link(commit_hash, tree_hash)
