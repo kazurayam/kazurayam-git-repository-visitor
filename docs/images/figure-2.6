@@ -1,0 +1,60 @@
+// Git Repository graph
+digraph main {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+	master [label=master shape=doubleoctagon width=0.3]
+	master -> "5c161d8" [arrowhead=normal constraint=false minlen=1 weight=2]
+	"5c161d8" [label="commit: 5c161d8
+Merge branch 'develop'" shape=ellipse]
+	"5c161d8" -> "5c161d8_39e990f" [style=dashed weight=2]
+	"5c161d8_39e990f" [label="tree: 39e990f
+/" shape=folder]
+	"5c161d8_39e990f__" [shape=point width=0.1]
+	"5c161d8_39e990f" -> "5c161d8_39e990f__" [arrowhead=none weight=4]
+	"5c161d8_b25c15b" [label="blob: b25c15b
+.gitignore"]
+	"5c161d8_39e990f__" -> "5c161d8_b25c15b"
+	"5c161d8_5a79541" [label="blob: 5a79541
+README.md"]
+	"5c161d8_39e990f__" -> "5c161d8_5a79541"
+	"5c161d8_b2298cc" [label="tree: b2298cc
+doc/" shape=folder]
+	"5c161d8_b2298cc__" [shape=point width=0.1]
+	"5c161d8_b2298cc" -> "5c161d8_b2298cc__" [arrowhead=none weight=4]
+	"5c161d8_de13371" [label="blob: de13371
+TODO.txt"]
+	"5c161d8_b2298cc__" -> "5c161d8_de13371"
+	"5c161d8_39e990f__" -> "5c161d8_b2298cc"
+	"5c161d8_3365c4a" [label="tree: 3365c4a
+src/" shape=folder]
+	"5c161d8_3365c4a__" [shape=point width=0.1]
+	"5c161d8_3365c4a" -> "5c161d8_3365c4a__" [arrowhead=none weight=4]
+	"5c161d8_b371df9" [label="blob: b371df9
+greeting.pl"]
+	"5c161d8_3365c4a__" -> "5c161d8_b371df9"
+	"5c161d8_39e990f__" -> "5c161d8_3365c4a"
+	"5c161d8" -> "46fa12b" [arrowhead=normal constraint=false minlen=2]
+	"5c161d8" -> "4219f4f" [arrowhead=normal constraint=false minlen=2]
+	"46fa12b" [label="commit: 46fa12b
+add doc/TODO.txt" shape=ellipse]
+	"46fa12b" -> "7f6d1e8" [arrowhead=normal constraint=false minlen=2]
+	"4219f4f" [label="commit: 4219f4f
+modified README.md" shape=ellipse]
+	"4219f4f" -> "7f6d1e8" [arrowhead=normal constraint=false minlen=2]
+	"7f6d1e8" [label="commit: 7f6d1e8
+initial commit" shape=ellipse]
+	subgraph cluster_commits {
+		graph [color=white]
+		master
+		"5c161d8"
+		"46fa12b"
+		"4219f4f"
+		"7f6d1e8"
+	}
+	HEAD -> master [arrowhead=normal constraint=true minlen=1]
+	"5c161d8" [fillcolor=green3]
+	"46fa12b" [fillcolor=deepskyblue]
+	"4219f4f" [fillcolor=hotpink]
+}

@@ -5,32 +5,32 @@ digraph main {
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	master [label=master shape=doubleoctagon width=0.3]
-	master -> "97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" [arrowhead=normal constraint=false minlen=1 weight=2]
-	"97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" [label="commit: 97a5fa9
+	master -> "7f6d1e8" [arrowhead=normal constraint=false minlen=1 weight=2]
+	"7f6d1e8" [label="commit: 7f6d1e8
 initial commit" shape=ellipse]
-	"97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea" -> "97a5fa9_c9b8214" [style=dashed weight=2]
-	"97a5fa9_c9b8214" [label="tree: c9b8214
+	"7f6d1e8" -> "7f6d1e8_c9b8214" [style=dashed weight=2]
+	"7f6d1e8_c9b8214" [label="tree: c9b8214
 /" shape=folder]
-	"97a5fa9_c9b8214__" [shape=point width=0.1]
-	"97a5fa9_c9b8214" -> "97a5fa9_c9b8214__" [arrowhead=none weight=4]
-	"97a5fa9_b25c15b" [label="blob: b25c15b
+	"7f6d1e8_c9b8214__" [shape=point width=0.1]
+	"7f6d1e8_c9b8214" -> "7f6d1e8_c9b8214__" [arrowhead=none weight=4]
+	"7f6d1e8_b25c15b" [label="blob: b25c15b
 .gitignore"]
-	"97a5fa9_c9b8214__" -> "97a5fa9_b25c15b"
-	"97a5fa9_aadb69a" [label="blob: aadb69a
+	"7f6d1e8_c9b8214__" -> "7f6d1e8_b25c15b"
+	"7f6d1e8_aadb69a" [label="blob: aadb69a
 README.md"]
-	"97a5fa9_c9b8214__" -> "97a5fa9_aadb69a"
-	"97a5fa9_3365c4a" [label="tree: 3365c4a
+	"7f6d1e8_c9b8214__" -> "7f6d1e8_aadb69a"
+	"7f6d1e8_3365c4a" [label="tree: 3365c4a
 src/" shape=folder]
-	"97a5fa9_3365c4a__" [shape=point width=0.1]
-	"97a5fa9_3365c4a" -> "97a5fa9_3365c4a__" [arrowhead=none weight=4]
-	"97a5fa9_b371df9" [label="blob: b371df9
+	"7f6d1e8_3365c4a__" [shape=point width=0.1]
+	"7f6d1e8_3365c4a" -> "7f6d1e8_3365c4a__" [arrowhead=none weight=4]
+	"7f6d1e8_b371df9" [label="blob: b371df9
 greeting.pl"]
-	"97a5fa9_3365c4a__" -> "97a5fa9_b371df9"
-	"97a5fa9_c9b8214__" -> "97a5fa9_3365c4a"
+	"7f6d1e8_3365c4a__" -> "7f6d1e8_b371df9"
+	"7f6d1e8_c9b8214__" -> "7f6d1e8_3365c4a"
 	subgraph cluster_commits {
 		graph [color=white]
 		master
-		"97a5fa9b18ca0b85543f2f4dbfdb2374eac1afea"
+		"7f6d1e8"
 	}
 	HEAD -> master [arrowhead=normal constraint=true minlen=1]
 }

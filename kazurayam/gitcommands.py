@@ -15,7 +15,7 @@ def print_git_msg(output):
     print("{}".format(get_git_msg(output)))
 
 
-def init(wt: str, verbose=False) -> str:
+def init(wt: str, verbose=True) -> str:
     """
     execute `git init` command in a new process
     :param wt:
@@ -29,7 +29,7 @@ def init(wt: str, verbose=False) -> str:
     return get_git_msg(output)
 
 
-def add(wt, path, verbose=False) -> str:
+def add(wt, path, verbose=True) -> str:
     output = subprocess.run(['git', 'add', path], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git add", path)
@@ -45,7 +45,7 @@ def status(wt, verbose=True) -> str:
     return get_git_msg(output)
 
 
-def commit(wt, msg, verbose=False):
+def commit(wt, msg, verbose=True):
     output = subprocess.run(['git', 'commit', '-m', msg], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git commit -m \"{}\"".format(msg))
@@ -127,7 +127,7 @@ b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
     return get_git_msg(output)
 
 
-def branch_new(wt, branch_name: str, verbose=False) -> str:
+def branch_new(wt, branch_name: str, verbose=True) -> str:
     """
     execute `git branch <brancc_name>` command
     :param wt:
@@ -156,7 +156,7 @@ def branch_show_current(wt, verbose=True) -> str:
     return get_git_msg(output)
 
 
-def checkout(wt, branch_name: str, verbose=False) -> str:
+def checkout(wt, branch_name: str, verbose=True) -> str:
     """
     execute `git checkout <branch_name>` command
     :param wt:
@@ -171,7 +171,7 @@ def checkout(wt, branch_name: str, verbose=False) -> str:
     return get_git_msg(output)
 
 
-def merge(wt, branch_name: str, verbose=False) -> str:
+def merge(wt, branch_name: str, verbose=True) -> str:
     """
     execute `git merge <branch_name>` command
     :param wt:
