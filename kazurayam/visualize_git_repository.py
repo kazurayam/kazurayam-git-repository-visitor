@@ -36,14 +36,15 @@ class GitRepositoryVisualizer:
         # done
         return g
 
-    def visualize_current_branch(self, wt: str, g:Digraph) -> str:
+    def visualize_current_branch(self, wt: str, g: Digraph) -> str:
         branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
         # grasp the hash of the commit object aliased to the branch
         o = GIT.revparse(wt, branch_name)
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-        g.edge(branch_name, commit_hash, constraint="false", weight="2", minlen="1", arrowhead="normal")
+        g.edge(branch_name, commit_node_id(commit_hash), constraint="false",
+               weight="2", minlen="1", arrowhead="normal")
         # draw the great tree
         self.traverse_commits(wt, commit_hash, True, g)
         # draw the commit objects in a subgraph
@@ -51,7 +52,7 @@ class GitRepositoryVisualizer:
             c.attr('graph', color="white")
             c.node(branch_name)
             for h in self.commits:
-                c.node(h)
+                c.node(commit_node_id(h))
         #
         return branch_name
 
@@ -77,17 +78,17 @@ class GitRepositoryVisualizer:
             self.commits.append(the_commit_hash)
 
             # look into the commit object
-            o = GIT.catfile_p(wt, the_commit_hash[0:7])
+            o = GIT.catfile_p(wt, commit_node_id(the_commit_hash))
             commit_message = get_commit_message(o)
-            g.node(the_commit_hash,
-                   "commit: " + the_commit_hash[0:7] + "\n" + commit_message,
+            g.node(commit_node_id(the_commit_hash),
+                   "commit: " + commit_node_id(the_commit_hash) + "\n" + commit_message,
                    shape="ellipse")
             #g.node(the_commit_hash, xlabel="Tag x.x.x")
 
             if in_detail:
                 # now look into the root tree object `/` to trace its internal down
                 tree_hash = o.splitlines()[0].split()[1]
-                g.edge(the_commit_hash,
+                g.edge(commit_node_id(the_commit_hash),
                        node_id(the_commit_hash, tree_hash), weight="2", style="dashed")
                 self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
@@ -102,7 +103,8 @@ class GitRepositoryVisualizer:
             # draw edge from this commit to the parent commits
             for line in parent_lines:
                 parent_commit_hash = line.split()[1]
-                g.edge(the_commit_hash, parent_commit_hash,
+                g.edge(commit_node_id(the_commit_hash),
+                       commit_node_id(parent_commit_hash),
                        constraint="false", arrowhead="normal", minlen="2")
 
     def visualize_tree(self, wt: str, commit_hash: str, tree_hash: str, fname: str, g: Digraph):
@@ -142,8 +144,12 @@ class GitRepositoryVisualizer:
                     g.node(node_id(commit_hash, object_hash), fillcolor="lightgrey")
 
 
+def commit_node_id(commit_hash):
+    return commit_hash[0:7]
+
+
 def node_id(commit_hash, object_hash):
-    return commit_hash[0:7] + "_" + object_hash[0:7]
+    return commit_node_id(commit_hash) + "_" + object_hash[0:7]
 
 
 def get_commit_message(commit_content: str) -> str:
