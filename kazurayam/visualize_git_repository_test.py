@@ -75,17 +75,23 @@ def test_2_branch_and_merge(basedir):
     GIT.branch_new(wt, "develop")
     GIT.checkout(wt, "develop")
     GRV().visualize(wt,
-                    lambda g: g.node('develop', color="red")
+                    lambda g: g.node('develop', fillcolor="gold")
                     ).render(os.path.join(gr, "figure-2.2"), format="png")
     #
     operate_modify_readme(wt)
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.3"), format="png")
+    GRV().visualize(wt,
+                    lambda g: g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="hotpink")
+                    ).render(os.path.join(gr, "figure-2.3"), format="png")
     #
     GIT.checkout(wt, "master")
     operate_add_todo(wt)
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.4"), format="png")
+    GRV().visualize(wt,
+                    lambda g: g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="deepskyblue")
+                    ).render(os.path.join(gr, "figure-2.4"), format="png")
     #
     GIT.merge(wt, "develop")
-    GRV().visualize(wt).render(os.path.join(gr, "figure-2.5"), format="png")
+    GRV().visualize(wt,
+                    lambda g: g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="green3")
+                    ).render(os.path.join(gr, "figure-2.5"), format="png")
 
 
