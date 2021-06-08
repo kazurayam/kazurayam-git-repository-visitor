@@ -5,59 +5,68 @@ digraph main {
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	develop [label=develop shape=doubleoctagon width=0.3]
-	develop -> "4219f4f" [arrowhead=normal constraint=false minlen=1 weight=2]
-	"4219f4f" [label="commit: 4219f4f
-modified README.md" shape=ellipse]
-	"4219f4f" -> "4219f4f_bd4ab23" [style=dashed weight=2]
-	"4219f4f_bd4ab23" [label="tree: bd4ab23
+	develop -> f42373b [arrowhead=normal constraint=false minlen=1 weight=2]
+	f42373b [label="commit: f42373b
+add doc/TODO.txt" shape=ellipse]
+	f42373b -> f42373b_be633eb [style=dashed weight=2]
+	f42373b_be633eb [label="tree: be633eb
 /" shape=folder]
-	"4219f4f_bd4ab23__" [shape=point width=0.1]
-	"4219f4f_bd4ab23" -> "4219f4f_bd4ab23__" [arrowhead=none weight=4]
-	"4219f4f_b25c15b" [label="blob: b25c15b
+	f42373b_be633eb__ [shape=point width=0.1]
+	f42373b_be633eb -> f42373b_be633eb__ [arrowhead=none weight=4]
+	f42373b_b25c15b [label="blob: b25c15b
 .gitignore"]
-	"4219f4f_bd4ab23__" -> "4219f4f_b25c15b"
-	"4219f4f_5a79541" [label="blob: 5a79541
+	f42373b_be633eb__ -> f42373b_b25c15b
+	f42373b_aadb69a [label="blob: aadb69a
 README.md"]
-	"4219f4f_bd4ab23__" -> "4219f4f_5a79541"
-	"4219f4f_3365c4a" [label="tree: 3365c4a
+	f42373b_be633eb__ -> f42373b_aadb69a
+	f42373b_b2298cc [label="tree: b2298cc
+doc/" shape=folder]
+	f42373b_b2298cc__ [shape=point width=0.1]
+	f42373b_b2298cc -> f42373b_b2298cc__ [arrowhead=none weight=4]
+	f42373b_de13371 [label="blob: de13371
+TODO.txt"]
+	f42373b_b2298cc__ -> f42373b_de13371
+	f42373b_be633eb__ -> f42373b_b2298cc
+	f42373b_3365c4a [label="tree: 3365c4a
 src/" shape=folder]
-	"4219f4f_3365c4a__" [shape=point width=0.1]
-	"4219f4f_3365c4a" -> "4219f4f_3365c4a__" [arrowhead=none weight=4]
-	"4219f4f_b371df9" [label="blob: b371df9
+	f42373b_3365c4a__ [shape=point width=0.1]
+	f42373b_3365c4a -> f42373b_3365c4a__ [arrowhead=none weight=4]
+	f42373b_b371df9 [label="blob: b371df9
 greeting.pl"]
-	"4219f4f_3365c4a__" -> "4219f4f_b371df9"
-	"4219f4f_bd4ab23__" -> "4219f4f_3365c4a"
-	"4219f4f" -> "7f6d1e8" [arrowhead=normal constraint=false minlen=2]
-	"7f6d1e8" [label="commit: 7f6d1e8
+	f42373b_3365c4a__ -> f42373b_b371df9
+	f42373b_be633eb__ -> f42373b_3365c4a
+	f42373b -> a4a4d13 [arrowhead=normal constraint=false minlen=2]
+	a4a4d13 [label="commit: a4a4d13
 initial commit" shape=ellipse]
-	"7f6d1e8" -> "7f6d1e8_c9b8214" [style=dashed weight=2]
-	"7f6d1e8_c9b8214" [label="tree: c9b8214
+	a4a4d13 -> a4a4d13_c9b8214 [style=dashed weight=2]
+	a4a4d13_c9b8214 [label="tree: c9b8214
 /" shape=folder]
-	"7f6d1e8_c9b8214__" [shape=point width=0.1]
-	"7f6d1e8_c9b8214" -> "7f6d1e8_c9b8214__" [arrowhead=none weight=4]
-	"7f6d1e8_b25c15b" [label="blob: b25c15b
+	a4a4d13_c9b8214__ [shape=point width=0.1]
+	a4a4d13_c9b8214 -> a4a4d13_c9b8214__ [arrowhead=none weight=4]
+	a4a4d13_b25c15b [label="blob: b25c15b
 .gitignore"]
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_b25c15b"
-	"7f6d1e8_aadb69a" [label="blob: aadb69a
+	a4a4d13_c9b8214__ -> a4a4d13_b25c15b
+	a4a4d13_aadb69a [label="blob: aadb69a
 README.md"]
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_aadb69a"
-	"7f6d1e8_3365c4a" [label="tree: 3365c4a
+	a4a4d13_c9b8214__ -> a4a4d13_aadb69a
+	a4a4d13_3365c4a [label="tree: 3365c4a
 src/" shape=folder]
-	"7f6d1e8_3365c4a__" [shape=point width=0.1]
-	"7f6d1e8_3365c4a" -> "7f6d1e8_3365c4a__" [arrowhead=none weight=4]
-	"7f6d1e8_b371df9" [label="blob: b371df9
+	a4a4d13_3365c4a__ [shape=point width=0.1]
+	a4a4d13_3365c4a -> a4a4d13_3365c4a__ [arrowhead=none weight=4]
+	a4a4d13_b371df9 [label="blob: b371df9
 greeting.pl"]
-	"7f6d1e8_3365c4a__" -> "7f6d1e8_b371df9"
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_3365c4a"
+	a4a4d13_3365c4a__ -> a4a4d13_b371df9
+	a4a4d13_c9b8214__ -> a4a4d13_3365c4a
 	subgraph cluster_commits {
 		graph [color=white]
 		develop
-		"4219f4f"
-		"7f6d1e8"
+		f42373b
+		a4a4d13
 	}
 	HEAD -> develop [arrowhead=normal constraint=true minlen=1]
-	"4219f4f_b25c15b" [fillcolor=lightgrey]
-	"4219f4f_3365c4a" [fillcolor=lightgrey]
-	"4219f4f_b371df9" [fillcolor=lightgrey]
-	"4219f4f" [fillcolor=hotpink]
+	f42373b_b25c15b [fillcolor=lightgrey]
+	f42373b_aadb69a [fillcolor=lightgrey]
+	f42373b_3365c4a [fillcolor=lightgrey]
+	f42373b_b371df9 [fillcolor=lightgrey]
+	f42373b [fillcolor=deepskyblue]
 }

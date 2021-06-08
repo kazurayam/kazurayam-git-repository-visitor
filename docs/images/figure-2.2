@@ -5,32 +5,32 @@ digraph main {
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
 	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
 	develop [label=develop shape=doubleoctagon width=0.3]
-	develop -> "7f6d1e8" [arrowhead=normal constraint=false minlen=1 weight=2]
-	"7f6d1e8" [label="commit: 7f6d1e8
+	develop -> a4a4d13 [arrowhead=normal constraint=false minlen=1 weight=2]
+	a4a4d13 [label="commit: a4a4d13
 initial commit" shape=ellipse]
-	"7f6d1e8" -> "7f6d1e8_c9b8214" [style=dashed weight=2]
-	"7f6d1e8_c9b8214" [label="tree: c9b8214
+	a4a4d13 -> a4a4d13_c9b8214 [style=dashed weight=2]
+	a4a4d13_c9b8214 [label="tree: c9b8214
 /" shape=folder]
-	"7f6d1e8_c9b8214__" [shape=point width=0.1]
-	"7f6d1e8_c9b8214" -> "7f6d1e8_c9b8214__" [arrowhead=none weight=4]
-	"7f6d1e8_b25c15b" [label="blob: b25c15b
+	a4a4d13_c9b8214__ [shape=point width=0.1]
+	a4a4d13_c9b8214 -> a4a4d13_c9b8214__ [arrowhead=none weight=4]
+	a4a4d13_b25c15b [label="blob: b25c15b
 .gitignore"]
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_b25c15b"
-	"7f6d1e8_aadb69a" [label="blob: aadb69a
+	a4a4d13_c9b8214__ -> a4a4d13_b25c15b
+	a4a4d13_aadb69a [label="blob: aadb69a
 README.md"]
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_aadb69a"
-	"7f6d1e8_3365c4a" [label="tree: 3365c4a
+	a4a4d13_c9b8214__ -> a4a4d13_aadb69a
+	a4a4d13_3365c4a [label="tree: 3365c4a
 src/" shape=folder]
-	"7f6d1e8_3365c4a__" [shape=point width=0.1]
-	"7f6d1e8_3365c4a" -> "7f6d1e8_3365c4a__" [arrowhead=none weight=4]
-	"7f6d1e8_b371df9" [label="blob: b371df9
+	a4a4d13_3365c4a__ [shape=point width=0.1]
+	a4a4d13_3365c4a -> a4a4d13_3365c4a__ [arrowhead=none weight=4]
+	a4a4d13_b371df9 [label="blob: b371df9
 greeting.pl"]
-	"7f6d1e8_3365c4a__" -> "7f6d1e8_b371df9"
-	"7f6d1e8_c9b8214__" -> "7f6d1e8_3365c4a"
+	a4a4d13_3365c4a__ -> a4a4d13_b371df9
+	a4a4d13_c9b8214__ -> a4a4d13_3365c4a
 	subgraph cluster_commits {
 		graph [color=white]
 		develop
-		"7f6d1e8"
+		a4a4d13
 	}
 	HEAD -> develop [arrowhead=normal constraint=true minlen=1]
 	develop [fillcolor=gold]
