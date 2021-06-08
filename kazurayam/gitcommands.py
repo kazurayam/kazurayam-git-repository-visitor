@@ -1,6 +1,6 @@
 import os
 import subprocess
-from subprocess import PIPE, STDOUT
+from subprocess import PIPE, STDOUT, Popen
 
 
 def get_git_msg(output) -> str:
@@ -184,3 +184,40 @@ def merge(wt, branch_name: str, verbose=True) -> str:
         print("\n% git merge", branch_name)
         print_git_msg(output)
     return get_git_msg(output)
+
+
+def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=True) -> str:
+    """
+    execute `git tag <tag_name> <refer_to>` command
+    :param wt:
+    :param tag_name:
+    :param refer_to:
+    :param verbose:
+    :return:
+    """
+    output = subprocess.run(['git', 'tag', tag_name, refer_to], cwd=wt, stdout=PIPE, stderr=STDOUT)
+    if verbose:
+        print("\n% git tag", tag_name, refer_to)
+        print_git_msg(output)
+    return get_git_msg(output)
+
+
+def tag_points_at(wt, object: str, verbose=True) -> tuple:
+    """
+    execute `git tag --points-at <object>` command.
+    retrieves tag_name that refers to the object.
+    if the tag was found returns a tuple of (tag_name, 0).
+    if not found returns a tuple of ("error: malformed object name 'xxxx'", non-0 integer)
+    the caller should check the return code first and read the tag_name only when it is found.
+    :param wt:
+    :param object:
+    :param verbose:
+    :return: a tuple of (stdout, return_code)
+    """
+    output = subprocess.run(['git', 'tag', '--points-at', object],
+                            cwd=wt, stdout=PIPE, stderr=STDOUT,
+                            check=False)
+    if verbose:
+        print("\n% git tag --points-at", object)
+        print_git_msg(output)
+    return get_git_msg(output), output.returncode

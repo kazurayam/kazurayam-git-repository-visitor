@@ -12,10 +12,11 @@ def wt_with_initial_commit(basedir):
     fileutils.write_file(wt, '.gitignore', '*~\n')
     fileutils.write_file(wt, "README.md", "# Read me please\n")
     fileutils.write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
-    GIT.add(wt, '.', True)
+    GIT.add(wt, '.')
     GIT.status(wt)
     GIT.lsfiles_stage(wt)
-    GIT.commit(wt, "initial commit", True)
+    GIT.commit(wt, "initial commit")
+    GIT.tag_to(wt, '0.1.0')
     yield wt
 
 
@@ -36,3 +37,11 @@ def test_branch_new_then_checkout(wt_with_initial_commit):
     assert "Switched to branch 'develop'" in o
     o = GIT.branch_show_current(wt_with_initial_commit)
     assert "develop" in o
+
+
+def test_tag_points_at(wt_with_initial_commit):
+    commit_object = GIT.revparse(wt_with_initial_commit, "HEAD").strip()
+    t = GIT.tag_points_at(wt_with_initial_commit, commit_object)
+    print(commit_object, t[0], t[1])
+    assert t[1] == 0
+    assert t[0] == '0.1.0'
