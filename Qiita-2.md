@@ -35,7 +35,7 @@ Pythonでツール [`kazurayam/visualize_git_repository.py`](https://github.com/
 
 | master | develop |
 | :----------: | :-----------: |
-| ![figure-2.1.png](tmp/2_branch_and_merge/gr/figure-2.1.png) | まだ無い |
+| ![figure-2.1.png](docs/images/figure-2.1.png) | まだ無い |
 
 このグラフから次のことが読みとれる。
 
@@ -61,7 +61,7 @@ Pythonでツール [`kazurayam/visualize_git_repository.py`](https://github.com/
 
 | master | develop |
 | :----------: | :-----------: |
-| 前と同じ | ![figure-2.2.png](tmp/2_branch_and_merge/gr/figure-2.2.png) |
+| 前と同じ | ![figure-2.2.png](docs/images/figure-2.2.png) |
 
 このグラフから次のことが読みとれる。
 
@@ -90,7 +90,7 @@ commitオブジェクト すなわち `master` が指していたのと同じcom
 
 | master | develop |
 | :----------: | :-----------: |
-| 前と同じ | ![figure-2.3.png](tmp/2_branch_and_merge/gr/figure-2.3.png) |
+| 前と同じ | ![figure-2.3.png](docs/images/figure-2.3.png) |
 
 このグラフから次のことが読みとれる。
 
@@ -108,7 +108,7 @@ commitオブジェクト すなわち `master` が指していたのと同じcom
 
 | master | develop |
 | :----------: | :-----------: |
-| ![figure-2.4.png](tmp/2_branch_and_merge/gr/figure-2.4.png) | 前と同じ |
+| ![figure-2.4.png](docs/images/figure-2.4.png) | 前と同じ |
 
 このグラフから次のことが読みとれる。
 
@@ -134,7 +134,7 @@ masterブランチで既存の`README.md`ファイルを変更してコミット
 
 | master | develop |
 | :----------: | :-----------: |
-| ![figure-2.5.png](tmp/2_branch_and_merge/gr/figure-2.5.png) | 前と同じ |
+| ![figure-2.5.png](docs/images/figure-2.5.png) | 前と同じ |
 
 このグラフから次のことが読みとれる。
 
@@ -154,7 +154,7 @@ masterブランチで既存の`README.md`ファイルを変更してコミット
 
 | master | develop |
 | :----------: | :-----------: |
-| ![figure-2.6.png](tmp/2_branch_and_merge/gr/figure-2.6.png) | 前と同じ |
+| ![figure-2.6.png](docs/images/figure-2.6.png) | 前と同じ |
 
 このグラフから次のことが読みとれる。
 
