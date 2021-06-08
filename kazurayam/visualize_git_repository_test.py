@@ -41,10 +41,10 @@ def operate_add_todo(wt):
 
 def test_1_object_tree(basedir):
     """
-    1. initial commit and make a graph
-    2. modify README.md and make a graph
-    3. add doc/TODO.txt and make a graph
-    on the master branch, without any branch manipulation
+    1. create a Git repository, make the initial commit
+    2. modify README.md, commit it
+    3. add doc/TODO.txt, commit it
+    4. draw a graph of the Git repository
     :param basedir:
     :return:
     """
@@ -63,9 +63,10 @@ def test_1_object_tree(basedir):
 
 def test_2_branch_and_merge(basedir):
     """
-    1. initial commit; make a graph
-    2. create a new branch "develop"; make a graph
-    3. in the new branch, modify README.md, commit it; make a graph
+    1. create a Git repository
+    2. create a new branch "develop"
+    3. make commits in branches
+    4. do merging
     :param basedir:
     :return:
     """
@@ -103,3 +104,22 @@ def test_2_branch_and_merge(basedir):
         g.node(GIT.revparse(wt, "HEAD^2")[0:7], fillcolor="deepskyblue")
         g.node(GIT.revparse(wt, "HEAD^1")[0:7], fillcolor="hotpink")
     GRV().visualize(wt, modifier6).render(os.path.join(gr, "figure-2.6"), format="png")
+
+
+def test_3_tags(basedir):
+    """
+    1. create a Git repository
+    2. make commits, put tags
+    3. visualize the Git repository with tags
+    :param basedir:
+    :return:
+    """
+    (wt, gr) = testutils.create_subject_dir(basedir, '3_tags')
+    GIT.init(wt, True)
+    #
+    operate_initial_commit(wt)
+    GIT.tag_to(wt, '0.1.0')
+    def modifier1(g: Digraph):
+        g.node(GIT.revparse(wt, "HEAD")[0:7],
+               xlabel='<<font color="red" face="bold" point-size="18">0.1.0</font>>')
+    GRV().visualize(wt, modifier1).render(os.path.join(gr, "figure-3.1"), format="png")
