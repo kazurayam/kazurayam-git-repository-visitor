@@ -17,6 +17,9 @@ This is an effort to draw graphics that show how a Git repository is constructed
 
 I wrote a post in [Qiita](https://qiita.com/)
 
-- [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第1回 commitとtreeとblob](Qiita-1.md) 
+- [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第1回 commitとtreeとblob](Qiita-1.commit_tree_blob.md) 
   
-- [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第2回 ブランチとマージ](Qiita-2.md) 
+- [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第2回 ブランチとマージ](Qiita-2.branch_merge.md) 
+
+- [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第3回 タグ](Qiita-3.tags.md) 
+
