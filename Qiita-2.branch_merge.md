@@ -186,7 +186,7 @@ PNG画像を生成するにはコマンドラインで下記の操作をする�
 
 ```
 $ cd $visualize_git_repository
-$ pytest -s kazurayam/visualize_git_repository.py::test_2_branch_and_mearge
+$ pytest -s kazurayam/visualize_git_repository.py::test_2_branch_and_merge
 ```
 
 上記の例を作るのにどういうgitコマンドを実行したのかを知りたいならプログラムのソースコードを読み解いてください。下記を入り口として解読してください。

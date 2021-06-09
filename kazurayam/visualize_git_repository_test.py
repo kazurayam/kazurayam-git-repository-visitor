@@ -7,11 +7,11 @@ from .visualize_git_repository import GitRepositoryVisualizer as GRV
 
 
 def operate_initial_commit(wt):
-    write_file(wt, '.gitignore', '*~\n')
+    f = write_file(wt, '.gitignore', '*~\n')
     print("% echo '*~' > .gitignore")
-    write_file(wt, "README.md", "# Read me please\n")
+    f = write_file(wt, "README.md", "# Read me please\n")
     print("% echo '#Read me plase' > README.md")
-    write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
+    f = write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
     print("% echo 'print(\"How do you do?\");' > src/greeting.pl")
     GIT.add(wt, '.', True)
     GIT.status(wt)
@@ -39,8 +39,22 @@ def operate_add_todo(wt):
     GIT.commit(wt, "add doc/TODO.txt", True)
 
 
+def operate_modify_greeting(wt):
+    f = write_file(wt, "src/greeting.pl", "print(\"Nice to meet you.\");\n")
+    print("\n", "-" * 72)
+    print("% echo 'print(\"Nice to meet you.\");' > src/greeting.pl")
+    GIT.add(wt, '.', True)
+    GIT.status(wt)
+    GIT.lsfiles_stage(wt)
+    GIT.commit(wt, "modify src/greeting.pl", True)
+
+
+
 def test_1_object_tree(basedir):
     """
+    Let me look at how commit objects + tree objects + blob objects
+    in a Git repository are depicted in a Graphviz graph.
+
     1. create a Git repository, make the initial commit
     2. modify README.md, commit it
     3. add doc/TODO.txt, commit it
@@ -63,6 +77,9 @@ def test_1_object_tree(basedir):
 
 def test_2_branch_and_merge(basedir):
     """
+    Let me look at how branches and merge operations
+    in a Git repository are depicted in a Graphviz graph.
+
     1. create a Git repository
     2. create a new branch "develop"
     3. make commits in branches
@@ -108,6 +125,8 @@ def test_2_branch_and_merge(basedir):
 
 def test_3_tags(basedir):
     """
+    Let me look at how Tags in a Git repository are depicted in a Graphviz graph.
+
     1. create a Git repository
     2. make commits, put tags
     3. visualize the Git repository with tags
@@ -118,8 +137,46 @@ def test_3_tags(basedir):
     GIT.init(wt, True)
     #
     operate_initial_commit(wt)
+    GRV().visualize(wt).render(os.path.join(gr, "figure-3.1"), format="png")
+    #
     GIT.tag_to(wt, '0.1.0')
-    def modifier1(g: Digraph):
+    def modifier2(g: Digraph):
         g.node(GIT.revparse(wt, "HEAD")[0:7],
-               xlabel='<<font color="red" face="bold" point-size="18">0.1.0</font>>')
-    GRV().visualize(wt, modifier1).render(os.path.join(gr, "figure-3.1"), format="png")
+           xlabel='<<font color="red" face="bold" point-size="18">0.1.0</font>>')
+    GRV().visualize(wt, modifier2).render(os.path.join(gr, "figure-3.2"), format="png")
+    #
+    GIT.branch_new(wt, "develop")
+    GIT.checkout(wt, "develop")
+    operate_add_todo(wt)
+    GIT.tag_to(wt, '0.2.0')
+    def modifier3(g: Digraph):
+        g.node('develop', fillcolor="gold")
+        g.node(GIT.revparse(wt, "HEAD")[0:7],
+               xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
+    GRV().visualize(wt, modifier3).render(os.path.join(gr, "figure-3.3"), format="png")
+    #
+    GIT.checkout(wt, "master")
+    operate_modify_greeting(wt)
+    GIT.tag_to(wt, '0.1.1')
+    def modifier4(g: Digraph):
+        g.node('master', fillcolor="gold")
+        g.node(GIT.revparse(wt, "HEAD")[0:7],
+               xlabel='<<font color="red" face="bold" point-size="18">0.1.1</font>>')
+    GRV().visualize(wt, modifier4).render(os.path.join(gr, "figure-3.4"), format="png")
+    #
+    GIT.checkout(wt, "master")
+    GIT.merge(wt, "develop")
+    def modifier5(g: Digraph):
+        g.node(GIT.revparse(wt, "HEAD^2")[0:7],
+               xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
+    GRV().visualize(wt, modifier5).render(os.path.join(gr, "figure-3.5"), format="png")
+    #
+    operate_modify_readme(wt)
+    GIT.tag_to(wt, '0.2.1')
+    def modifier6(g: Digraph):
+        g.node(GIT.revparse(wt, "HEAD")[0:7],
+               xlabel='<<font color="red" face="bold" point-size="18">0.2.1</font>>')
+    GRV().visualize(wt, modifier6).render(os.path.join(gr, "figure-3.6"), format="png")
+
+
+

@@ -1,0 +1,75 @@
+// Git Repository graph
+digraph main {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+	develop [label=develop shape=doubleoctagon width=0.3]
+	develop -> "25612c6" [arrowhead=normal constraint=false minlen=1 weight=2]
+	"25612c6" [label="commit: 25612c6
+add doc/TODO.txt" shape=ellipse]
+	"25612c6" [xlabel="0.2.0"]
+	"25612c6" -> "25612c6_be633eb" [style=dashed weight=2]
+	"25612c6_be633eb" [label="tree: be633eb
+/" shape=folder]
+	"25612c6_be633eb__" [shape=point width=0.1]
+	"25612c6_be633eb" -> "25612c6_be633eb__" [arrowhead=none weight=4]
+	"25612c6_b25c15b" [label="blob: b25c15b
+.gitignore"]
+	"25612c6_be633eb__" -> "25612c6_b25c15b"
+	"25612c6_aadb69a" [label="blob: aadb69a
+README.md"]
+	"25612c6_be633eb__" -> "25612c6_aadb69a"
+	"25612c6_b2298cc" [label="tree: b2298cc
+doc/" shape=folder]
+	"25612c6_b2298cc__" [shape=point width=0.1]
+	"25612c6_b2298cc" -> "25612c6_b2298cc__" [arrowhead=none weight=4]
+	"25612c6_de13371" [label="blob: de13371
+TODO.txt"]
+	"25612c6_b2298cc__" -> "25612c6_de13371"
+	"25612c6_be633eb__" -> "25612c6_b2298cc"
+	"25612c6_3365c4a" [label="tree: 3365c4a
+src/" shape=folder]
+	"25612c6_3365c4a__" [shape=point width=0.1]
+	"25612c6_3365c4a" -> "25612c6_3365c4a__" [arrowhead=none weight=4]
+	"25612c6_b371df9" [label="blob: b371df9
+greeting.pl"]
+	"25612c6_3365c4a__" -> "25612c6_b371df9"
+	"25612c6_be633eb__" -> "25612c6_3365c4a"
+	"25612c6" -> aa39811 [arrowhead=normal constraint=false minlen=2]
+	aa39811 [label="commit: aa39811
+initial commit" shape=ellipse]
+	aa39811 [xlabel="0.1.0"]
+	aa39811 -> aa39811_c9b8214 [style=dashed weight=2]
+	aa39811_c9b8214 [label="tree: c9b8214
+/" shape=folder]
+	aa39811_c9b8214__ [shape=point width=0.1]
+	aa39811_c9b8214 -> aa39811_c9b8214__ [arrowhead=none weight=4]
+	aa39811_b25c15b [label="blob: b25c15b
+.gitignore"]
+	aa39811_c9b8214__ -> aa39811_b25c15b
+	aa39811_aadb69a [label="blob: aadb69a
+README.md"]
+	aa39811_c9b8214__ -> aa39811_aadb69a
+	aa39811_3365c4a [label="tree: 3365c4a
+src/" shape=folder]
+	aa39811_3365c4a__ [shape=point width=0.1]
+	aa39811_3365c4a -> aa39811_3365c4a__ [arrowhead=none weight=4]
+	aa39811_b371df9 [label="blob: b371df9
+greeting.pl"]
+	aa39811_3365c4a__ -> aa39811_b371df9
+	aa39811_c9b8214__ -> aa39811_3365c4a
+	subgraph cluster_commits {
+		graph [color=white]
+		develop
+		"25612c6"
+		aa39811
+	}
+	HEAD -> develop [arrowhead=normal constraint=true minlen=1]
+	"25612c6_b25c15b" [fillcolor=lightgrey]
+	"25612c6_aadb69a" [fillcolor=lightgrey]
+	"25612c6_3365c4a" [fillcolor=lightgrey]
+	"25612c6_b371df9" [fillcolor=lightgrey]
+	develop [fillcolor=gold]
+	"25612c6" [xlabel=<<font color="red" face="bold" point-size="18">0.2.0</font>>]
+}

@@ -1,0 +1,65 @@
+// Git Repository graph
+digraph main {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+	master [label=master shape=doubleoctagon width=0.3]
+	master -> df10055 [arrowhead=normal constraint=false minlen=1 weight=2]
+	df10055 [label="commit: df10055
+modify src/greeting.pl" shape=ellipse]
+	df10055 [xlabel="0.1.1"]
+	df10055 -> df10055_14a3aac [style=dashed weight=2]
+	df10055_14a3aac [label="tree: 14a3aac
+/" shape=folder]
+	df10055_14a3aac__ [shape=point width=0.1]
+	df10055_14a3aac -> df10055_14a3aac__ [arrowhead=none weight=4]
+	df10055_b25c15b [label="blob: b25c15b
+.gitignore"]
+	df10055_14a3aac__ -> df10055_b25c15b
+	df10055_aadb69a [label="blob: aadb69a
+README.md"]
+	df10055_14a3aac__ -> df10055_aadb69a
+	df10055_bf5384e [label="tree: bf5384e
+src/" shape=folder]
+	df10055_bf5384e__ [shape=point width=0.1]
+	df10055_bf5384e -> df10055_bf5384e__ [arrowhead=none weight=4]
+	df10055_6bdda3b [label="blob: 6bdda3b
+greeting.pl"]
+	df10055_bf5384e__ -> df10055_6bdda3b
+	df10055_14a3aac__ -> df10055_bf5384e
+	df10055 -> aa39811 [arrowhead=normal constraint=false minlen=2]
+	aa39811 [label="commit: aa39811
+initial commit" shape=ellipse]
+	aa39811 [xlabel="0.1.0"]
+	aa39811 -> aa39811_c9b8214 [style=dashed weight=2]
+	aa39811_c9b8214 [label="tree: c9b8214
+/" shape=folder]
+	aa39811_c9b8214__ [shape=point width=0.1]
+	aa39811_c9b8214 -> aa39811_c9b8214__ [arrowhead=none weight=4]
+	aa39811_b25c15b [label="blob: b25c15b
+.gitignore"]
+	aa39811_c9b8214__ -> aa39811_b25c15b
+	aa39811_aadb69a [label="blob: aadb69a
+README.md"]
+	aa39811_c9b8214__ -> aa39811_aadb69a
+	aa39811_3365c4a [label="tree: 3365c4a
+src/" shape=folder]
+	aa39811_3365c4a__ [shape=point width=0.1]
+	aa39811_3365c4a -> aa39811_3365c4a__ [arrowhead=none weight=4]
+	aa39811_b371df9 [label="blob: b371df9
+greeting.pl"]
+	aa39811_3365c4a__ -> aa39811_b371df9
+	aa39811_c9b8214__ -> aa39811_3365c4a
+	subgraph cluster_commits {
+		graph [color=white]
+		master
+		df10055
+		aa39811
+	}
+	HEAD -> master [arrowhead=normal constraint=true minlen=1]
+	df10055_b25c15b [fillcolor=lightgrey]
+	df10055_aadb69a [fillcolor=lightgrey]
+	master [fillcolor=gold]
+	df10055 [xlabel=<<font color="red" face="bold" point-size="18">0.1.1</font>>]
+}
