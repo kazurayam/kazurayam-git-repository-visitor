@@ -132,6 +132,6 @@ dmypy.json
 .idea/
 
 
-tmp/
+build/
 
 work/
