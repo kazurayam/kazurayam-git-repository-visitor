@@ -3,20 +3,45 @@ from graphviz import Digraph
 from . import gitcommands as GIT
 
 
+def set_graph_basics(g: Digraph):
+    g.attr('graph', layout="dot", rank="max", rankdir="LR",
+           splines="ortho", ranksep="0.5", nodesep="0.3")
+    g.node_attr.update(shape="note", height="0.3", style="filled", fillcolor="white",
+                       fontname="arial", fontsize="10")
+    g.edge_attr.update(constraint="true", arrowhead="onormal",
+                       fontname="arial", fontsize="10")
+
+
 class GitRepositoryVisualizer:
 
     def __init__(self):
         self.commits = []
         self.object_commit_reverse_links = {}
 
+    def visualize_index(self, wt: str) -> Digraph:
+        """
+        generate a Graphviz Digraph where the Git index (or stage, cache) is depicted
+        :param wt:
+        :return:
+        """
+        g = Digraph("index", comment="Git Index graph")
+        set_graph_basics(g)
+        #
+        o = GIT.lsfiles_stage(wt, verbose=False)
+        g.attr('graph', nodesep="0.1")
+        g.node_attr.update(width="2")
+        with g.subgraph(name="cluster_index") as x:
+            x.attr(label='index')
+            for line in o.splitlines():
+                blob_hash = line.split()[1][0:7]
+                file_path = line.split()[3]
+                x.node(blob_hash, blob_hash + '   ' + file_path, shape="rectangle")
+        #
+        return g
+
     def visualize(self, wt: str, modifier=None) -> Digraph:
         g = Digraph("main", comment="Git Repository graph")
-        g.attr('graph', layout="dot", rank="max", rankdir="LR",
-               splines="ortho", ranksep="0.5", nodesep="0.3")
-        g.node_attr.update(shape="note", height="0.3", style="filled", fillcolor="white",
-                            fontname="arial", fontsize="10")
-        g.edge_attr.update(constraint="true", arrowhead="onormal",
-                           fontname="arial", fontsize="10")
+        set_graph_basics(g)
         #
         g.node("HEAD", "HEAD", shape="doublecircle", width="0.5", fixedsize="true")
 

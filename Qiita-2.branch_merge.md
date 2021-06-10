@@ -1,8 +1,5 @@
 # Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第2回 ブランチとマージ
 
-
-本稿は「 [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第1回 commitとtreeとblob](https://qiita.com/kazurayam/items/deea847acaa043a52e36) 」の続編です。
-
 ## 解決すべき問題
 
 一年前のこと、Subversionを長く使ってきた開発チームにGitを教えようとした。わたしはGitの*ブランチ*をちゃんと説明したかった。というのもSubversionにもブランチという用語があるが、GitのブランチはSubversionとは似て非なるものだからだ。"Git"と"Subversion"と"ブランチ"をキーにネットを検索すると解説記事がたくさんみつかった。だがわたしが同僚諸君に説明するのに使えるようなひと目で理解できる記事が見当たらなかった。
@@ -199,3 +196,9 @@ $ pytest -s kazurayam/visualize_git_repository.py::test_2_branch_and_merge
 
 - author: kazurayam
 - date: June, 2021
+
+# 連作の目次
+
+- [第1回 commitとtreeとblob](https://qiita.com/kazurayam/items/deea847acaa043a52e36)
+- [第2回 ブランチとマージ](https://qiita.com/kazurayam/items/18419085764ff1d81406)
+- [第3回 タグ](https://qiita.com/kazurayam/items/4ed4c69078c86c2f1a8c)

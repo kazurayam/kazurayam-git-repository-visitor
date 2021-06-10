@@ -179,4 +179,20 @@ def test_3_tags(basedir):
     GRV().visualize(wt, modifier6).render(os.path.join(gr, "figure-3.6"), format="png")
 
 
+def test_4_index(basedir):
+    """
+    Let me look at how the Git Index is depicted in a Graphviz graph.
+
+    1. create a Git repository
+    2. make commits
+    3. visualize the Git Index
+    :param basedir:
+    :return:
+    """
+    (wt, gr) = testutils.create_subject_dir(basedir, '4_index')
+    GIT.init(wt, True)
+    #
+    operate_initial_commit(wt)
+    GRV().visualize_index(wt).render(os.path.join(gr, "figure-4.1"), format="png")
+
 

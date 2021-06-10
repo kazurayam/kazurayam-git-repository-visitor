@@ -1,9 +1,5 @@
 # Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第3回 タグ
 
-前回まで:
-- 「 [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第1回 commitとtreeとblob](https://qiita.com/kazurayam/items/deea847acaa043a52e36) 」
-- 「 [Gitレポジトリの内部のデータ構造をGraphvizで描画してみた 第2回 ブランチとマージ](https://qiita.com/kazurayam/items/18419085764ff1d81406) 」
-
 ## 解決すべき問題
 
 ```
@@ -183,3 +179,10 @@ $ pytest -s kazurayam/visualize_git_repository.py::test_3_tags
 
 - author: kazurayam
 - date: June, 2021
+
+
+# 連作の目次
+
+- [第1回 commitとtreeとblob](https://qiita.com/kazurayam/items/deea847acaa043a52e36)
+- [第2回 ブランチとマージ](https://qiita.com/kazurayam/items/18419085764ff1d81406)
+- [第3回 タグ](https://qiita.com/kazurayam/items/4ed4c69078c86c2f1a8c)
