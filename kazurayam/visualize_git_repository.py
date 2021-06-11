@@ -84,7 +84,7 @@ class GitRepositoryVisualizer:
         #
         return g
 
-    def visualize(self, wt: str, modifier=None) -> Digraph:
+    def visualize_history(self, wt: str, modifier=None) -> Digraph:
         g = Digraph("main", comment="Git Repository graph")
         set_graph_basics(g)
         #
