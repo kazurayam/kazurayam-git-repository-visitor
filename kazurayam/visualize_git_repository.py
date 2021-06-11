@@ -1,7 +1,6 @@
 from collections import deque
 from graphviz import Digraph
 from . import gitcommands as GIT
-from . import shellcommand as SH
 
 
 def set_graph_basics(g: Digraph):
@@ -59,6 +58,51 @@ class GitRepositoryVisualizer:
                     j.node(node_id, node_label, shape="folder")
                 else:
                     raise Exception("unknown object type: {}".format(object_type))
+
+            # draw edges between the commit/tree/blob objects
+            branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
+            top_commit_hash = GIT.revparse(wt, branch_name).strip()
+            # create a Deque (Double-ended-queue)
+            cm_dq = deque()
+            cm_dq.append(top_commit_hash)
+            # repeat until the deque of commits gets empty
+            while len(cm_dq) > 0:
+                # pop a commit_hash from the top left of the deque
+                commit_hash = cm_dq.popleft()
+                if commit_hash is not None:
+                    # grasp the hash of the root tree `/` linked by this commit
+                    o = GIT.catfile_p(wt, commit_hash)
+                    root_tree_hash = o.splitlines()[0].split()[1]
+                    # draw an edge from the commit to the root tree
+                    j.edge('j_' + commit_hash[0:7] + ':e',
+                           'j_' + root_tree_hash[0:7] + ':e',
+                           constraint="false", dir="back")
+                    # trace the links between tree and blobs
+                    tr_dq = deque()
+                    tr_dq.append(root_tree_hash)
+                    # repeat until the deque of trees gets empty
+                    while len(tr_dq) > 0:
+                        # pop a tree_hash from the top left of the deque
+                        tree_hash = tr_dq.popleft()
+                        o = GIT.lstree(wt, tree_hash)
+                        for line in o.splitlines():
+                            object_type = line.split()[1]
+                            object_hash = line.split()[2]
+                            j.edge('j_' + tree_hash[0:7] + ':e',
+                                   'j_' + object_hash[0:7] + ':e',
+                                   constraint="false", dir="back")
+                            if object_type == 'tree':
+                                # append nesting trees into the tree Deque
+                                tr_dq.append(object_hash)
+
+                    # append following commits into the commit Deque
+                    parent_commits = get_parent_commits(wt, commit_hash)
+                    for parent in parent_commits:
+                        cm_dq.append(parent)
+                        g.edge('j_' + commit_hash[0:7], 'j_' + parent[0:7])
+                    if len(parent_commits) >= 2:
+                        in_detail = False
+
         #
         o = GIT.lsfiles_stage(wt, verbose=False)
         g.attr('graph', nodesep="0.1")
