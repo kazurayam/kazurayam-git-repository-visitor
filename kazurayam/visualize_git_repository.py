@@ -37,7 +37,7 @@ class GitRepositoryVisualizer:
             node_commandline_id = 'wt_commandline'
             node_commandline_label = "% tree -afni .\\l" + t[0].replace('\n', '\\l')
             w.node(node_commandline_id, node_commandline_label,
-                   shape="rectangle", fillcolor="darkgrey", color="white")
+                   shape="rectangle", fillcolor="lightgrey", color="white")
 
         with g.subgraph(name="cluster_objects") as j:
             j.attr(label="ディレクトリ ./.git/objects", color="white")
