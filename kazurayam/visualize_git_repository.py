@@ -9,7 +9,7 @@ class GitRepositoryVisualizer:
         self.commits = []
         self.object_commit_reverse_links = {}
 
-    def visualize(self, wt: str, modifier=None) -> Digraph:
+    def visualize_history(self, wt: str, modifier=None) -> Digraph:
         g = Digraph("main", comment="Git Repository graph")
         g.attr('graph', layout="dot", rank="max", rankdir="LR",
                splines="ortho", ranksep="0.5", nodesep="0.3")
