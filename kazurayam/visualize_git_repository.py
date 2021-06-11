@@ -19,7 +19,8 @@ class GitRepositoryVisualizer:
         self.commits = []
         self.object_commit_reverse_links = {}
 
-    def visualize_index(self, wt: str) -> Digraph:
+    @staticmethod
+    def visualize_index(wt: str) -> Digraph:
         """
         generate a Graphviz Digraph where the Git index (or stage, cache) is depicted
         :param wt:
@@ -31,12 +32,15 @@ class GitRepositoryVisualizer:
         #
         t = SH.shellcommand(wt, ['tree', '-afni', '-I', '.git'])
         with g.subgraph(name="cluster_worktree") as w:
-            w.attr(label="work tree", color="white")
-            w.node("anchor_wt", "% tree -afni\\l")
-            w.node("worktree", t[0].replace('\n', '\\l'))
-        #
+            w.attr(label="ワークツリー ./", color="white")
+            w.node("anchor_wt", "", shape="point", width="0", style="invis")
+            node_commandline_id = 'wt_commandline'
+            node_commandline_label = "% tree -afni .\\l" + t[0].replace('\n', '\\l')
+            w.node(node_commandline_id, node_commandline_label,
+                   shape="rectangle", fillcolor="darkgrey", color="white")
+
         with g.subgraph(name="cluster_objects") as j:
-            j.attr(label="ディレクトリ ./git/objects", color="white")
+            j.attr(label="ディレクトリ ./.git/objects", color="white")
             j.node("anchor_objects", shape="point", width="0", style="invis")
             o = GIT.revlist_objects_all(wt)
             for line in o.splitlines():
@@ -62,7 +66,7 @@ class GitRepositoryVisualizer:
         g.attr('graph', nodesep="0.1")
         g.node_attr.update(width="2")
         with g.subgraph(name="cluster_index") as x:
-            x.attr(label='ファイル .git/index', color="white")
+            x.attr(label='ファイル ./.git/index', color="white")
             x.node("anchor_index", shape="point", width="0", style="invis")
             with x.subgraph(name="cluster_index_content") as xc:
                 xc.attr(label="", color="black")
@@ -73,7 +77,8 @@ class GitRepositoryVisualizer:
                     node_label = blob_hash + '   ' + file_path + '\\l'
                     xc.node(node_id, node_label, shape="rectangle", color="white")
                     g.edge(node_id + ':e', 'j_' + blob_hash + ':w')
-        #
+
+        # layout the work tree to the left, the index to the center, the objects to the right of the graph
         g.edge("anchor_wt", "anchor_index", ltail="cluster_worktree", lhead="cluster_index", style="invis")
         g.edge("anchor_index", "anchor_objects", ltail="cluster_index", lhead="cluster_objects", style="invis")
         #
