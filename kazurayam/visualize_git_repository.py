@@ -20,7 +20,7 @@ class GitRepositoryVisualizer:
         self.object_commit_reverse_links = {}
 
     @staticmethod
-    def visualize_index(wt: str, commandline: list=[]) -> Digraph:
+    def visualize_index(wt: str, commandline: list=[], modifier=None) -> Digraph:
         """
         generate a Graphviz Digraph where the Git index (or stage, cache) is depicted
         :param wt:
@@ -134,6 +134,10 @@ class GitRepositoryVisualizer:
         # layout the work tree to the left, the index to the center, the objects to the right of the graph
         g.edge("anchor_wt", "anchor_index", ltail="cluster_worktree", lhead="cluster_index", style="invis")
         g.edge("anchor_index", "anchor_objects", ltail="cluster_index", lhead="cluster_objects", style="invis")
+        #
+        # modify the generated Digraph using the specified callback function
+        if modifier is not None:
+            modifier(g)
         #
         return g
 

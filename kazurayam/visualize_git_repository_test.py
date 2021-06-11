@@ -216,21 +216,37 @@ def test_4_index(basedir):
     GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.4"), format="png")
     # step5
     GIT.add(wt, '.')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.5"), format="png")
+    def modifier5(g: Digraph):
+        g.node("x_de13371", fillcolor="gold")
+        g.node("j_de13371", fillcolor="gold")
+    GRV().visualize_index(wt, sh_quotation, modifier5).render(os.path.join(gr, "figure-4.5"), format="png")
     # step6
     GIT.commit(wt, 'add doc/TODO.txt')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.6"), format="png")
+    def modifier6(g: Digraph):
+        g.node("j_de13371", fillcolor="gold")
+    GRV().visualize_index(wt, sh_quotation, modifier6).render(os.path.join(gr, "figure-4.6"), format="png")
     # step7
     f = write_file(wt, "README.md", "# Read me more carefully\n")
+    def modifier7(g: Digraph):
+        g.node("j_5a79541", fillcolor="hotpink")
+        g.node("j_aadb69a", fillcolor="lightgrey")
     GIT.add(wt, '.')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.7"), format="png")
+    GRV().visualize_index(wt, sh_quotation, modifier7).render(os.path.join(gr, "figure-4.7"), format="png")
     # step8
     f = write_file(wt, "README.md", "# I know you didnt read me.\n")
     GIT.add(wt, '.')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.8"), format="png")
+    def modifier8(g: Digraph):
+        g.node("j_5a79541", fillcolor="lightgrey")
+        g.node("j_9230643", fillcolor="hotpink")
+        g.node("j_aadb69a", fillcolor="lightgrey")
+    GRV().visualize_index(wt, sh_quotation, modifier8).render(os.path.join(gr, "figure-4.8"), format="png")
     # step9
     GIT.commit(wt, 'modified README.md')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.9"), format="png")
+    def modifier9(g: Digraph):
+        g.node("j_5a79541", fillcolor="black", fontcolor="white")
+        g.node("j_9230643", fillcolor="gold")
+        g.node("j_aadb69a", fillcolor="lightgrey")
+    GRV().visualize_index(wt, sh_quotation, modifier9).render(os.path.join(gr, "figure-4.9"), format="png")
 
 
 def execute_tree_command(wt: str) -> list:

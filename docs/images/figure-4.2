@@ -1,0 +1,35 @@
+// Git Index graph
+digraph index {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled width=2]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	compound=true splines=true
+	subgraph cluster_worktree {
+		color=white label="ワークツリー ./"
+		anchor_wt [label="" shape=point style=invis width=0]
+		wt_commandline [label="tree -afni -I .git\l.\l./.gitignore\l./README.md\l./src\l./src/greeting.pl\l\l1 directory, 3 files" color=lightgrey fillcolor=lightgrey shape=rectangle]
+	}
+	subgraph cluster_objects {
+		color=white label="ディレクトリ ./.git/objects"
+		anchor_objects [shape=point style=invis width=0]
+		j_aadb69a [label="blob aadb69a\n"]
+		j_b25c15b [label="blob b25c15b\n"]
+		j_b371df9 [label="blob b371df9\n"]
+	}
+	graph [nodesep=0.1]
+	x_b25c15b:e -> j_b25c15b:w
+	x_aadb69a:e -> j_aadb69a:w
+	x_b371df9:e -> j_b371df9:w
+	subgraph cluster_index {
+		color=white label="ファイル ./.git/index"
+		anchor_index [shape=point style=invis width=0]
+		subgraph cluster_index_content {
+			color=black label=""
+			x_b25c15b [label="b25c15b   .gitignore\l" color=white shape=rectangle]
+			x_aadb69a [label="aadb69a   README.md\l" color=white shape=rectangle]
+			x_b371df9 [label="b371df9   src/greeting.pl\l" color=white shape=rectangle]
+		}
+	}
+	anchor_wt -> anchor_index [lhead=cluster_index ltail=cluster_worktree style=invis]
+	anchor_index -> anchor_objects [lhead=cluster_objects ltail=cluster_index style=invis]
+}
