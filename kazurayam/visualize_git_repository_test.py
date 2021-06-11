@@ -194,6 +194,10 @@ def test_4_index(basedir):
     GIT.init(wt, True)
     #
     operate_initial_commit(wt)
-    GRV().visualize_index(wt).render(os.path.join(gr, "figure-4.1"), format="png")
+    t = SH.shellcommand(wt, ['tree', '-afni', '-I', '.git'])
+    commandline = [ '% tree -afni -I .git .' ]
+    commandline.extend(t[0].splitlines())
+    print(commandline)
+    GRV().visualize_index(wt, commandline).render(os.path.join(gr, "figure-4.1"), format="png")
 
 

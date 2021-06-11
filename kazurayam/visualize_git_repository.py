@@ -20,24 +20,22 @@ class GitRepositoryVisualizer:
         self.object_commit_reverse_links = {}
 
     @staticmethod
-    def visualize_index(wt: str) -> Digraph:
+    def visualize_index(wt: str, commandline: list=[]) -> Digraph:
         """
         generate a Graphviz Digraph where the Git index (or stage, cache) is depicted
         :param wt:
+        :param commandline:
         :return:
         """
         g = Digraph("index", comment="Git Index graph")
         set_graph_basics(g)
         g.attr(compound="true", splines="curved")
         #
-        t = SH.shellcommand(wt, ['tree', '-afni', '-I', '.git'])
         with g.subgraph(name="cluster_worktree") as w:
             w.attr(label="ワークツリー ./", color="white")
             w.node("anchor_wt", "", shape="point", width="0", style="invis")
-            node_commandline_id = 'wt_commandline'
-            node_commandline_label = "% tree -afni .\\l" + t[0].replace('\n', '\\l')
-            w.node(node_commandline_id, node_commandline_label,
-                   shape="rectangle", fillcolor="lightgrey", color="white")
+            w.node('wt_commandline', '\\l'.join(commandline),
+                   shape="rectangle", fillcolor="lightgrey")
 
         with g.subgraph(name="cluster_objects") as j:
             j.attr(label="ディレクトリ ./.git/objects", color="white")
