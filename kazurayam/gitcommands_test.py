@@ -40,8 +40,16 @@ def test_branch_new_then_checkout(wt_with_initial_commit):
 
 
 def test_tag_points_at(wt_with_initial_commit):
-    commit_object = GIT.revparse(wt_with_initial_commit, "HEAD").strip()
+    commit_object = GIT.revparse(wt_with_initial_commit, "HEAD")[0].strip()
     t = GIT.tag_points_at(wt_with_initial_commit, commit_object)
     print(commit_object, t[0], t[1])
     assert t[1] == 0
     assert t[0] == '0.1.0'
+
+
+def test_catfile_batchcheck_batchallobjects(wt_with_initial_commit):
+    completed_process = GIT.catfile_batchcheck_batchallobjects(wt_with_initial_commit)
+    assert completed_process.returncode == 0
+    lines = completed_process.stdout.splitlines()
+    assert len(lines) == 6
+    # 1 commit, 2 trees, 3 blobs = 6 objects

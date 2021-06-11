@@ -1,6 +1,7 @@
 import subprocess
 from subprocess import PIPE, STDOUT
-from .shellcommand import get_msg, print_msg
+from .shellcommand import decode_stdout, print_msg
+from .shellcommand import shell_command
 
 
 def init(wt: str, verbose=True) -> str:
@@ -14,7 +15,7 @@ def init(wt: str, verbose=True) -> str:
     if verbose:
         print("\n% git init")
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def add(wt, path, verbose=True) -> str:
@@ -22,7 +23,7 @@ def add(wt, path, verbose=True) -> str:
     if verbose:
         print("\n% git add", path)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def status(wt, verbose=True) -> str:
@@ -30,7 +31,7 @@ def status(wt, verbose=True) -> str:
     if verbose:
         print("\n% git status")
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def commit(wt, msg, verbose=True):
@@ -38,7 +39,7 @@ def commit(wt, msg, verbose=True):
     if verbose:
         print("\n% git commit -m \"{}\"".format(msg))
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def catfile_t(wt, gitobject: str, verbose=True) -> str:
@@ -46,7 +47,7 @@ def catfile_t(wt, gitobject: str, verbose=True) -> str:
     if verbose:
         print("\n% git cat-file -t", gitobject)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def catfile_p(wt, gitobject: str, verbose=True) -> str:
@@ -54,7 +55,7 @@ def catfile_p(wt, gitobject: str, verbose=True) -> str:
     if verbose:
         print("\n% git cat-file -p", gitobject)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def catfile_blob(wt, gitobject: str, verbose=True) -> str:
@@ -62,15 +63,15 @@ def catfile_blob(wt, gitobject: str, verbose=True) -> str:
     if verbose:
         print("\n% git cat-file blob", gitobject)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
-def revparse(wt, gitobject: str, verbose=True) -> str:
+def revparse(wt, gitobject: str, verbose=True) -> tuple:
     completed_process = subprocess.run(['git', 'rev-parse', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git rev-parse", gitobject)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process), completed_process.returncode
 
 
 def lstree(wt, gitobject: str, verbose=True) -> str:
@@ -78,7 +79,7 @@ def lstree(wt, gitobject: str, verbose=True) -> str:
     if verbose:
         print("\n% git ls-tree", gitobject)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def lsfiles_stage(wt, verbose=True) -> str:
@@ -93,7 +94,7 @@ def lsfiles_stage(wt, verbose=True) -> str:
     if verbose:
         print("\n% git ls-files --stage")
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def showref_heads(wt, verbose=True) -> str:
@@ -112,7 +113,7 @@ b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
     if verbose:
         print("\n% git show-ref --heads")
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def branch_new(wt, branch_name: str, verbose=True) -> str:
@@ -127,7 +128,7 @@ def branch_new(wt, branch_name: str, verbose=True) -> str:
     if verbose:
         print("\n% git branch", branch_name)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def branch_show_current(wt, verbose=True) -> str:
@@ -142,7 +143,7 @@ def branch_show_current(wt, verbose=True) -> str:
     if verbose:
         print("\n% git branch", "--show-current")
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def checkout(wt, branch_name: str, verbose=True) -> str:
@@ -157,7 +158,7 @@ def checkout(wt, branch_name: str, verbose=True) -> str:
     if verbose:
         print("\n% git checkout", branch_name)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def merge(wt, branch_name: str, verbose=True) -> str:
@@ -172,7 +173,7 @@ def merge(wt, branch_name: str, verbose=True) -> str:
     if verbose:
         print("\n% git merge", branch_name)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=True) -> str:
@@ -188,7 +189,7 @@ def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=True) -> str:
     if verbose:
         print("\n% git tag", tag_name, refer_to)
         print_msg(completed_process)
-    return get_msg(completed_process)
+    return decode_stdout(completed_process)
 
 
 def tag_points_at(wt, object: str, verbose=True) -> tuple:
@@ -209,21 +210,26 @@ def tag_points_at(wt, object: str, verbose=True) -> tuple:
     if verbose:
         print("\n% git tag --points-at", object)
         print_msg(completed_process)
-    return get_msg(completed_process), completed_process.returncode
+    return decode_stdout(completed_process), completed_process.returncode
 
 
-def revlist_objects_all(wt, verbose=True):
+def catfile_batchcheck_batchallobjects(wt:str, verbose=True):
     """
-    execute `git rev-list --objects --all` command.
-    it shows all objects in the .git/objects including
-    commit objects, tree objects and blob objects.
-    the order of lines are not defined; not sorted by the hash values.
+    executes `git cat-file --batch-check --batch-all-objects`
+    this command list all objects in the .git/objects directory regardless
+    if each of them is reachable from the commits.
+    In other words, this command can list the blob objects
+    which have been added but not het commited.
     :param wt:
     :param verbose:
-    :return:
+    :return: subprocess.CompletedProcess object
+    the stdout could be for example:
+
+$ git cat-file --batch-check --batch-all-objects
+aadb69a077c74818e3aff608c0c60c56c6c7c6c9 blob 17
+b25c15b81fae06e1c55946ac6270bfdb293870e8 blob 3
+b371df9d9194821c4a54f0e3a77f89bbcee62f7e blob 25
+
     """
-    completed_process = subprocess.run(['git', 'rev-list', '--objects', '--all'], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git rev-list --objects --all")
-        print_msg(completed_process)
-    return get_msg(completed_process)
+    args = ['git', 'cat-file', '--batch-check', '--batch-all-objects']
+    return shell_command(wt, args, verbose)

@@ -102,7 +102,7 @@ def test_2_branch_and_merge(basedir):
     #
     operate_add_todo(wt)
     def modifier3(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="deepskyblue")
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="deepskyblue")
     GRV().visualize_history(wt, modifier3).render(os.path.join(gr, "figure-2.3"), format="png")
     #
     GIT.checkout(wt, "master")
@@ -113,14 +113,14 @@ def test_2_branch_and_merge(basedir):
 
     operate_modify_readme(wt)
     def modifier5(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="hotpink")
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="hotpink")
     GRV().visualize_history(wt, modifier5).render(os.path.join(gr, "figure-2.5"), format="png")
     #
     GIT.merge(wt, "develop")
     def modifier6(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0:7], fillcolor="green3")
-        g.node(GIT.revparse(wt, "HEAD^2")[0:7], fillcolor="deepskyblue")
-        g.node(GIT.revparse(wt, "HEAD^1")[0:7], fillcolor="hotpink")
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="green3")
+        g.node(GIT.revparse(wt, "HEAD^2")[0][0:7], fillcolor="deepskyblue")
+        g.node(GIT.revparse(wt, "HEAD^1")[0][0:7], fillcolor="hotpink")
     GRV().visualize_history(wt, modifier6).render(os.path.join(gr, "figure-2.6"), format="png")
 
 
@@ -142,7 +142,7 @@ def test_3_tags(basedir):
     #
     GIT.tag_to(wt, '0.1.0')
     def modifier2(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0:7],
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
            xlabel='<<font color="red" face="bold" point-size="18">0.1.0</font>>')
     GRV().visualize_history(wt, modifier2).render(os.path.join(gr, "figure-3.2"), format="png")
     #
@@ -152,7 +152,7 @@ def test_3_tags(basedir):
     GIT.tag_to(wt, '0.2.0')
     def modifier3(g: Digraph):
         g.node('develop', fillcolor="gold")
-        g.node(GIT.revparse(wt, "HEAD")[0:7],
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
     GRV().visualize_history(wt, modifier3).render(os.path.join(gr, "figure-3.3"), format="png")
     #
@@ -161,21 +161,21 @@ def test_3_tags(basedir):
     GIT.tag_to(wt, '0.1.1')
     def modifier4(g: Digraph):
         g.node('master', fillcolor="gold")
-        g.node(GIT.revparse(wt, "HEAD")[0:7],
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.1.1</font>>')
     GRV().visualize_history(wt, modifier4).render(os.path.join(gr, "figure-3.4"), format="png")
     #
     GIT.checkout(wt, "master")
     GIT.merge(wt, "develop")
     def modifier5(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD^2")[0:7],
+        g.node(GIT.revparse(wt, "HEAD^2")[0][0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
     GRV().visualize_history(wt, modifier5).render(os.path.join(gr, "figure-3.5"), format="png")
     #
     operate_modify_readme(wt)
     GIT.tag_to(wt, '0.2.1')
     def modifier6(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0:7],
+        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.1</font>>')
     GRV().visualize_history(wt, modifier6).render(os.path.join(gr, "figure-3.6"), format="png")
 
@@ -183,21 +183,59 @@ def test_3_tags(basedir):
 def test_4_index(basedir):
     """
     Let me look at how the Git Index is depicted in a Graphviz graph.
-
-    1. create a Git repository
-    2. make commits
-    3. visualize the Git Index
+    1. create a work tree with a few text files, create a Git repository; draw the 1st graph (emtpy index, no objects yet)
+    2. do `git add .`; draw the 3rd graph (index is filled, blob objects, no commits, no trees)
+    3. do `git commit`; draw the 4th graph (index remains the same, commits+trees+blobs are linked)
+    4. create and add a text file; draw the 5th graph (index is updated, a new blob is added, commits + trees stay unchanged)
+    5. do `git commit`; draw the 6th graph (index remains the same, 2 commits+trees+blobs are linked)
+    6. modify README and do `git add .`; draw the 7th graph
+    7. modify README again and do the `git add .`; draw the 8th graph (1 lonesome blob stands)
     :param basedir:
     :return:
     """
     (wt, gr) = testutils.create_subject_dir(basedir, '4_index')
-    GIT.init(wt, True)
-    #
-    operate_initial_commit(wt)
-    t = SH.shellcommand(wt, ['tree', '-afni', '-I', '.git'])
-    commandline = [ '% tree -afni -I .git .' ]
-    commandline.extend(t[0].splitlines())
-    print(commandline)
-    GRV().visualize_index(wt, commandline).render(os.path.join(gr, "figure-4.1"), format="png")
+    f = write_file(wt, '.gitignore', '*~\n')
+    print("% echo '*~' > .gitignore")
+    f = write_file(wt, "README.md", "# Read me please\n")
+    print("% echo '#Read me plase' > README.md")
+    f = write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
+    print("% echo 'print(\"How do you do?\");' > src/greeting.pl")
+    # step1
+    sh_quotation = execute_tree_command(wt)
+    GIT.init(wt)
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.1"), format="png")
+    # step2
+    GIT.add(wt, '.')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.2"), format="png")
+    # step3
+    GIT.commit(wt, 'initial commit')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.3"), format="png")
+    # step4
+    f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
+    sh_quotation = execute_tree_command(wt)
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.4"), format="png")
+    # step5
+    GIT.add(wt, '.')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.5"), format="png")
+    # step6
+    GIT.commit(wt, 'add doc/TODO.txt')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.6"), format="png")
+    # step7
+    f = write_file(wt, "README.md", "# Read me more carefully\n")
+    GIT.add(wt, '.')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.7"), format="png")
+    # step8
+    f = write_file(wt, "README.md", "# I know you didnt read me.\n")
+    GIT.add(wt, '.')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.8"), format="png")
+    # step9
+    GIT.commit(wt, 'modified README.md')
+    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.9"), format="png")
 
 
+def execute_tree_command(wt: str) -> list:
+    args = ['tree', '-afni', '-I', '.git']
+    completed_process = SH.shell_command(wt, args)
+    commandline = [' '.join(args)]
+    commandline.extend(completed_process.stdout.splitlines())
+    return commandline

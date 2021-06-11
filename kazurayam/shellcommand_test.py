@@ -13,16 +13,19 @@ def wt_with_data(basedir):
     fileutils.write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
     yield wt
 
-def test_shellcommand_echo(wt_with_data):
-    t = SH.shellcommand(wt_with_data, ['echo', 'Hello, world!'])
-    assert t[0] == 'Hello, world!'
-    assert t[1] == 0
 
-def test_shellcommand_tree(wt_with_data):
-    t = SH.shellcommand(wt_with_data, ['tree', '-afni'])
-    assert len(t[0].splitlines()) >= 3
-    assert '.gitignore' in t[0]
-    assert 'README.md' in t[0]
-    assert 'src' in t[0]
-    assert 'greeting.pl' in t[0]
-    assert t[1] == 0
+def test_echo(wt_with_data):
+    # cp : Completed Process, decoded
+    cp = SH.shell_command(wt_with_data, ['echo', 'Hello, world!'])
+    assert cp.stdout == 'Hello, world!'
+    assert cp.returncode == 0
+
+
+def test_tree(wt_with_data):
+    cp = SH.shell_command(wt_with_data, ['tree', '-afni'])
+    assert len(cp.stdout.splitlines()) >= 3
+    assert '.gitignore' in cp.stdout
+    assert 'README.md' in cp.stdout
+    assert 'src' in cp.stdout
+    assert 'greeting.pl' in cp.stdout
+    assert cp.returncode == 0

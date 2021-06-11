@@ -1,6 +1,7 @@
 from collections import deque
 from graphviz import Digraph
 from . import gitcommands as GIT
+from . import shellcommand as SH
 
 
 def set_graph_basics(g: Digraph):
@@ -28,83 +29,88 @@ class GitRepositoryVisualizer:
         """
         g = Digraph("index", comment="Git Index graph")
         set_graph_basics(g)
-        g.attr(compound="true", splines="curved")
+        g.attr(compound="true", splines="true")
         #
         with g.subgraph(name="cluster_worktree") as w:
             w.attr(label="ワークツリー ./", color="white")
             w.node("anchor_wt", "", shape="point", width="0", style="invis")
             w.node('wt_commandline', '\\l'.join(commandline),
-                   shape="rectangle", fillcolor="lightgrey")
+                   shape="rectangle", fillcolor="lightgrey", color="lightgrey")
 
         with g.subgraph(name="cluster_objects") as j:
             j.attr(label="ディレクトリ ./.git/objects", color="white")
             j.node("anchor_objects", shape="point", width="0", style="invis")
-            o = GIT.revlist_objects_all(wt)
-            for line in o.splitlines():
-                hash7 = line.split()[0][0:7]
-                file = ""
-                if len(line.split()) > 1:
-                    file = line.split()[1]
-                object_type = GIT.catfile_t(wt, hash7).strip()
-                node_id = "j_" + hash7
-                if object_type == 'blob':
-                    node_label = 'blob ' + hash7 + " " + file + "\\l"
-                    j.node(node_id, node_label)
-                elif object_type == 'commit':
-                    node_label = 'commit ' + hash7 + " " + file + "\\l"
-                    j.node(node_id, node_label, shape="ellipse")
-                elif object_type == 'tree':
-                    node_label = "tree " + hash7 + " " + file + "\\l"
-                    j.node(node_id, node_label, shape="folder")
-                else:
-                    raise Exception("unknown object type: {}".format(object_type))
+            # check if the current working directory is `git init`ed or not.
+            completed_process = SH.shell_command(wt, ['ls', '.git'])
+            if completed_process.returncode == 0:
+                # yes, we find the '.git' directory
+                completed_process = GIT.catfile_batchcheck_batchallobjects(wt)
+                for line in completed_process.stdout.splitlines():
+                    object_hash = line.split()[0]
+                    hash7 = object_hash[0:7]
+                    object_type = line.split()[1]
+                    node_id = "j_" + hash7
+                    if object_type == 'commit':
+                        commit_content = GIT.catfile_p(wt, hash7)
+                        node_label = object_type + ' ' + hash7 + '\\n' + \
+                                     get_commit_message(commit_content)
+                        j.node(node_id, node_label, shape="ellipse")
+                    elif object_type == 'tree':
+                        node_label = object_type + ' ' + hash7
+                        j.node(node_id, node_label, shape="folder")
+                    else:
+                        node_label = object_type + ' ' + hash7 + '\\n' + \
+                                     find_filepath_of_blob(wt, object_hash)
+                        j.node(node_id, node_label)
 
-            # draw edges between the commit/tree/blob objects
-            branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
-            top_commit_hash = GIT.revparse(wt, branch_name).strip()
-            # create a Deque (Double-ended-queue)
-            cm_dq = deque()
-            cm_dq.append(top_commit_hash)
-            # repeat until the deque of commits gets empty
-            while len(cm_dq) > 0:
-                # pop a commit_hash from the top left of the deque
-                commit_hash = cm_dq.popleft()
-                if commit_hash is not None:
-                    # grasp the hash of the root tree `/` linked by this commit
-                    o = GIT.catfile_p(wt, commit_hash)
-                    root_tree_hash = o.splitlines()[0].split()[1]
-                    # draw an edge from the commit to the root tree
-                    j.edge('j_' + commit_hash[0:7] + ':e',
-                           'j_' + root_tree_hash[0:7] + ':e',
-                           constraint="false", dir="back")
-                    # trace the links between tree and blobs
-                    tr_dq = deque()
-                    tr_dq.append(root_tree_hash)
-                    # repeat until the deque of trees gets empty
-                    while len(tr_dq) > 0:
-                        # pop a tree_hash from the top left of the deque
-                        tree_hash = tr_dq.popleft()
-                        o = GIT.lstree(wt, tree_hash)
-                        for line in o.splitlines():
-                            object_type = line.split()[1]
-                            object_hash = line.split()[2]
-                            j.edge('j_' + tree_hash[0:7] + ':e',
-                                   'j_' + object_hash[0:7] + ':e',
-                                   constraint="false", dir="back")
-                            if object_type == 'tree':
-                                # append nesting trees into the tree Deque
-                                tr_dq.append(object_hash)
+                # draw edges between the commit/tree/blob objects
+                branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
+                completed_process = GIT.revparse(wt, branch_name)
+                if completed_process[1] == 0:
+                    # only when at least one commit has been made, we can draw edges
+                    top_commit_hash = completed_process[0]
+                    # create a Deque (Double-ended-queue)
+                    cm_dq = deque()
+                    cm_dq.append(top_commit_hash)
+                    # repeat until the deque of commits gets empty
+                    while len(cm_dq) > 0:
+                        # pop a commit_hash from the top left of the deque
+                        commit_hash = cm_dq.popleft()
+                        if commit_hash is not None:
+                            # grasp the hash of the root tree `/` linked by this commit
+                            o = GIT.catfile_p(wt, commit_hash)
+                            root_tree_hash = o.splitlines()[0].split()[1]
+                            # draw an edge from the commit to the root tree
+                            j.edge('j_' + commit_hash[0:7] + ':e',
+                                   'j_' + root_tree_hash[0:7] + ':e',
+                                   constraint="false", arrowhead="none")
+                            # trace the links between tree and blobs
+                            tr_dq = deque()
+                            tr_dq.append(root_tree_hash)
+                            # repeat until the deque of trees gets empty
+                            while len(tr_dq) > 0:
+                                # pop a tree_hash from the top left of the deque
+                                tree_hash = tr_dq.popleft()
+                                o = GIT.lstree(wt, tree_hash)
+                                for line in o.splitlines():
+                                    object_type = line.split()[1]
+                                    object_hash = line.split()[2]
+                                    j.edge('j_' + tree_hash[0:7] + ':e',
+                                           'j_' + object_hash[0:7] + ':e',
+                                           constraint="false", arrowhead="none")
+                                    if object_type == 'tree':
+                                        # append nesting trees into the tree Deque
+                                        tr_dq.append(object_hash)
 
-                    # append following commits into the commit Deque
-                    parent_commits = get_parent_commits(wt, commit_hash)
-                    for parent in parent_commits:
-                        cm_dq.append(parent)
-                        g.edge('j_' + commit_hash[0:7], 'j_' + parent[0:7])
-                    if len(parent_commits) >= 2:
-                        in_detail = False
-
+                            # append following commits into the commit Deque
+                            parent_commits = get_parent_commits(wt, commit_hash)
+                            for parent in parent_commits:
+                                cm_dq.append(parent)
+                                g.edge('j_' + commit_hash[0:7], 'j_' + parent[0:7],
+                                       constraint="false", arrowhead="none")
+                            if len(parent_commits) >= 2:
+                                in_detail = False
         #
-        o = GIT.lsfiles_stage(wt, verbose=False)
         g.attr('graph', nodesep="0.1")
         g.node_attr.update(width="2")
         with g.subgraph(name="cluster_index") as x:
@@ -112,13 +118,18 @@ class GitRepositoryVisualizer:
             x.node("anchor_index", shape="point", width="0", style="invis")
             with x.subgraph(name="cluster_index_content") as xc:
                 xc.attr(label="", color="black")
-                for line in o.splitlines():
-                    blob_hash = line.split()[1][0:7]
-                    file_path = line.split()[3]
-                    node_id = 'x_' + blob_hash
-                    node_label = blob_hash + '   ' + file_path + '\\l'
-                    xc.node(node_id, node_label, shape="rectangle", color="white")
-                    g.edge(node_id + ':e', 'j_' + blob_hash + ':w')
+                # check if the current working directory is `git init`ed or not.
+                completed_process = SH.shell_command(wt, ['ls', '.git'])
+                if completed_process.returncode == 0:
+                    o = GIT.lsfiles_stage(wt, verbose=False)
+                    for line in o.splitlines():
+                        blob_hash = line.split()[1][0:7]
+                        file_path = line.split()[3]
+                        node_id = 'x_' + blob_hash
+                        node_label = blob_hash + '   ' + file_path + '\\l'
+                        xc.node(node_id, node_label, shape="rectangle", color="white")
+                        #
+                        g.edge(node_id + ':e', 'j_' + blob_hash + ':w')
 
         # layout the work tree to the left, the index to the center, the objects to the right of the graph
         g.edge("anchor_wt", "anchor_index", ltail="cluster_worktree", lhead="cluster_index", style="invis")
@@ -151,7 +162,7 @@ class GitRepositoryVisualizer:
     def visualize_current_branch(self, wt: str, g: Digraph) -> str:
         branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
         # grasp the hash of the commit object aliased to the branch
-        o = GIT.revparse(wt, branch_name)
+        o = GIT.revparse(wt, branch_name)[0]
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
@@ -307,3 +318,25 @@ def get_parent_commits(wt: str, commit_hash) -> tuple:
     parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
     parent_commit_hashes = tuple([line.split()[1] for line in parent_lines])
     return parent_commit_hashes
+
+
+def find_filepath_of_blob(wt: str, blob_hash:str) -> str:
+    """
+$ git ls-tree -r HEAD
+100644 blob fb7c93af634239c075b1b0c8c6c19bbeede0ed54    .DS_Store
+100644 blob 8caadd35fa8e89dabe889e75ff632fc57be2eb56    .github/workflows/toc.yml
+100644 blob 035f157551a9de459b3851b555d936a6ebb1ded6    .gitignore
+
+    :param wt:
+    :param blob_hash:
+    :return:
+    """
+    completed_process = SH.shell_command(wt, ['git', 'ls-tree', '-r', 'HEAD'])
+    if completed_process.returncode == 0:
+        for line in completed_process.stdout.splitlines():
+            hash = line.split()[2]
+            if hash.startswith(blob_hash):
+                return line.split()[3]
+    return ''
+
+
