@@ -2,6 +2,7 @@ import os
 from graphviz import Digraph
 from .fileutils import write_file
 from . import gitcommands as GIT
+from . import shellcommand as SH
 from . import testutils
 from .visualize_git_repository import GitRepositoryVisualizer as GRV
 

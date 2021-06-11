@@ -1,6 +1,7 @@
 from collections import deque
 from graphviz import Digraph
 from . import gitcommands as GIT
+from . import shellcommand as SH
 
 
 def set_graph_basics(g: Digraph):
@@ -26,16 +27,55 @@ class GitRepositoryVisualizer:
         """
         g = Digraph("index", comment="Git Index graph")
         set_graph_basics(g)
+        g.attr(compound="true", splines="curved")
+        #
+        t = SH.shellcommand(wt, ['tree', '-afni', '-I', '.git'])
+        with g.subgraph(name="cluster_worktree") as w:
+            w.attr(label="work tree", color="white")
+            w.node("anchor_wt", "% tree -afni\\l")
+            w.node("worktree", t[0].replace('\n', '\\l'))
+        #
+        with g.subgraph(name="cluster_objects") as j:
+            j.attr(label="ディレクトリ ./git/objects", color="white")
+            j.node("anchor_objects", shape="point", width="0", style="invis")
+            o = GIT.revlist_objects_all(wt)
+            for line in o.splitlines():
+                hash7 = line.split()[0][0:7]
+                file = ""
+                if len(line.split()) > 1:
+                    file = line.split()[1]
+                object_type = GIT.catfile_t(wt, hash7).strip()
+                node_id = "j_" + hash7
+                if object_type == 'blob':
+                    node_label = 'blob ' + hash7 + " " + file + "\\l"
+                    j.node(node_id, node_label)
+                elif object_type == 'commit':
+                    node_label = 'commit ' + hash7 + " " + file + "\\l"
+                    j.node(node_id, node_label, shape="ellipse")
+                elif object_type == 'tree':
+                    node_label = "tree " + hash7 + " " + file + "\\l"
+                    j.node(node_id, node_label, shape="folder")
+                else:
+                    raise Exception("unknown object type: {}".format(object_type))
         #
         o = GIT.lsfiles_stage(wt, verbose=False)
         g.attr('graph', nodesep="0.1")
         g.node_attr.update(width="2")
         with g.subgraph(name="cluster_index") as x:
-            x.attr(label='index')
-            for line in o.splitlines():
-                blob_hash = line.split()[1][0:7]
-                file_path = line.split()[3]
-                x.node(blob_hash, blob_hash + '   ' + file_path, shape="rectangle")
+            x.attr(label='ファイル .git/index', color="white")
+            x.node("anchor_index", shape="point", width="0", style="invis")
+            with x.subgraph(name="cluster_index_content") as xc:
+                xc.attr(label="", color="black")
+                for line in o.splitlines():
+                    blob_hash = line.split()[1][0:7]
+                    file_path = line.split()[3]
+                    node_id = 'x_' + blob_hash
+                    node_label = blob_hash + '   ' + file_path + '\\l'
+                    xc.node(node_id, node_label, shape="rectangle", color="white")
+                    g.edge(node_id + ':e', 'j_' + blob_hash + ':w')
+        #
+        g.edge("anchor_wt", "anchor_index", ltail="cluster_worktree", lhead="cluster_index", style="invis")
+        g.edge("anchor_index", "anchor_objects", ltail="cluster_index", lhead="cluster_objects", style="invis")
         #
         return g
 
