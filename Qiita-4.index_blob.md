@@ -1,4 +1,4 @@
-# Gitの内部データ構造をGraphvizで描画してみた 第4回 インデックスとblob
+# Gitの内部データ構造をGraphvizで描画してみた 第4回 ワークツリーとインデックスとblob
 
 ## 解決すべき問題
 
@@ -36,13 +36,15 @@
 
 ![figure-4.7](docs/images/figure-4.7.png)
 
-### ステップ8 もう一度READMEを修正して`git add`した
+### ステップ8 もう一度修正して`git add`した
 
 ![figure-4.8](docs/images/figure-4.8.png)
 
 ### ステップ9 READMEの修正を`git commit`した
 
 ![figure-4.9](docs/images/figure-4.9.png)
+
+[git gc](https://git-scm.com/docs/git-gc)
 
 ## まとめ
 

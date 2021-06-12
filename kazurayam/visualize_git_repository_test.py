@@ -213,13 +213,16 @@ def test_4_index(basedir):
     # step4
     f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
     sh_quotation = execute_tree_command(wt)
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.4"), format="png")
+    def modifier4(g: Digraph):
+        g.node("w_6", fillcolor="gold")
+    GRV().visualize_index(wt, sh_quotation, modifier4).render(os.path.join(gr, "figure-4.4"), format="png")
     # step5
     GIT.add(wt, '.')
     def modifier5(g: Digraph):
         g.node("x_de13371", fillcolor="gold")
         g.node("j_de13371", fillcolor="gold")
     GRV().visualize_index(wt, sh_quotation, modifier5).render(os.path.join(gr, "figure-4.5"), format="png")
+    """
     # step6
     GIT.commit(wt, 'add doc/TODO.txt')
     def modifier6(g: Digraph):
@@ -236,7 +239,7 @@ def test_4_index(basedir):
     f = write_file(wt, "README.md", "# I know you didnt read me.\n")
     GIT.add(wt, '.')
     def modifier8(g: Digraph):
-        g.node("j_5a79541", fillcolor="lightgrey")
+        g.node("j_5a79541", fillcolor="black", fontcolor="white")
         g.node("j_9230643", fillcolor="hotpink")
         g.node("j_aadb69a", fillcolor="lightgrey")
     GRV().visualize_index(wt, sh_quotation, modifier8).render(os.path.join(gr, "figure-4.8"), format="png")
@@ -247,7 +250,7 @@ def test_4_index(basedir):
         g.node("j_9230643", fillcolor="gold")
         g.node("j_aadb69a", fillcolor="lightgrey")
     GRV().visualize_index(wt, sh_quotation, modifier9).render(os.path.join(gr, "figure-4.9"), format="png")
-
+"""
 
 def execute_tree_command(wt: str) -> list:
     args = ['tree', '-afni', '-I', '.git']

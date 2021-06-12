@@ -32,10 +32,12 @@ class GitRepositoryVisualizer:
         g.attr(compound="true", splines="true")
         #
         with g.subgraph(name="cluster_worktree") as w:
-            w.attr(label="ワークツリー ./", color="white")
+            w.attr(label="ワークツリー ./", color="lightgrey")
             w.node("anchor_wt", "", shape="point", width="0", style="invis")
-            w.node('wt_commandline', '\\l'.join(commandline),
-                   shape="rectangle", fillcolor="lightgrey", color="lightgrey")
+            for num, line in enumerate(commandline, start=1):
+                w.node('w_{}'.format(num), line + '\\l', shape="rectangle",
+                       fillcolor="white", color="white",
+                       fixedsize="false", height="0.2")
 
         with g.subgraph(name="cluster_objects") as j:
             j.attr(label="ディレクトリ ./.git/objects", color="white")
