@@ -2,7 +2,7 @@ import subprocess
 from subprocess import PIPE, STDOUT
 
 
-def shell_command(wt: str, args: list, verbose=True) -> tuple:
+def shell_command(wt: str, args: list, verbose=False) -> tuple:
     """
     execute a anonymous shell command in Python subprocess.
     :param wt:
