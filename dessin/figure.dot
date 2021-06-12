@@ -1,0 +1,67 @@
+// Git Index graph
+digraph index {
+	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled width=2]
+	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
+	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	compound=true splines=true
+	subgraph cluster_worktree {
+		color=lightgrey label="ワークツリー ./"
+		anchor_wt [label="" shape=point style=invis width=0]
+		w_1 [label="tree -afni -I .git\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_2 [label=".\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_3 [label="./.gitignore\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_4 [label="./README.md\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_5 [label="./doc\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_6 [label="./doc/TODO.txt\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_7 [label="./src\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_8 [label="./src/greeting.pl\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_9 [label="\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_10 [label="2 directories, 4 files\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+	}
+	j_84c1a32 -> j_6131a45 [arrowhead=none constraint=false]
+	subgraph cluster_objects {
+		color=white label="ディレクトリ ./.git/objects"
+		anchor_objects [shape=point style=invis width=0]
+		j_3365c4a [label="tree 3365c4a" shape=folder]
+		j_6131a45 [label="commit 6131a45\ninitial commit" shape=ellipse]
+		j_84c1a32 [label="commit 84c1a32\nadd doc/TODO.txt" shape=ellipse]
+		j_aadb69a [label="blob aadb69a\nREADME.md"]
+		j_b2298cc [label="tree b2298cc" shape=folder]
+		j_b25c15b [label="blob b25c15b\n.gitignore"]
+		j_b371df9 [label="blob b371df9\nsrc/greeting.pl"]
+		j_be633eb [label="tree be633eb" shape=folder]
+		j_c9b8214 [label="tree c9b8214" shape=folder]
+		j_de13371 [label="blob de13371\ndoc/TODO.txt"]
+		j_84c1a32:e -> j_be633eb:e [arrowhead=none constraint=false]
+		j_be633eb:e -> j_b25c15b:e [arrowhead=none constraint=false]
+		j_be633eb:e -> j_aadb69a:e [arrowhead=none constraint=false]
+		j_be633eb:e -> j_b2298cc:e [arrowhead=none constraint=false]
+		j_be633eb:e -> j_3365c4a:e [arrowhead=none constraint=false]
+		j_b2298cc:e -> j_de13371:e [arrowhead=none constraint=false]
+		j_3365c4a:e -> j_b371df9:e [arrowhead=none constraint=false]
+		j_6131a45:e -> j_c9b8214:e [arrowhead=none constraint=false]
+		j_c9b8214:e -> j_b25c15b:e [arrowhead=none constraint=false]
+		j_c9b8214:e -> j_aadb69a:e [arrowhead=none constraint=false]
+		j_c9b8214:e -> j_3365c4a:e [arrowhead=none constraint=false]
+		j_3365c4a:e -> j_b371df9:e [arrowhead=none constraint=false]
+	}
+	graph [nodesep=0.1]
+	x_b25c15b:e -> j_b25c15b:w
+	x_aadb69a:e -> j_aadb69a:w
+	x_de13371:e -> j_de13371:w
+	x_b371df9:e -> j_b371df9:w
+	subgraph cluster_index {
+		color=white label="ファイル ./.git/index"
+		anchor_index [shape=point style=invis width=0]
+		subgraph cluster_index_content {
+			color=black label=""
+			x_b25c15b [label="b25c15b   .gitignore\l" color=white shape=rectangle]
+			x_aadb69a [label="aadb69a   README.md\l" color=white shape=rectangle]
+			x_de13371 [label="de13371   doc/TODO.txt\l" color=white shape=rectangle]
+			x_b371df9 [label="b371df9   src/greeting.pl\l" color=white shape=rectangle]
+		}
+	}
+	anchor_wt -> anchor_index [lhead=cluster_index ltail=cluster_worktree style=invis]
+	anchor_index -> anchor_objects [lhead=cluster_objects ltail=cluster_index style=invis]
+	j_de13371 [fillcolor=gold]
+}

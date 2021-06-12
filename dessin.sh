@@ -1,1 +1,1 @@
-dot -Tpng -o work/dessin.png work/dessin.dot
+dot -Tpng -o dessin/figure.png dessin/figure.dot

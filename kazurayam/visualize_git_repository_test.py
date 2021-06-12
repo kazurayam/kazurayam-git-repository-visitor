@@ -222,12 +222,13 @@ def test_4_index(basedir):
         g.node("x_de13371", fillcolor="gold")
         g.node("j_de13371", fillcolor="gold")
     GRV().visualize_index(wt, sh_quotation, modifier5).render(os.path.join(gr, "figure-4.5"), format="png")
-    """
     # step6
     GIT.commit(wt, 'add doc/TODO.txt')
     def modifier6(g: Digraph):
         g.node("j_de13371", fillcolor="gold")
     GRV().visualize_index(wt, sh_quotation, modifier6).render(os.path.join(gr, "figure-4.6"), format="png")
+
+    """
     # step7
     f = write_file(wt, "README.md", "# Read me more carefully\n")
     def modifier7(g: Digraph):
