@@ -203,6 +203,8 @@ def test_4_index(basedir):
     # step1
     sh_quotation = execute_tree_command(wt)
     GIT.init(wt)
+    SH.shell_command(wt, ['ls', '-la', '.'])
+    SH.shell_command(wt, ['ls', '-la', './.git'])
     GRV().visualize_index(wt, sh_quotation, label='ステップ1 git initした後でgit addする前').render(
         os.path.join(gr, "figure-4.1"), format="png")
     # step2
@@ -236,7 +238,9 @@ def test_4_index(basedir):
     # step7
     f = write_file(wt, "README.md", "# Read me more carefully\n")
     def modifier7(g: Digraph):
+        g.node("w_4", fillcolor="hotpink")
         g.node("j_5a79541", fillcolor="hotpink")
+        g.node("x_5a79541", fillcolor="hotpink")
         g.node("j_aadb69a", fillcolor="lightgrey")
     GIT.add(wt, '.')
     GRV().visualize_index(wt, sh_quotation, modifier7, label='ステップ7 READMEファイルを修正してgit addした').render(
@@ -244,9 +248,12 @@ def test_4_index(basedir):
     # step8
     f = write_file(wt, "README.md", "# I know you didnt read me.\n")
     GIT.add(wt, '.')
+    GIT.status(wt)
     def modifier8(g: Digraph):
+        g.node("w_4", fillcolor="deepskyblue")
         g.node("j_5a79541", fillcolor="black", fontcolor="white")
-        g.node("j_9230643", fillcolor="hotpink")
+        g.node("j_9230643", fillcolor="deepskyblue")
+        g.node("x_9230643", fillcolor="deepskyblue")
         g.node("j_aadb69a", fillcolor="lightgrey")
     GRV().visualize_index(wt, sh_quotation, modifier8, label='ステップ8 READMEファイルをもう一度修正してgit addした').render(
         os.path.join(gr, "figure-4.8"), format="png")
@@ -265,4 +272,5 @@ def execute_tree_command(wt: str) -> list:
     completed_process = SH.shell_command(wt, args)
     commandline = [' '.join(args)]
     commandline.extend(completed_process.stdout.splitlines())
+    commandline[0] = '% ' + commandline[0]
     return commandline

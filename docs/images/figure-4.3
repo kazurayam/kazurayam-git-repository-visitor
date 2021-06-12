@@ -8,7 +8,7 @@ digraph index {
 	subgraph cluster_worktree {
 		color=lightgrey label="ワークツリー ./"
 		anchor_wt [label="" shape=point style=invis width=0]
-		w_1 [label="tree -afni -I .git\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_1 [label="% tree -afni -I .git\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
 		w_2 [label=".\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
 		w_3 [label="./.gitignore\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
 		w_4 [label="./README.md\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
@@ -25,8 +25,8 @@ digraph index {
 		j_b25c15b [label="blob b25c15b\n.gitignore"]
 		j_b371df9 [label="blob b371df9\nsrc/greeting.pl"]
 		j_c9b8214 [label="tree c9b8214\n" shape=folder]
-		j_cac908f [label="commit cac908f\ninitial commit" shape=ellipse]
-		j_cac908f:e -> j_c9b8214:e [arrowhead=none constraint=false]
+		j_dccdbc2 [label="commit dccdbc2\ninitial commit" shape=ellipse]
+		j_dccdbc2:e -> j_c9b8214:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_b25c15b:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_aadb69a:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_3365c4a:e [arrowhead=none constraint=false]
