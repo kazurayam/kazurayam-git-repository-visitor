@@ -335,6 +335,9 @@ $ git ls-tree -r HEAD
 100644 blob 8caadd35fa8e89dabe889e75ff632fc57be2eb56    .github/workflows/toc.yml
 100644 blob 035f157551a9de459b3851b555d936a6ebb1ded6    .gitignore
 
+    This function retrieves all blob objects. A blob object which has not been
+     commited yet will be retrieved.
+
     :param wt:
     :param blob_hash:
     :return:
@@ -370,5 +373,3 @@ def find_filepath_of_tree(wt: str, tree_hash: str) -> str:
     completed_process = SH.shell_command(wt, ['git', 'cat-file', '-p', current_branch])
     root_tree_hash = completed_process.stdout.splitlines()[0].split()[1]
     return traverse_tree(wt, root_tree_hash, tree_hash)
-
-# TODO: find_filepath_of_blob can be replaced with the implementation of find_filepath_of_tree

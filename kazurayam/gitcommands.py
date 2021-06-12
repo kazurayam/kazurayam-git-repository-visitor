@@ -4,7 +4,7 @@ from .shellcommand import decode_stdout, print_msg
 from .shellcommand import shell_command
 
 
-def init(wt: str, verbose=True) -> str:
+def init(wt: str, verbose=False) -> str:
     """
     execute `git init` command in a new process
     :param wt:
@@ -18,7 +18,7 @@ def init(wt: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def add(wt, path, verbose=True) -> str:
+def add(wt, path, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'add', path], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git add", path)
@@ -26,7 +26,7 @@ def add(wt, path, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def status(wt, verbose=True) -> str:
+def status(wt, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'status'], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git status")
@@ -34,7 +34,7 @@ def status(wt, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def commit(wt, msg, verbose=True):
+def commit(wt, msg, verbose=False):
     completed_process = subprocess.run(['git', 'commit', '-m', msg], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git commit -m \"{}\"".format(msg))
@@ -42,7 +42,7 @@ def commit(wt, msg, verbose=True):
     return decode_stdout(completed_process)
 
 
-def catfile_t(wt, gitobject: str, verbose=True) -> str:
+def catfile_t(wt, gitobject: str, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'cat-file', '-t', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git cat-file -t", gitobject)
@@ -50,7 +50,7 @@ def catfile_t(wt, gitobject: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def catfile_p(wt, gitobject: str, verbose=True) -> str:
+def catfile_p(wt, gitobject: str, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'cat-file', '-p', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git cat-file -p", gitobject)
@@ -58,7 +58,7 @@ def catfile_p(wt, gitobject: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def catfile_blob(wt, gitobject: str, verbose=True) -> str:
+def catfile_blob(wt, gitobject: str, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'cat-file', 'blob', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git cat-file blob", gitobject)
@@ -66,7 +66,7 @@ def catfile_blob(wt, gitobject: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def revparse(wt, gitobject: str, verbose=True) -> tuple:
+def revparse(wt, gitobject: str, verbose=False) -> tuple:
     completed_process = subprocess.run(['git', 'rev-parse', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git rev-parse", gitobject)
@@ -74,7 +74,7 @@ def revparse(wt, gitobject: str, verbose=True) -> tuple:
     return decode_stdout(completed_process), completed_process.returncode
 
 
-def lstree(wt, gitobject: str, verbose=True) -> str:
+def lstree(wt, gitobject: str, verbose=False) -> str:
     completed_process = subprocess.run(['git', 'ls-tree', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git ls-tree", gitobject)
@@ -82,7 +82,7 @@ def lstree(wt, gitobject: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def lsfiles_stage(wt, verbose=True) -> str:
+def lsfiles_stage(wt, verbose=False) -> str:
     """
     execute `get ls-file --stage` command
     this command shows the content of the Index
@@ -97,7 +97,7 @@ def lsfiles_stage(wt, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def showref_heads(wt, verbose=True) -> str:
+def showref_heads(wt, verbose=False) -> str:
     """
     execute `git show-ref --heads` command
     this command shows something like this:
@@ -116,7 +116,7 @@ b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
     return decode_stdout(completed_process)
 
 
-def branch_new(wt, branch_name: str, verbose=True) -> str:
+def branch_new(wt, branch_name: str, verbose=False) -> str:
     """
     execute `git branch <brancc_name>` command
     :param wt:
@@ -131,7 +131,7 @@ def branch_new(wt, branch_name: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def branch_show_current(wt, verbose=True) -> str:
+def branch_show_current(wt, verbose=False) -> str:
     """
     execute `git branch --show-current` command
     this will show the current branch which you are on currently
@@ -146,7 +146,7 @@ def branch_show_current(wt, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def checkout(wt, branch_name: str, verbose=True) -> str:
+def checkout(wt, branch_name: str, verbose=False) -> str:
     """
     execute `git checkout <branch_name>` command
     :param wt:
@@ -161,7 +161,7 @@ def checkout(wt, branch_name: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def merge(wt, branch_name: str, verbose=True) -> str:
+def merge(wt, branch_name: str, verbose=False) -> str:
     """
     execute `git merge <branch_name>` command
     :param wt:
@@ -176,7 +176,7 @@ def merge(wt, branch_name: str, verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=True) -> str:
+def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=False) -> str:
     """
     execute `git tag <tag_name> <refer_to>` command
     :param wt:
@@ -192,7 +192,7 @@ def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=True) -> str:
     return decode_stdout(completed_process)
 
 
-def tag_points_at(wt, object: str, verbose=True) -> tuple:
+def tag_points_at(wt, object: str, verbose=False) -> tuple:
     """
     execute `git tag --points-at <object>` command.
     retrieves tag_name that refers to the object.
@@ -213,7 +213,7 @@ def tag_points_at(wt, object: str, verbose=True) -> tuple:
     return decode_stdout(completed_process), completed_process.returncode
 
 
-def catfile_batchcheck_batchallobjects(wt:str, verbose=True):
+def catfile_batchcheck_batchallobjects(wt:str, verbose=False):
     """
     executes `git cat-file --batch-check --batch-all-objects`
     this command list all objects in the .git/objects directory regardless
