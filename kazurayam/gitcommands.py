@@ -11,51 +11,40 @@ def init(wt: str, verbose=False) -> str:
     :param verbose:
     :return: STDOUT+STDERROR emitted by the process where the git command was executed
     """
-    completed_process = subprocess.run('git init'.split(), cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git init")
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    # cp stands for Completed Process as defined in Python subprocess
+    args = ['git', 'init']
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def add(wt, path, verbose=False) -> str:
-    completed_process = subprocess.run(['git', 'add', path], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git add", path)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ["git", "add", path]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def status(wt, verbose=False) -> str:
-    completed_process = subprocess.run(['git', 'status'], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git status")
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'status']
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
-def commit(wt, msg, verbose=False):
-    completed_process = subprocess.run(['git', 'commit', '-m', msg], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git commit -m \"{}\"".format(msg))
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+def commit(wt, msg, verbose=False) -> str:
+    args = ['git', 'commit', '-m', msg]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def catfile_t(wt, gitobject: str, verbose=False) -> str:
-    completed_process = subprocess.run(['git', 'cat-file', '-t', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git cat-file -t", gitobject)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'cat-file', '-t', gitobject]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def catfile_p(wt, gitobject: str, verbose=False) -> str:
-    completed_process = subprocess.run(['git', 'cat-file', '-p', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git cat-file -p", gitobject)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'cat-file', '-p', gitobject]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def catfile_blob(wt, gitobject: str, verbose=False) -> str:

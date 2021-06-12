@@ -3,6 +3,7 @@ import re
 from . import fileutils
 from . import gitcommands as GIT
 from . import testutils
+from .shellcommand import shell_command
 
 
 @pytest.fixture(scope="module")
@@ -18,6 +19,57 @@ def wt_with_initial_commit(basedir):
     GIT.commit(wt, "initial commit")
     GIT.tag_to(wt, '0.1.0')
     yield wt
+
+
+def test_init(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_init')
+    stdout = GIT.init(wt, verbose=True)
+    assert stdout.startswith("hint:")
+
+
+def test_add(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_add')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.add(wt, '.')
+    assert stdout == ""
+
+
+def test_status(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_status')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.status(wt, '.')
+    assert stdout.startswith("On branch master")
+
+
+def test_commit(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_commit')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.add(wt, '.')
+    stdout = GIT.commit(wt, 'add .gitignore')
+    assert stdout.startswith("On branch master")
+
+
+def test_catfile_t(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_catfile_t')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.add(wt, '.')
+    stdout = GIT.commit(wt, 'add .gitignore')
+    stdout = GIT.catfile_t(wt, 'HEAD')
+    assert stdout == 'commit'
+
+
+def test_catfile_p(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_catfile_p')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.add(wt, '.')
+    stdout = GIT.commit(wt, 'add .gitignore')
+    stdout = GIT.catfile_p(wt, 'HEAD')
+    assert stdout.startswith('tree')
 
 
 def test_showref_heads(wt_with_initial_commit):
