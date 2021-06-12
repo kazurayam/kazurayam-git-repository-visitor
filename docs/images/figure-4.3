@@ -3,22 +3,30 @@ digraph index {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled width=2]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	label="ステップ3 git commitしたらblobがツリーにつながった" labelfontsize=12 labelloc=t
 	compound=true splines=true
 	subgraph cluster_worktree {
-		color=white label="ワークツリー ./"
+		color=lightgrey label="ワークツリー ./"
 		anchor_wt [label="" shape=point style=invis width=0]
-		wt_commandline [label="tree -afni -I .git\l.\l./.gitignore\l./README.md\l./src\l./src/greeting.pl\l\l1 directory, 3 files" color=lightgrey fillcolor=lightgrey shape=rectangle]
+		w_1 [label="tree -afni -I .git\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_2 [label=".\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_3 [label="./.gitignore\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_4 [label="./README.md\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_5 [label="./src\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_6 [label="./src/greeting.pl\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_7 [label="\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_8 [label="1 directory, 3 files\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
 	}
 	subgraph cluster_objects {
 		color=white label="ディレクトリ ./.git/objects"
 		anchor_objects [shape=point style=invis width=0]
-		j_1fceaca [label="commit 1fceaca\ninitial commit" shape=ellipse]
-		j_3365c4a [label="tree 3365c4a" shape=folder]
+		j_3365c4a [label="tree 3365c4a\nsrc" shape=folder]
 		j_aadb69a [label="blob aadb69a\nREADME.md"]
 		j_b25c15b [label="blob b25c15b\n.gitignore"]
 		j_b371df9 [label="blob b371df9\nsrc/greeting.pl"]
-		j_c9b8214 [label="tree c9b8214" shape=folder]
-		j_1fceaca:e -> j_c9b8214:e [arrowhead=none constraint=false]
+		j_c9b8214 [label="tree c9b8214\n" shape=folder]
+		j_cac908f [label="commit cac908f\ninitial commit" shape=ellipse]
+		j_cac908f:e -> j_c9b8214:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_b25c15b:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_aadb69a:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_3365c4a:e [arrowhead=none constraint=false]

@@ -3,11 +3,19 @@ digraph index {
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled width=2]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
+	label="ステップ2 git addしたらインデックスとblobが更新された" labelfontsize=12 labelloc=t
 	compound=true splines=true
 	subgraph cluster_worktree {
-		color=white label="ワークツリー ./"
+		color=lightgrey label="ワークツリー ./"
 		anchor_wt [label="" shape=point style=invis width=0]
-		wt_commandline [label="tree -afni -I .git\l.\l./.gitignore\l./README.md\l./src\l./src/greeting.pl\l\l1 directory, 3 files" color=lightgrey fillcolor=lightgrey shape=rectangle]
+		w_1 [label="tree -afni -I .git\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_2 [label=".\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_3 [label="./.gitignore\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_4 [label="./README.md\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_5 [label="./src\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_6 [label="./src/greeting.pl\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_7 [label="\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
+		w_8 [label="1 directory, 3 files\l" color=white fillcolor=white fixedsize=false height=0.2 shape=rectangle]
 	}
 	subgraph cluster_objects {
 		color=white label="ディレクトリ ./.git/objects"

@@ -203,39 +203,44 @@ def test_4_index(basedir):
     # step1
     sh_quotation = execute_tree_command(wt)
     GIT.init(wt)
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.1"), format="png")
+    GRV().visualize_index(wt, sh_quotation, label='ステップ1 git initした後でgit addする前').render(
+        os.path.join(gr, "figure-4.1"), format="png")
     # step2
     GIT.add(wt, '.')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.2"), format="png")
+    GRV().visualize_index(wt, sh_quotation, label='ステップ2 git addしたらインデックスとblobが更新された').render(
+        os.path.join(gr, "figure-4.2"), format="png")
     # step3
     GIT.commit(wt, 'initial commit')
-    GRV().visualize_index(wt, sh_quotation).render(os.path.join(gr, "figure-4.3"), format="png")
+    GRV().visualize_index(wt, sh_quotation, label='ステップ3 git commitしたらblobがツリーにつながった').render(
+        os.path.join(gr, "figure-4.3"), format="png")
     # step4
     f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
     sh_quotation = execute_tree_command(wt)
     def modifier4(g: Digraph):
         g.node("w_6", fillcolor="gold")
-    GRV().visualize_index(wt, sh_quotation, modifier4).render(os.path.join(gr, "figure-4.4"), format="png")
+    GRV().visualize_index(wt, sh_quotation, modifier4, label='ステップ4 TODO.txtファイルを追加してgit addする前').render(
+        os.path.join(gr, "figure-4.4"), format="png")
     # step5
     GIT.add(wt, '.')
     def modifier5(g: Digraph):
         g.node("x_de13371", fillcolor="gold")
         g.node("j_de13371", fillcolor="gold")
-    GRV().visualize_index(wt, sh_quotation, modifier5).render(os.path.join(gr, "figure-4.5"), format="png")
+    GRV().visualize_index(wt, sh_quotation, modifier5, label='ステップ5 git addしたらインデックスとblobが更新された').render(
+        os.path.join(gr, "figure-4.5"), format="png")
     # step6
     GIT.commit(wt, 'add doc/TODO.txt')
     def modifier6(g: Digraph):
         g.node("j_de13371", fillcolor="gold")
-    GRV().visualize_index(wt, sh_quotation, modifier6).render(os.path.join(gr, "figure-4.6"), format="png")
-
-    """
+    GRV().visualize_index(wt, sh_quotation, modifier6, label='ステップ6 git commitしたらblobがツリーにつながった').render(
+        os.path.join(gr, "figure-4.6"), format="png")
     # step7
     f = write_file(wt, "README.md", "# Read me more carefully\n")
     def modifier7(g: Digraph):
         g.node("j_5a79541", fillcolor="hotpink")
         g.node("j_aadb69a", fillcolor="lightgrey")
     GIT.add(wt, '.')
-    GRV().visualize_index(wt, sh_quotation, modifier7).render(os.path.join(gr, "figure-4.7"), format="png")
+    GRV().visualize_index(wt, sh_quotation, modifier7, label='ステップ7 READMEファイルを修正してgit addした').render(
+        os.path.join(gr, "figure-4.7"), format="png")
     # step8
     f = write_file(wt, "README.md", "# I know you didnt read me.\n")
     GIT.add(wt, '.')
@@ -243,15 +248,17 @@ def test_4_index(basedir):
         g.node("j_5a79541", fillcolor="black", fontcolor="white")
         g.node("j_9230643", fillcolor="hotpink")
         g.node("j_aadb69a", fillcolor="lightgrey")
-    GRV().visualize_index(wt, sh_quotation, modifier8).render(os.path.join(gr, "figure-4.8"), format="png")
+    GRV().visualize_index(wt, sh_quotation, modifier8, label='ステップ8 READMEファイルをもう一度修正してgit addした').render(
+        os.path.join(gr, "figure-4.8"), format="png")
     # step9
     GIT.commit(wt, 'modified README.md')
     def modifier9(g: Digraph):
         g.node("j_5a79541", fillcolor="black", fontcolor="white")
         g.node("j_9230643", fillcolor="gold")
         g.node("j_aadb69a", fillcolor="lightgrey")
-    GRV().visualize_index(wt, sh_quotation, modifier9).render(os.path.join(gr, "figure-4.9"), format="png")
-"""
+    GRV().visualize_index(wt, sh_quotation, modifier9, label='ステップ9 READMEファイルをgit commitした').render(
+        os.path.join(gr, "figure-4.9"), format="png")
+
 
 def execute_tree_command(wt: str) -> list:
     args = ['tree', '-afni', '-I', '.git']

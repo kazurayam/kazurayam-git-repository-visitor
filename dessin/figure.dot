@@ -1,5 +1,6 @@
 // Git Index graph
 digraph index {
+    label="ステップ9 もう一度コミットした" labelloc="t"
 	node [fillcolor=white fontname=arial fontsize=10 height=0.3 shape=note style=filled width=2]
 	edge [arrowhead=onormal constraint=true fontname=arial fontsize=10]
 	graph [layout=dot nodesep=0.3 rank=max rankdir=LR ranksep=0.5 splines=ortho]
@@ -64,4 +65,6 @@ digraph index {
 	anchor_wt -> anchor_index [lhead=cluster_index ltail=cluster_worktree style=invis]
 	anchor_index -> anchor_objects [lhead=cluster_objects ltail=cluster_index style=invis]
 	j_de13371 [fillcolor=gold]
+
+    j_b2298cc:e -> j_de13371:e [constraint=false color=red style=bold]
 }

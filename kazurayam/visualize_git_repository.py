@@ -20,7 +20,7 @@ class GitRepositoryVisualizer:
         self.object_commit_reverse_links = {}
 
     @staticmethod
-    def visualize_index(wt: str, commandline: list=[], modifier=None) -> Digraph:
+    def visualize_index(wt: str, commandline: list=[], modifier=None, label=None) -> Digraph:
         """
         generate a Graphviz Digraph where the Git index (or stage, cache) is depicted
         :param wt:
@@ -29,6 +29,8 @@ class GitRepositoryVisualizer:
         """
         g = Digraph("index", comment="Git Index graph")
         set_graph_basics(g)
+        if label is not None:
+            g.attr(labelloc="t", label=label, labelfontsize="12")
         g.attr(compound="true", splines="true")
         #
         with g.subgraph(name="cluster_worktree") as w:
@@ -58,7 +60,8 @@ class GitRepositoryVisualizer:
                                      get_commit_message(commit_content)
                         j.node(node_id, node_label, shape="ellipse")
                     elif object_type == 'tree':
-                        node_label = object_type + ' ' + hash7
+                        node_label = object_type + ' ' + hash7 + '\\n' + \
+                                     find_filepath_of_tree(wt, object_hash)
                         j.node(node_id, node_label, shape="folder")
                     else:
                         node_label = object_type + ' ' + hash7 + '\\n' + \
@@ -325,7 +328,6 @@ def get_parent_commits(wt: str, commit_hash) -> tuple:
     parent_commit_hashes = tuple([line.split()[1] for line in parent_lines])
     return parent_commit_hashes
 
-
 def find_filepath_of_blob(wt: str, blob_hash:str) -> str:
     """
 $ git ls-tree -r HEAD
@@ -346,3 +348,27 @@ $ git ls-tree -r HEAD
     return ''
 
 
+def find_filepath_of_tree(wt: str, tree_hash: str) -> str:
+    def traverse_tree(wt: str, base_tree_hash: str, target_tree_hash: str) -> str:
+        completed_process = SH.shell_command(wt, ['git', 'cat-file', '-p', base_tree_hash])
+        if completed_process.returncode == 0:
+            for line in completed_process.stdout.splitlines():
+                object_type = line.split()[1]
+                object_hash = line.split()[2]
+                filepath = line.split()[3]
+                if object_hash.startswith(target_tree_hash):
+                    return filepath
+                # traverse into the child tree
+                if object_type == 'tree':
+                    return traverse_tree(wt, object_hash, target_tree_hash)
+            return ''
+        else:
+            raise Exception("unable to traverse tree {}".format(base_tree_hash))
+    #
+    completed_process = SH.shell_command(wt, ['git', 'branch', '--show-current'])
+    current_branch = completed_process.stdout
+    completed_process = SH.shell_command(wt, ['git', 'cat-file', '-p', current_branch])
+    root_tree_hash = completed_process.stdout.splitlines()[0].split()[1]
+    return traverse_tree(wt, root_tree_hash, tree_hash)
+
+# TODO: find_filepath_of_blob can be replaced with the implementation of find_filepath_of_tree
