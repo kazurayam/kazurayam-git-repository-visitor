@@ -81,7 +81,7 @@ def init(wt: str, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def lsfiles_stage(wt, verbose=False) -> str:
+def lsfiles_stage(wt, verbose=False) -> subprocess.CompletedProcess:
     """
     execute `git ls-file --stage` command
     this command shows the content of the Index
@@ -91,7 +91,7 @@ def lsfiles_stage(wt, verbose=False) -> str:
     """
     args = ['git', 'ls-files', '--stage']
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def lstree(wt, gitobject: str, verbose=False) -> str:

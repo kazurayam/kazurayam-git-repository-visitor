@@ -127,8 +127,8 @@ class GitRepositoryVisualizer:
                 # check if the current working directory is `git init`ed or not.
                 completed_process = SH.shell_command(wt, ['ls', '.git'])
                 if completed_process.returncode == 0:
-                    o = GIT.lsfiles_stage(wt, verbose=False)
-                    for line in o.splitlines():
+                    cp = GIT.lsfiles_stage(wt, verbose=False)
+                    for line in cp.stdout.splitlines():
                         blob_hash = line.split()[1][0:7]
                         file_path = line.split()[3]
                         node_id = 'x_' + blob_hash
