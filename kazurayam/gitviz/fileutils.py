@@ -33,3 +33,14 @@ def write_file(wt: str, path: str, text: str):
     with open(os.path.join(wt, path), 'w') as file:
         file.write(text)
     return f
+
+
+def remove_file(wt: str, path: str):
+    """
+    remove the file
+    :param wt:
+    :param path:
+    :return:
+    """
+    f = pathlib.Path(os.path.join(wt, path))
+    os.remove(f)

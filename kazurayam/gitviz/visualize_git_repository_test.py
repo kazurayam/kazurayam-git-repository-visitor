@@ -1,6 +1,6 @@
 import os
 from graphviz import Digraph
-from .fileutils import write_file
+from .fileutils import write_file, remove_file
 from . import gitcommands as GIT, shellcommand as SH, testutils
 from .visualize_git_repository import GitRepositoryVisualizer as GRV
 
@@ -263,6 +263,89 @@ def test_4_index(basedir):
         g.node("j_aadb69a", fillcolor="lightgrey")
     GRV().visualize_index(wt, sh_quotation, modifier9, label='ステップ9 READMEファイルをgit commitした').render(
         os.path.join(gr, "figure-4.9"), format="png")
+
+
+def test_999_checkout_index_wt(basedir):
+    """
+    I want to look at how the Git Index and worktree look like when I do "git checkout develop".
+
+    1. create a work tree with a few text files, create a Git repository,
+        do `git add .` and `git commit`;
+        draw the 1th graph of worktree + index + objects in the 'master' branch
+
+    2. create a new branch 'develop', a file doc/TODO.txt and remove a file src/greeting.pl,
+        do `git add .' and `git commit`;
+        draw the 2nd graph of worktree + index + objects in the 'develop' branch
+
+    3. do `git checkout master`;
+        draw the 3rd graph of worktree + index + objects in the 'master' branch
+
+    Then, how does the index look like? how does thee worktree look like?
+    How do I find the added entry (`doc/TODO.txt`) and the removed entry (`src/greeting.pl`) are
+     depicted in the graph?
+
+    :param basedir:
+    :return:
+    """
+    (wt, gr) = testutils.create_subject_dir(basedir, '999_checkout_index_wt')
+    f = write_file(wt, '.gitignore', '*~\n')
+    print("% echo '*~' > .gitignore")
+    f = write_file(wt, "README.md", "# Read me please\n")
+    print("% echo '#Read me plase' > README.md")
+    f = write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
+    print("% echo 'print(\"How do you do?\");' > src/greeting.pl")
+    # step1
+    sh_quotation = execute_tree_command(wt)
+    GIT.init(wt, verbose=True)
+    GIT.add(wt, '.', verbose=True)
+    GIT.commit(wt, 'initial commit', verbose=True)
+    GRV().visualize_index(wt, sh_quotation,
+                          label='ステップ1 初期状態:masterブランチにファイル3つをコミットした').render(
+        os.path.join(gr, "figure-5.1"), format="png")
+    # step2
+    GIT.branch_new(wt, 'develop', verbose=True)
+    GIT.checkout(wt, 'develop', verbose=True)
+    GIT.branch_show_current(wt, verbose=True)
+    f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
+    remove_file(wt, 'src/greeting.pl')
+    sh_quotation = execute_tree_command(wt)
+    GIT.add(wt, '.', verbose=True)
+    GIT.commit(wt, 'add doc/TODO.txt; remove src/greeting.pl', verbose=True)
+    def modifier2(g: Digraph):
+        g.node("w_6", fillcolor="gold")
+        g.node("x_de13371", fillcolor="gold")
+        g.node("j_b371df9", fillcolor="darkgrey")
+        g.node("j_de13371", fillcolor="gold")
+    GRV().visualize_index(wt, sh_quotation,
+                          modifier=modifier2,
+                          label='ステップ2 developブランチでファイルを追加し削除した').render(
+        os.path.join(gr, "figure-5.2"), format="png")
+    # step3 "git checkout master"する
+    GIT.checkout(wt, 'master', verbose=True)
+    sh_quotation = execute_tree_command(wt)
+    GIT.status(wt, verbose=True)
+    def modifier3(g: Digraph):
+        g.node("w_6", fillcolor="lightgrey")
+        g.node("j_b371df9", fillcolor="lightgrey")
+        g.node("x_b371df9", fillcolor="lightgrey")
+        g.node("j_de13371", fillcolor="gold")
+    GRV().visualize_index(wt, sh_quotation,
+                          modifier=modifier3,
+                          label='ステップ3 git checkout masterしたら').render(
+        os.path.join(gr, "figure-5.3"), format="png")
+    # step4 master"git merge develop"する
+    GIT.branch_show_current(wt, verbose=True)
+    GIT.merge(wt, 'develop', verbose=True)
+    sh_quotation = execute_tree_command(wt)
+    def modifier4(g: Digraph):
+        g.node("w_6", fillcolor="gold")
+        g.node("x_de13371", fillcolor="gold")
+        g.node("j_de13371", fillcolor="gold")
+        g.node("j_b371df9", fillcolor="lightgrey")
+    GRV().visualize_index(wt, sh_quotation,
+                          modifier=modifier4,
+                          label='ステップ4 git merge developしたら').render(
+        os.path.join(gr, "figure-5.4"), format="png")
 
 
 def execute_tree_command(wt: str) -> list:

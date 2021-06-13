@@ -327,6 +327,7 @@ def get_parent_commits(wt: str, commit_hash) -> tuple:
     parent_commit_hashes = tuple([line.split()[1] for line in parent_lines])
     return parent_commit_hashes
 
+
 def find_filepath_of_blob(wt: str, blob_hash:str) -> str:
     """
 $ git ls-tree -r HEAD
