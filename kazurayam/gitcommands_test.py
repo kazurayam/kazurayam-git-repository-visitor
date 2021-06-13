@@ -119,8 +119,8 @@ def test_commit(basedir):
     fileutils.write_file(wt, '.gitignore', '*~\n')
     stdout = GIT.init(wt)
     cp = GIT.add(wt, '.')
-    stdout = GIT.commit(wt, 'add .gitignore')
-    assert '.gitignore' in stdout
+    cp = GIT.commit(wt, 'add .gitignore')
+    assert '.gitignore' in cp.stdout
 
 
 def test_init(basedir):
@@ -158,7 +158,7 @@ def test_merge(wt_with_initial_commit):
     content = "# Read me very crefully"
     fileutils.write_file(wt_with_initial_commit, "README.md", content)
     cp = GIT.add(wt_with_initial_commit, '.')
-    o = GIT.commit(wt_with_initial_commit, "modified README.md")
+    cp = GIT.commit(wt_with_initial_commit, "modified README.md")
     cp = GIT.checkout(wt_with_initial_commit, 'master')
     o = GIT.merge(wt_with_initial_commit, 'develop')
     blob_hash = None
