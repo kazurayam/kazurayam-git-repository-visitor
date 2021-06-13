@@ -55,9 +55,9 @@ class GitRepositoryVisualizer:
                     object_type = line.split()[1]
                     node_id = "j_" + hash7
                     if object_type == 'commit':
-                        commit_content = GIT.catfile_p(wt, hash7)
+                        cp = GIT.catfile_p(wt, hash7)
                         node_label = object_type + ' ' + hash7 + '\\n' + \
-                                     get_commit_message(commit_content)
+                                     get_commit_message(cp.stdout)
                         j.node(node_id, node_label, shape="ellipse")
                     elif object_type == 'tree':
                         node_label = object_type + ' ' + hash7 + '\\n' + \
@@ -84,8 +84,8 @@ class GitRepositoryVisualizer:
                         commit_hash = cm_dq.popleft()
                         if commit_hash is not None:
                             # grasp the hash of the root tree `/` linked by this commit
-                            o = GIT.catfile_p(wt, commit_hash)
-                            root_tree_hash = o.splitlines()[0].split()[1]
+                            cp = GIT.catfile_p(wt, commit_hash)
+                            root_tree_hash = cp.stdout.splitlines()[0].split()[1]
                             # draw an edge from the commit to the root tree
                             j.edge('j_' + commit_hash[0:7] + ':e',
                                    'j_' + root_tree_hash[0:7] + ':e',
@@ -212,26 +212,26 @@ class GitRepositoryVisualizer:
             self.commits.append(the_commit_hash)
 
             # look into the commit object
-            o = GIT.catfile_p(wt, commit_node_id(the_commit_hash))
-            commit_message = get_commit_message(o)
+            cp = GIT.catfile_p(wt, commit_node_id(the_commit_hash))
+            commit_message = get_commit_message(cp.stdout)
             g.node(commit_node_id(the_commit_hash),
                    "commit: " + commit_node_id(the_commit_hash) + "\n" + commit_message,
                    shape="ellipse")
             # check if any tag refers to this commit object
-            cp = GIT.tag_points_at(wt, the_commit_hash)
-            if cp.returncode == 0:
+            tagged_cp = GIT.tag_points_at(wt, the_commit_hash)
+            if tagged_cp.returncode == 0:
                 # draw Tag name
-                g.node(commit_node_id(the_commit_hash), xlabel=cp.stdout)
+                g.node(commit_node_id(the_commit_hash), xlabel=tagged_cp.stdout)
 
             if in_detail:
                 # now look into the root tree object `/` to trace its internal down
-                tree_hash = o.splitlines()[0].split()[1]
+                tree_hash = cp.stdout.splitlines()[0].split()[1]
                 g.edge(commit_node_id(the_commit_hash),
                        node_id(the_commit_hash, tree_hash), weight="2", style="dashed")
                 self.visualize_tree(wt, the_commit_hash, tree_hash, "", g)
 
             # select lines that start with "parent"
-            parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
+            parent_lines = [line for line in cp.stdout.splitlines() if line.startswith("parent")]
 
             # if this commit object is a merge commit?
             # then print no detail of the merged commits that follow this commit
@@ -314,7 +314,7 @@ added src/good-luck.pl
 
 
 def get_parent_commits(wt: str, commit_hash) -> tuple:
-    o = GIT.catfile_p(wt, commit_hash[0:7])
+    cp = GIT.catfile_p(wt, commit_hash[0:7])
     """for example
     tree 259f232afef1e76cb2a6f0ffb6c167e1fed33bd5
     parent bb52f598e0ad27dfe7ad3ca6b59d5e92bf5f7a1f
@@ -324,7 +324,7 @@ def get_parent_commits(wt: str, commit_hash) -> tuple:
     added src/good-luck.pl
     """
     # select lines that start with "parent"
-    parent_lines = [line for line in o.splitlines() if line.startswith("parent")]
+    parent_lines = [line for line in cp.stdout.splitlines() if line.startswith("parent")]
     parent_commit_hashes = tuple([line.split()[1] for line in parent_lines])
     return parent_commit_hashes
 

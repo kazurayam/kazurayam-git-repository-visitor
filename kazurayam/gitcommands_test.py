@@ -74,12 +74,12 @@ def test_catfile_blob(wt_with_initial_commit):
         if line.split()[3] == '.gitignore':
             blob_hash = line.split()[2]
     assert blob_hash is not None
-    stdout = GIT.catfile_p(wt_with_initial_commit, blob_hash)
-    assert stdout.startswith('*~')
+    cp = GIT.catfile_p(wt_with_initial_commit, blob_hash)
+    assert cp.stdout.startswith('*~')
 
 
 def test_catfile_p(wt_with_initial_commit):
-    stdout = GIT.catfile_p(wt_with_initial_commit, 'HEAD')
+    cp = GIT.catfile_p(wt_with_initial_commit, 'HEAD')
     """
     $ git cat-file -p HEAD
     tree ...
@@ -88,16 +88,16 @@ def test_catfile_p(wt_with_initial_commit):
     
     message
     """
-    assert stdout.startswith('tree')
+    assert cp.stdout.startswith('tree')
 
 
 def test_catfile_t(wt_with_initial_commit):
-    stdout = GIT.catfile_t(wt_with_initial_commit, 'HEAD')
+    cp = GIT.catfile_t(wt_with_initial_commit, 'HEAD')
     """
     $ git cat-file -t HEAD
     commit
     """
-    assert stdout == 'commit'
+    assert cp.stdout == 'commit'
 
 
 def test_checkout(wt_with_initial_commit):
@@ -172,7 +172,7 @@ def test_merge(wt_with_initial_commit):
             blob_hash = line.split()[2]
     assert blob_hash is not None
     assert re.match(r'^[0-9a-f]{40}', blob_hash)
-    assert content in GIT.catfile_p(wt_with_initial_commit, blob_hash)
+    assert content in GIT.catfile_p(wt_with_initial_commit, blob_hash).stdout
 
 
 def test_revparse(wt_with_initial_commit):

@@ -50,16 +50,16 @@ def catfile_blob(wt, gitobject: str, verbose=False) -> subprocess.CompletedProce
     return cp
 
 
-def catfile_p(wt, gitobject: str, verbose=False) -> str:
+def catfile_p(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'cat-file', '-p', gitobject]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
-def catfile_t(wt, gitobject: str, verbose=False) -> str:
+def catfile_t(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'cat-file', '-t', gitobject]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def checkout(wt, branch_name: str, verbose=False) -> str:
