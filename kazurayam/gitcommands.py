@@ -16,10 +16,10 @@ def branch_new(wt, branch_name: str, verbose=False) -> subprocess.CompletedProce
     return cp
 
 
-def branch_show_current(wt, verbose=False) -> str:
+def branch_show_current(wt, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'branch', '--show-current']
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def catfile_batchcheck_batchallobjects(wt:str, verbose=False) -> subprocess.CompletedProcess:

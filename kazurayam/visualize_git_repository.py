@@ -69,7 +69,8 @@ class GitRepositoryVisualizer:
                         j.node(node_id, node_label)
 
                 # draw edges between the commit/tree/blob objects
-                branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
+                cp = GIT.branch_show_current(wt)
+                branch_name = cp.stdout   # "master", "develop" etc
                 completed_process = GIT.revparse(wt, branch_name)
                 if completed_process.returncode == 0:
                     # only when at least one commit has been made, we can draw edges
@@ -169,7 +170,8 @@ class GitRepositoryVisualizer:
         return g
 
     def visualize_current_branch(self, wt: str, g: Digraph) -> str:
-        branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
+        cp = GIT.branch_show_current(wt)
+        branch_name = cp.stdout   # "master", "develop" etc
         # grasp the hash of the commit object aliased to the branch
         o = GIT.revparse(wt, branch_name).stdout
         commit_hash = o.strip()

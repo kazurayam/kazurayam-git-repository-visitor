@@ -45,12 +45,12 @@ def test_branch_new(wt_with_initial_commit):
 
 
 def test_branch_show_current(wt_with_initial_commit):
-    o = GIT.branch_show_current(wt_with_initial_commit)
+    cp = GIT.branch_show_current(wt_with_initial_commit)
     """
     $ git branch --show--current
     master
     """
-    assert "master" in o
+    assert "master" in cp.stdout
 
 
 def test_catfile_batchcheck_batchallobjects(wt_with_initial_commit):
