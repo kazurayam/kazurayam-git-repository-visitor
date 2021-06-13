@@ -153,7 +153,7 @@ def tag_points_at(wt, object: str, verbose=False) -> subprocess.CompletedProcess
     return cp
 
 
-def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=False) -> str:
+def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'tag', tag_name, refer_to]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp

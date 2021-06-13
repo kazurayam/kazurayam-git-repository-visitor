@@ -210,7 +210,7 @@ def test_tag_points_at(wt_with_initial_commit):
 
 
 def test_tag_to(wt_with_initial_commit):
-    o = GIT.tag_to(wt_with_initial_commit, '0.1.0')
+    cp = GIT.tag_to(wt_with_initial_commit, '0.1.0')
     cp = shell_command(wt_with_initial_commit, ['git', 'tag'])
     assert len(cp.stdout.splitlines()) == 1
     assert cp.stdout.splitlines()[0] == '0.1.0'
