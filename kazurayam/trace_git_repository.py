@@ -16,8 +16,8 @@ def trace(wt: str):
 
 
 def trace_tree_or_blob(wt, tree_hash):
-    o = GIT.lstree(wt, tree_hash)
-    for line in o.splitlines():
+    cp = GIT.lstree(wt, tree_hash)
+    for line in cp.stdout.splitlines():
         (mode, object_type, object_hash, file_name) = tuple(line.split())
         if object_type == "tree":
             sub_tree_hash7 = object_hash[0:7]

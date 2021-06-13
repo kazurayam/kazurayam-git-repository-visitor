@@ -94,10 +94,10 @@ def lsfiles_stage(wt, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def lstree(wt, gitobject: str, verbose=False) -> str:
+def lstree(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'ls-tree', gitobject]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def merge(wt, branch_name: str, verbose=False) -> str:

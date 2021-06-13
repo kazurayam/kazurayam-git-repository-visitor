@@ -97,8 +97,8 @@ class GitRepositoryVisualizer:
                             while len(tr_dq) > 0:
                                 # pop a tree_hash from the top left of the deque
                                 tree_hash = tr_dq.popleft()
-                                o = GIT.lstree(wt, tree_hash)
-                                for line in o.splitlines():
+                                cp = GIT.lstree(wt, tree_hash)
+                                for line in cp.stdout.splitlines():
                                     object_type = line.split()[1]
                                     object_hash = line.split()[2]
                                     j.edge('j_' + tree_hash[0:7] + ':e',
@@ -254,8 +254,8 @@ class GitRepositoryVisualizer:
                shape="folder")
         g.node(hub_node_id, shape="point", width="0.1")
         g.edge(tree_node_id, hub_node_id, arrowhead="none", weight="4")
-        o = GIT.lstree(wt, tree_hash)
-        for line in o.splitlines():
+        cp = GIT.lstree(wt, tree_hash)
+        for line in cp.stdout.splitlines():
             (mode, object_type, object_hash, file_name) = tuple(line.split())
             if object_type == "tree":
                 self.visualize_tree(wt, commit_hash, object_hash, file_name, g)  # trace the tree recursively
