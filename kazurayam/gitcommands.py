@@ -84,19 +84,17 @@ def showref_heads(wt, verbose=False) -> str:
     """
     execute `git show-ref --heads` command
     this command shows something like this:
-```
-b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/develop
-b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
-```
+    ```
+    b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/develop
+    b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
+    ```
     :param wt:
     :param verbose:
     :return:
     """
-    completed_process = subprocess.run(['git', 'show-ref', '--heads'], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git show-ref --heads")
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'show-ref', '--heads']
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def branch_new(wt, branch_name: str, verbose=False) -> str:
