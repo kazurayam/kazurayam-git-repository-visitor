@@ -160,7 +160,7 @@ def test_merge(wt_with_initial_commit):
     cp = GIT.add(wt_with_initial_commit, '.')
     cp = GIT.commit(wt_with_initial_commit, "modified README.md")
     cp = GIT.checkout(wt_with_initial_commit, 'master')
-    o = GIT.merge(wt_with_initial_commit, 'develop')
+    cp = GIT.merge(wt_with_initial_commit, 'develop')
     blob_hash = None
     for line in GIT.lstree(wt_with_initial_commit, 'HEAD').stdout.splitlines():
         """

@@ -100,10 +100,10 @@ def lstree(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def merge(wt, branch_name: str, verbose=False) -> str:
+def merge(wt, branch_name: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'merge', branch_name]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def revparse(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
