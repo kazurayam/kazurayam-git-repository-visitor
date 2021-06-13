@@ -74,11 +74,11 @@ def commit(wt, msg, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def init(wt: str, verbose=False) -> str:
+def init(wt: str, verbose=False) -> subprocess.CompletedProcess:
     # cp stands for Completed Process as defined in Python subprocess
     args = ['git', 'init']
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def lsfiles_stage(wt, verbose=False) -> str:

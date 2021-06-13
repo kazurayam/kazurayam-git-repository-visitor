@@ -22,7 +22,7 @@ def wt_with_initial_commit(basedir):
 def test_add(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_add')
     fileutils.write_file(wt, '.gitignore', '*~\n')
-    stdout = GIT.init(wt)
+    cp = GIT.init(wt)
     cp = GIT.add(wt, '.')
     assert cp.stdout == ""
 
@@ -117,7 +117,7 @@ def test_checkout(wt_with_initial_commit):
 def test_commit(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_commit')
     fileutils.write_file(wt, '.gitignore', '*~\n')
-    stdout = GIT.init(wt)
+    cp = GIT.init(wt)
     cp = GIT.add(wt, '.')
     cp = GIT.commit(wt, 'add .gitignore')
     assert '.gitignore' in cp.stdout
@@ -125,8 +125,8 @@ def test_commit(basedir):
 
 def test_init(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_init')
-    stdout = GIT.init(wt)
-    assert stdout.startswith("hint:")
+    cp = GIT.init(wt)
+    assert cp.stdout.startswith("hint:")
 
 
 def test_lsfiles_stage(wt_with_initial_commit):
