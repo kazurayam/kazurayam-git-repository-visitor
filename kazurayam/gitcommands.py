@@ -55,12 +55,10 @@ def catfile_blob(wt, gitobject: str, verbose=False) -> str:
     return decode_stdout(completed_process)
 
 
-def revparse(wt, gitobject: str, verbose=False) -> tuple:
-    completed_process = subprocess.run(['git', 'rev-parse', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git rev-parse", gitobject)
-        print_msg(completed_process)
-    return decode_stdout(completed_process), completed_process.returncode
+def revparse(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
+    args = ['git', 'rev-parse', gitobject]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp
 
 
 def lstree(wt, gitobject: str, verbose=False) -> str:

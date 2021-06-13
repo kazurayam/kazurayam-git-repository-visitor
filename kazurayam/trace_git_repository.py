@@ -3,7 +3,7 @@ from . import gitcommands as GIT
 
 def trace(wt: str):
     # grasp the hash of the commit object aliased to HEAD
-    o = GIT.revparse(wt, "HEAD")[0]
+    o = GIT.revparse(wt, "HEAD").stdout
     head_hash = o.strip()
     head_hash7 = head_hash[0:7]
     # cat the HEAD commit objectgi

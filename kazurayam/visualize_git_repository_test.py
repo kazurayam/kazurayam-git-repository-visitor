@@ -102,7 +102,7 @@ def test_2_branch_and_merge(basedir):
     #
     operate_add_todo(wt)
     def modifier3(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="deepskyblue")
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7], fillcolor="deepskyblue")
     GRV().visualize_history(wt, modifier3).render(os.path.join(gr, "figure-2.3"), format="png")
     #
     GIT.checkout(wt, "master")
@@ -113,14 +113,14 @@ def test_2_branch_and_merge(basedir):
 
     operate_modify_readme(wt)
     def modifier5(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="hotpink")
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7], fillcolor="hotpink")
     GRV().visualize_history(wt, modifier5).render(os.path.join(gr, "figure-2.5"), format="png")
     #
     GIT.merge(wt, "develop")
     def modifier6(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7], fillcolor="green3")
-        g.node(GIT.revparse(wt, "HEAD^2")[0][0:7], fillcolor="deepskyblue")
-        g.node(GIT.revparse(wt, "HEAD^1")[0][0:7], fillcolor="hotpink")
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7], fillcolor="green3")
+        g.node(GIT.revparse(wt, "HEAD^2").stdout[0:7], fillcolor="deepskyblue")
+        g.node(GIT.revparse(wt, "HEAD^1").stdout[0:7], fillcolor="hotpink")
     GRV().visualize_history(wt, modifier6).render(os.path.join(gr, "figure-2.6"), format="png")
 
 
@@ -142,7 +142,7 @@ def test_3_tags(basedir):
     #
     GIT.tag_to(wt, '0.1.0', verbose=True)
     def modifier2(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7],
            xlabel='<<font color="red" face="bold" point-size="18">0.1.0</font>>')
     GRV().visualize_history(wt, modifier2).render(os.path.join(gr, "figure-3.2"), format="png")
     #
@@ -152,7 +152,7 @@ def test_3_tags(basedir):
     GIT.tag_to(wt, '0.2.0', verbose=True)
     def modifier3(g: Digraph):
         g.node('develop', fillcolor="gold")
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
     GRV().visualize_history(wt, modifier3).render(os.path.join(gr, "figure-3.3"), format="png")
     #
@@ -161,21 +161,21 @@ def test_3_tags(basedir):
     GIT.tag_to(wt, '0.1.1', verbose=True)
     def modifier4(g: Digraph):
         g.node('master', fillcolor="gold")
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.1.1</font>>')
     GRV().visualize_history(wt, modifier4).render(os.path.join(gr, "figure-3.4"), format="png")
     #
     GIT.checkout(wt, "master", verbose=True)
     GIT.merge(wt, "develop", verbose=True)
     def modifier5(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD^2")[0][0:7],
+        g.node(GIT.revparse(wt, "HEAD^2").stdout[0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.0</font>>')
     GRV().visualize_history(wt, modifier5).render(os.path.join(gr, "figure-3.5"), format="png")
     #
     operate_modify_readme(wt)
     GIT.tag_to(wt, '0.2.1', verbose=True)
     def modifier6(g: Digraph):
-        g.node(GIT.revparse(wt, "HEAD")[0][0:7],
+        g.node(GIT.revparse(wt, "HEAD").stdout[0:7],
                xlabel='<<font color="red" face="bold" point-size="18">0.2.1</font>>')
     GRV().visualize_history(wt, modifier6).render(os.path.join(gr, "figure-3.6"), format="png")
 

@@ -71,9 +71,9 @@ class GitRepositoryVisualizer:
                 # draw edges between the commit/tree/blob objects
                 branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
                 completed_process = GIT.revparse(wt, branch_name)
-                if completed_process[1] == 0:
+                if completed_process.returncode == 0:
                     # only when at least one commit has been made, we can draw edges
-                    top_commit_hash = completed_process[0]
+                    top_commit_hash = completed_process.stdout
                     # create a Deque (Double-ended-queue)
                     cm_dq = deque()
                     cm_dq.append(top_commit_hash)
@@ -171,7 +171,7 @@ class GitRepositoryVisualizer:
     def visualize_current_branch(self, wt: str, g: Digraph) -> str:
         branch_name = GIT.branch_show_current(wt)   # "master", "develop" etc
         # grasp the hash of the commit object aliased to the branch
-        o = GIT.revparse(wt, branch_name)[0]
+        o = GIT.revparse(wt, branch_name).stdout
         commit_hash = o.strip()
         # draw the branch name node
         g.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
