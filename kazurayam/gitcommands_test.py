@@ -6,7 +6,7 @@ from . import testutils
 from .shellcommand import shell_command
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def wt_with_initial_commit(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'gitcommands_test')
     GIT.init(wt)
@@ -132,12 +132,45 @@ def test_showref_heads(wt_with_initial_commit):
     assert 'refs/heads/master' in stdout
 
 
-def test_branch_new_then_checkout(wt_with_initial_commit):
+def test_branch_new(wt_with_initial_commit):
     o = GIT.branch_new(wt_with_initial_commit, "develop")
+    """
+    $ git branch develop
+    (shows nothing in stdout)
+    """
+    cp = shell_command(wt_with_initial_commit, ['git', 'branch'])
+    """
+    $ git branch
+      develop
+    * master
+    """
+    assert len(cp.stdout.splitlines()) == 2
+    assert 'develop' in cp.stdout
+    assert 'master' in cp.stdout
     o = GIT.checkout(wt_with_initial_commit, "develop")
+
+
+def test_checkout(wt_with_initial_commit):
+    o = GIT.branch_new(wt_with_initial_commit, "develop")
+    """
+    $ git branch develop
+    (shows nothing in stdout)
+    """
+    o = GIT.checkout(wt_with_initial_commit, "develop")
+    """
+    $ git checkout
+    Switched to branch 'develop'
+    """
     assert "Switched to branch 'develop'" in o
+
+
+def test_branch_show_current(wt_with_initial_commit):
     o = GIT.branch_show_current(wt_with_initial_commit)
-    assert "develop" in o
+    """
+    $ git branch --show--current
+    master
+    """
+    assert "master" in o
 
 
 def test_tag_points_at(wt_with_initial_commit):

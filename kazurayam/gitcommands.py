@@ -105,11 +105,9 @@ def branch_new(wt, branch_name: str, verbose=False) -> str:
     :param verbose:
     :return:
     """
-    completed_process = subprocess.run(['git', 'branch', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git branch", branch_name)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'branch', branch_name]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def branch_show_current(wt, verbose=False) -> str:
