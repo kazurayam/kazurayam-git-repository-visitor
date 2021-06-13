@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Visualizing Git Repository with Graphviz via Python](#visualizing-git-repository-with-graphviz-via-python)
+  - [Posts](#posts)
+- [連作の目次](#%E9%80%A3%E4%BD%9C%E3%81%AE%E7%9B%AE%E6%AC%A1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Visualizing Git Repository with Graphviz via Python
 
 This is an effort to draw graphics that show how a Git repository is structured with internal objects (commit, tree, blob, etc), using Graphviz in Python.
