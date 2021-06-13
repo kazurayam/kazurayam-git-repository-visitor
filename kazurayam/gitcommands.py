@@ -110,18 +110,9 @@ def checkout(wt, branch_name: str, verbose=False) -> str:
 
 
 def merge(wt, branch_name: str, verbose=False) -> str:
-    """
-    execute `git merge <branch_name>` command
-    :param wt:
-    :param branch_name:
-    :param verbose:
-    :return:
-    """
-    completed_process = subprocess.run(['git', 'merge', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git merge", branch_name)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'merge', branch_name]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=False) -> str:

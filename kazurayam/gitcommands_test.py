@@ -147,7 +147,6 @@ def test_branch_new(wt_with_initial_commit):
     assert len(cp.stdout.splitlines()) == 2
     assert 'develop' in cp.stdout
     assert 'master' in cp.stdout
-    o = GIT.checkout(wt_with_initial_commit, "develop")
 
 
 def test_checkout(wt_with_initial_commit):
@@ -171,6 +170,28 @@ def test_branch_show_current(wt_with_initial_commit):
     master
     """
     assert "master" in o
+
+
+def test_merge(wt_with_initial_commit):
+    o = GIT.branch_new(wt_with_initial_commit, "develop")
+    content = "# Read me very crefully"
+    fileutils.write_file(wt_with_initial_commit, "README.md", content)
+    o = GIT.add(wt_with_initial_commit, '.')
+    o = GIT.commit(wt_with_initial_commit, "modified README.md")
+    o = GIT.checkout(wt_with_initial_commit, 'master')
+    o = GIT.merge(wt_with_initial_commit, 'develop')
+    blob_hash = None
+    for line in GIT.lstree(wt_with_initial_commit, 'HEAD').splitlines():
+        """
+        $ git ls-tree HEAD
+        100644 blob 3e152b50e7ea36b543d598cf626fcd631cdc6c49    .gitignore
+        ...
+        """
+        if "README.md" in line:
+            blob_hash = line.split()[2]
+    assert blob_hash is not None
+    assert re.match(r'^[0-9a-f]{40}', blob_hash)
+    assert content in GIT.catfile_p(wt_with_initial_commit, blob_hash)
 
 
 def test_tag_points_at(wt_with_initial_commit):
