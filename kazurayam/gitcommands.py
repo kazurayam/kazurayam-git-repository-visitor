@@ -62,10 +62,10 @@ def catfile_t(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def checkout(wt, branch_name: str, verbose=False) -> str:
+def checkout(wt, branch_name: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'checkout', branch_name]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def commit(wt, msg, verbose=False) -> str:

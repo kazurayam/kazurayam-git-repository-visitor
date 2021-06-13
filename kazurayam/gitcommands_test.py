@@ -106,12 +106,12 @@ def test_checkout(wt_with_initial_commit):
     $ git branch develop
     (shows nothing in stdout)
     """
-    o = GIT.checkout(wt_with_initial_commit, "develop")
+    cp = GIT.checkout(wt_with_initial_commit, "develop")
     """
     $ git checkout
     Switched to branch 'develop'
     """
-    assert "Switched to branch 'develop'" in o
+    assert "Switched to branch 'develop'" in cp.stdout
 
 
 def test_commit(basedir):
@@ -159,7 +159,7 @@ def test_merge(wt_with_initial_commit):
     fileutils.write_file(wt_with_initial_commit, "README.md", content)
     cp = GIT.add(wt_with_initial_commit, '.')
     o = GIT.commit(wt_with_initial_commit, "modified README.md")
-    o = GIT.checkout(wt_with_initial_commit, 'master')
+    cp = GIT.checkout(wt_with_initial_commit, 'master')
     o = GIT.merge(wt_with_initial_commit, 'develop')
     blob_hash = None
     for line in GIT.lstree(wt_with_initial_commit, 'HEAD').splitlines():
