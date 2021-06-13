@@ -25,4 +25,4 @@ def trace_tree_or_blob(wt, tree_hash):
             trace_tree_or_blob(wt, sub_tree_hash7)  # trace the tree recursively
         elif object_type == "blob":
             blob_hash7 = object_hash[0:7]
-            GIT.catfile_blob(wt, blob_hash7)
+            GIT.catfile_blob(wt, blob_hash7, verbose=True)

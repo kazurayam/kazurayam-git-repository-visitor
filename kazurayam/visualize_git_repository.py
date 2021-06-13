@@ -261,8 +261,6 @@ class GitRepositoryVisualizer:
                 self.visualize_tree(wt, commit_hash, object_hash, file_name, g)  # trace the tree recursively
                 g.edge(hub_node_id, node_id(commit_hash, object_hash))
             elif object_type == "blob":
-                blob_hash7 = object_hash[0:7]
-                GIT.catfile_blob(wt, blob_hash7)
                 self.remember_link(commit_hash, object_hash)
                 g.node(node_id(commit_hash, object_hash),
                        "blob: " + object_hash[0:7] + "\n" + file_name)

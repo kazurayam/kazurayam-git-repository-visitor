@@ -44,12 +44,10 @@ b371df9d9194821c4a54f0e3a77f89bbcee62f7e blob 25
     return shell_command(wt, args, verbose)
 
 
-def catfile_blob(wt, gitobject: str, verbose=False) -> str:
-    completed_process = subprocess.run(['git', 'cat-file', 'blob', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git cat-file blob", gitobject)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+def catfile_blob(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
+    args = ['git', 'cat-file', 'blob', gitobject]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp
 
 
 def catfile_p(wt, gitobject: str, verbose=False) -> str:
