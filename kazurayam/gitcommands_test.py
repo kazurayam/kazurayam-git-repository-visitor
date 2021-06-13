@@ -28,7 +28,7 @@ def test_add(basedir):
 
 
 def test_branch_new(wt_with_initial_commit):
-    o = GIT.branch_new(wt_with_initial_commit, "develop")
+    cp = GIT.branch_new(wt_with_initial_commit, "develop")
     """
     $ git branch develop
     (shows nothing in stdout)
@@ -101,7 +101,7 @@ def test_catfile_t(wt_with_initial_commit):
 
 
 def test_checkout(wt_with_initial_commit):
-    o = GIT.branch_new(wt_with_initial_commit, "develop")
+    cp = GIT.branch_new(wt_with_initial_commit, "develop")
     """
     $ git branch develop
     (shows nothing in stdout)
@@ -154,7 +154,7 @@ def test_lstree(wt_with_initial_commit):
 
 
 def test_merge(wt_with_initial_commit):
-    o = GIT.branch_new(wt_with_initial_commit, "develop")
+    cp = GIT.branch_new(wt_with_initial_commit, "develop")
     content = "# Read me very crefully"
     fileutils.write_file(wt_with_initial_commit, "README.md", content)
     cp = GIT.add(wt_with_initial_commit, '.')

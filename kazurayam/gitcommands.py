@@ -10,10 +10,10 @@ def add(wt, path, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def branch_new(wt, branch_name: str, verbose=False) -> str:
+def branch_new(wt, branch_name: str, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'branch', branch_name]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def branch_show_current(wt, verbose=False) -> str:
