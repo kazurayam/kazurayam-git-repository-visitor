@@ -129,10 +129,10 @@ def showref_heads(wt, verbose=False) -> subprocess.CompletedProcess:
     return cp
 
 
-def status(wt, verbose=False) -> str:
+def status(wt, verbose=False) -> subprocess.CompletedProcess:
     args = ['git', 'status']
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def tag_points_at(wt, object: str, verbose=False) -> subprocess.CompletedProcess:

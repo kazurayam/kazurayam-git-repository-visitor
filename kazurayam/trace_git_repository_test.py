@@ -16,7 +16,7 @@ def test_trace(basedir):
     fileutils.write_file(wt, "src/hello.pl", "print(\"Hello, world!\")\n")
     #
     GIT.add(wt, '.', True)
-    GIT.status(wt)
+    GIT.status(wt, verbose=True)
     GIT.lsfiles_stage(wt, verbose=True)
     GIT.commit(wt, "initial commit", True)
     trace_git_repository.trace(wt)
@@ -26,7 +26,7 @@ def test_trace(basedir):
     print("\n", "-" * 72)
     print("% added src/good-luck.pl")
     GIT.add(wt, '.', True)
-    GIT.status(wt)
+    GIT.status(wt, verbose=True)
     GIT.lsfiles_stage(wt, verbose=True)
     GIT.commit(wt, "added src/good-luck.pl", True)
     trace_git_repository.trace(wt)

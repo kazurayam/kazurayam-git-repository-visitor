@@ -198,8 +198,8 @@ def test_showref_heads(wt_with_initial_commit):
 
 
 def test_status(wt_with_initial_commit):
-    stdout = GIT.status(wt_with_initial_commit)
-    assert stdout.startswith("On branch master")
+    cp = GIT.status(wt_with_initial_commit)
+    assert cp.stdout.startswith("On branch master")
 
 
 def test_tag_points_at(wt_with_initial_commit):
