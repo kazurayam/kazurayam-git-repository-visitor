@@ -65,28 +65,19 @@ def lstree(wt, gitobject: str, verbose=False) -> str:
     args = ['git', 'ls-tree', gitobject]
     cp = shell_command(wt, args, verbose=verbose)
     return cp.stdout
-    """
-    completed_process = subprocess.run(['git', 'ls-tree', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git ls-tree", gitobject)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
-    """
 
 
 def lsfiles_stage(wt, verbose=False) -> str:
     """
-    execute `get ls-file --stage` command
+    execute `git ls-file --stage` command
     this command shows the content of the Index
     :param wt:
     :param verbose:
     :return:
     """
-    completed_process = subprocess.run(['git', 'ls-files', '--stage'], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git ls-files --stage")
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'ls-files', '--stage']
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def showref_heads(wt, verbose=False) -> str:

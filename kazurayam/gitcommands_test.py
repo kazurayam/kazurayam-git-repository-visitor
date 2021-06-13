@@ -49,12 +49,17 @@ def test_status(wt_with_initial_commit):
 
 def test_catfile_t(wt_with_initial_commit):
     stdout = GIT.catfile_t(wt_with_initial_commit, 'HEAD')
+    """
+    $ git cat-file -t HEAD
+    commit
+    """
     assert stdout == 'commit'
 
 
 def test_catfile_p(wt_with_initial_commit):
     stdout = GIT.catfile_p(wt_with_initial_commit, 'HEAD')
     """
+    $ git cat-file -p HEAD
     tree ...
     author ...
     committer ...
@@ -85,6 +90,7 @@ def test_revparse(wt_with_initial_commit):
     # cp stands for subprocess.CompletedProcess
     cp = GIT.revparse(wt_with_initial_commit, 'HEAD')
     """
+    $ git rev-parse HEAD
     1e29db36da84624f599357777d986fa37aa5869d
     """
     assert re.match(r'^[0-9a-f]{40}', cp.stdout)
@@ -100,6 +106,18 @@ def test_lstree(wt_with_initial_commit):
     """
     assert len(stdout.splitlines()) > 0
     assert re.match(r'^[0-9a-f]{40}', stdout.splitlines()[0].split()[2])
+
+
+def test_lsfiles_stage(wt_with_initial_commit):
+    stdout = GIT.lsfiles_stage(wt_with_initial_commit)
+    """
+    $ git ls-files --stage
+100644 fb7c93af634239c075b1b0c8c6c19bbeede0ed54 0       .DS_Store
+100644 3e152b50e7ea36b543d598cf626fcd631cdc6c49 0       .gitignore
+...
+    """
+    assert len(stdout.splitlines()) > 0
+    assert re.match(r'^[0-9a-f]{40}', stdout.splitlines()[0].split()[1])
 
 
 def test_showref_heads(wt_with_initial_commit):
