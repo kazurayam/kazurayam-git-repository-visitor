@@ -23,14 +23,6 @@ def echo_args(args: list):
     print("\n% " + ' '.join(["'{}'".format(str(e)) if ' ' in str(e) else str(e) for e in args]))
 
 
-def decode_stdout(completed_process) -> str:
-    try:
-        msg = completed_process.stdout.decode("utf-8").strip()
-        return msg
-    except UnicodeDecodeError:
-        return "!!!! stdout is a binary sequence !!!!"
-
-
 def print_msg(completed_process):
     print("{}".format(decode_stdout(completed_process)))
 
@@ -44,3 +36,11 @@ def decode_completed_process(completed_process):
     """
     completed_process.stdout = decode_stdout(completed_process)
     return completed_process
+
+
+def decode_stdout(completed_process) -> str:
+    try:
+        msg = completed_process.stdout.decode("utf-8").strip()
+        return msg
+    except UnicodeDecodeError:
+        return "!!!! stdout is a binary sequence !!!!"
