@@ -23,8 +23,8 @@ def test_add(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_add')
     fileutils.write_file(wt, '.gitignore', '*~\n')
     stdout = GIT.init(wt)
-    stdout = GIT.add(wt, '.')
-    assert stdout == ""
+    cp = GIT.add(wt, '.')
+    assert cp.stdout == ""
 
 
 def test_branch_new(wt_with_initial_commit):
@@ -118,7 +118,7 @@ def test_commit(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_commit')
     fileutils.write_file(wt, '.gitignore', '*~\n')
     stdout = GIT.init(wt)
-    stdout = GIT.add(wt, '.')
+    cp = GIT.add(wt, '.')
     stdout = GIT.commit(wt, 'add .gitignore')
     assert '.gitignore' in stdout
 
@@ -157,7 +157,7 @@ def test_merge(wt_with_initial_commit):
     o = GIT.branch_new(wt_with_initial_commit, "develop")
     content = "# Read me very crefully"
     fileutils.write_file(wt_with_initial_commit, "README.md", content)
-    o = GIT.add(wt_with_initial_commit, '.')
+    cp = GIT.add(wt_with_initial_commit, '.')
     o = GIT.commit(wt_with_initial_commit, "modified README.md")
     o = GIT.checkout(wt_with_initial_commit, 'master')
     o = GIT.merge(wt_with_initial_commit, 'develop')

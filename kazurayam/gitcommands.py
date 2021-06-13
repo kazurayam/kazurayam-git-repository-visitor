@@ -4,10 +4,10 @@ from .shellcommand import decode_stdout, print_msg
 from .shellcommand import shell_command
 
 
-def add(wt, path, verbose=False) -> str:
+def add(wt, path, verbose=False) -> subprocess.CompletedProcess:
     args = ["git", "add", path]
     cp = shell_command(wt, args, verbose=verbose)
-    return cp.stdout
+    return cp
 
 
 def branch_new(wt, branch_name: str, verbose=False) -> str:
