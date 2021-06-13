@@ -5,12 +5,6 @@ from .shellcommand import shell_command
 
 
 def init(wt: str, verbose=False) -> str:
-    """
-    execute `git init` command in a new process
-    :param wt:
-    :param verbose:
-    :return: STDOUT+STDERROR emitted by the process where the git command was executed
-    """
     # cp stands for Completed Process as defined in Python subprocess
     args = ['git', 'init']
     cp = shell_command(wt, args, verbose=verbose)
@@ -98,46 +92,21 @@ def showref_heads(wt, verbose=False) -> str:
 
 
 def branch_new(wt, branch_name: str, verbose=False) -> str:
-    """
-    execute `git branch <brancc_name>` command
-    :param wt:
-    :param branch_name: e.g, "develop", "main" etc
-    :param verbose:
-    :return:
-    """
     args = ['git', 'branch', branch_name]
     cp = shell_command(wt, args, verbose=verbose)
     return cp.stdout
 
 
 def branch_show_current(wt, verbose=False) -> str:
-    """
-    execute `git branch --show-current` command
-    this will show the current branch which you are on currently
-    :param wt:
-    :param verbose:
-    :return:
-    """
-    completed_process = subprocess.run(['git', 'branch', '--show-current'], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git branch", "--show-current")
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'branch', '--show-current']
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def checkout(wt, branch_name: str, verbose=False) -> str:
-    """
-    execute `git checkout <branch_name>` command
-    :param wt:
-    :param branch_name:
-    :param verbose:
-    :return:
-    """
-    completed_process = subprocess.run(['git', 'checkout', branch_name], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git checkout", branch_name)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'checkout', branch_name]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
 def merge(wt, branch_name: str, verbose=False) -> str:
