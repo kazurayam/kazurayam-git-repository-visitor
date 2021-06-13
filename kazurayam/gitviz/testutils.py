@@ -1,5 +1,5 @@
 import os
-from . import fileutils
+from kazurayam.gitviz import fileutils
 
 
 def create_subject_dir(basedir, subject_dir_name):

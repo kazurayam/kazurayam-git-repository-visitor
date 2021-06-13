@@ -1,4 +1,4 @@
-from . import breadth_first_search
+from kazurayam.gitviz import breadth_first_search
 
 
 def test_demo1():

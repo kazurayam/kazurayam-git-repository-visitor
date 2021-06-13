@@ -1,5 +1,5 @@
 from graphviz import Digraph
-from . import visualize_git_repository
+from kazurayam.gitviz import visualize_git_repository
 
 if __name__ == '__main__':
     print('__package__: {}, __name__: {}'.format(__package__, __name__))

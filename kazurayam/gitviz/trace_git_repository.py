@@ -1,4 +1,4 @@
-from . import gitcommands as GIT
+from kazurayam.gitviz import gitcommands as GIT
 
 
 def trace(wt: str):

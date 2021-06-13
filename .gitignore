@@ -133,3 +133,6 @@ dmypy.json
 
 build/
 tmp/
+
+# Mac OS
+.DS_Store

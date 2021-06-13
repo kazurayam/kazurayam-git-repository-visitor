@@ -188,7 +188,7 @@ $ pytest -s kazurayam/visualize_git_repository.py::test_2_branch_and_merge
 
 上記の例を作るのにどういうgitコマンドを実行したのかを知りたいならプログラムのソースコードを読み解いてください。下記を入り口として解読してください。
 
-- [kazurayam/visualize_git_repository.py](kazurayam/visualize_git_repository_test.py)
+- [kazurayam/gitviz/visualize_git_repository.py](https://github.com/kazurayam/visualizing-git-repository/blob/main/kazurayam/gitviz/visualize_git_repository_test.py)
 
 ## まとめ
 

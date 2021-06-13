@@ -1,1 +1,1 @@
-pipenv run python -m kazurayam.visualize_main
+pipenv run python -m kazurayam.gitviz.visualize_main

@@ -1,7 +1,5 @@
 import os
-from . import fileutils
-from . import gitcommands as GIT
-from . import trace_git_repository
+from kazurayam.gitviz import gitcommands as GIT, trace_git_repository, fileutils
 
 
 def test_trace(basedir):

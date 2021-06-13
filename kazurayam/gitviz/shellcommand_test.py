@@ -1,8 +1,5 @@
 import pytest
-import re
-from . import fileutils
-from . import shellcommand as SH
-from . import testutils
+from kazurayam.gitviz import fileutils, shellcommand as SH, testutils
 
 
 @pytest.fixture(scope="module")

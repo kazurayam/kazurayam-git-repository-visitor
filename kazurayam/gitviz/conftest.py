@@ -1,6 +1,6 @@
 import os
 import pytest
-from . import fileutils
+from kazurayam.gitviz import fileutils
 
 
 @pytest.fixture(scope='session')

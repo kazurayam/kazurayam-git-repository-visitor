@@ -1,8 +1,6 @@
 import pytest
 import re
-from . import fileutils
-from . import gitcommands as GIT
-from . import testutils
+from . import gitcommands as GIT, fileutils, testutils
 from .shellcommand import shell_command
 
 

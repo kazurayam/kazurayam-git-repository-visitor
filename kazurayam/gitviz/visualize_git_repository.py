@@ -1,7 +1,6 @@
 from collections import deque
 from graphviz import Digraph
-from . import gitcommands as GIT
-from . import shellcommand as SH
+from kazurayam.gitviz import gitcommands as GIT, shellcommand as SH
 
 
 def set_graph_basics(g: Digraph):
