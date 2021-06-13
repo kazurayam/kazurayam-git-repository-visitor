@@ -186,15 +186,15 @@ def test_revparse(wt_with_initial_commit):
 
 
 def test_showref_heads(wt_with_initial_commit):
-    stdout = GIT.showref_heads(wt_with_initial_commit, verbose=False)
+    cp = GIT.showref_heads(wt_with_initial_commit, verbose=False)
     """
     $ git show-ref --heads
     b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/develop
     b114566da8f14ed186efba10388d47979c78e4f5 refs/heads/master
     """
-    assert len(stdout.splitlines()) > 0
-    assert re.match(r'^[0-9a-f]{40}', stdout.splitlines()[0].split()[0])
-    assert 'refs/heads/master' in stdout
+    assert len(cp.stdout.splitlines()) > 0
+    assert re.match(r'^[0-9a-f]{40}', cp.stdout.splitlines()[0].split()[0])
+    assert 'refs/heads/master' in cp.stdout
 
 
 def test_status(wt_with_initial_commit):
