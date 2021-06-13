@@ -194,11 +194,18 @@ def test_merge(wt_with_initial_commit):
     assert content in GIT.catfile_p(wt_with_initial_commit, blob_hash)
 
 
+def test_tag_to(wt_with_initial_commit):
+    o = GIT.tag_to(wt_with_initial_commit, '0.1.0')
+    cp = shell_command(wt_with_initial_commit, ['git', 'tag'])
+    assert len(cp.stdout.splitlines()) == 1
+    assert cp.stdout.splitlines()[0] == '0.1.0'
+
+
 def test_tag_points_at(wt_with_initial_commit):
     commit_object = GIT.revparse(wt_with_initial_commit, "HEAD").stdout.strip()
-    t = GIT.tag_points_at(wt_with_initial_commit, commit_object)
-    assert t[1] == 0
-    assert t[0] == '0.1.0'
+    cp = GIT.tag_points_at(wt_with_initial_commit, commit_object)
+    assert cp.returncode == 0
+    assert cp.stdout == '0.1.0'
 
 
 def test_catfile_batchcheck_batchallobjects(wt_with_initial_commit):

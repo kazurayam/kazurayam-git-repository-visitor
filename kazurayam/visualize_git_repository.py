@@ -216,10 +216,10 @@ class GitRepositoryVisualizer:
                    "commit: " + commit_node_id(the_commit_hash) + "\n" + commit_message,
                    shape="ellipse")
             # check if any tag refers to this commit object
-            t = GIT.tag_points_at(wt, the_commit_hash)
-            if t[1] == 0:
+            cp = GIT.tag_points_at(wt, the_commit_hash)
+            if cp.returncode == 0:
                 # draw Tag name
-                g.node(commit_node_id(the_commit_hash), xlabel=t[0])
+                g.node(commit_node_id(the_commit_hash), xlabel=cp.stdout)
 
             if in_detail:
                 # now look into the root tree object `/` to trace its internal down

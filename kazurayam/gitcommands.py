@@ -116,40 +116,27 @@ def merge(wt, branch_name: str, verbose=False) -> str:
 
 
 def tag_to(wt, tag_name: str, refer_to: str = 'HEAD', verbose=False) -> str:
-    """
-    execute `git tag <tag_name> <refer_to>` command
-    :param wt:
-    :param tag_name:
-    :param refer_to:
-    :param verbose:
-    :return:
-    """
-    completed_process = subprocess.run(['git', 'tag', tag_name, refer_to], cwd=wt, stdout=PIPE, stderr=STDOUT)
-    if verbose:
-        print("\n% git tag", tag_name, refer_to)
-        print_msg(completed_process)
-    return decode_stdout(completed_process)
+    args = ['git', 'tag', tag_name, refer_to]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
 
 
-def tag_points_at(wt, object: str, verbose=False) -> tuple:
+def tag_points_at(wt, object: str, verbose=False) -> subprocess.CompletedProcess:
     """
     execute `git tag --points-at <object>` command.
     retrieves tag_name that refers to the object.
-    if the tag was found returns a tuple of (tag_name, 0).
-    if not found returns a tuple of ("error: malformed object name 'xxxx'", non-0 integer)
-    the caller should check the return code first and read the tag_name only when it is found.
+    If the tag was found, will return an instance of subprocess.CompletedProcess
+    with the returncode == 0 and the stdout (=tag name).
+    If the tag was NOT found, will return an instance of subprocess.CompletedProcess
+    with the returncode != 0. You should not refer to the stdout.
     :param wt:
     :param object:
     :param verbose:
-    :return: a tuple of (stdout, return_code)
+    :return: subprocess.CompletedProcess
     """
-    completed_process = subprocess.run(['git', 'tag', '--points-at', object],
-                            cwd=wt, stdout=PIPE, stderr=STDOUT,
-                            check=False)
-    if verbose:
-        print("\n% git tag --points-at", object)
-        print_msg(completed_process)
-    return decode_stdout(completed_process), completed_process.returncode
+    args = ['git', 'tag', '--points-at', object]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp
 
 
 def catfile_batchcheck_batchallobjects(wt:str, verbose=False):
