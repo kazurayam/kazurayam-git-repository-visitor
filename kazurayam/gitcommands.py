@@ -139,7 +139,7 @@ def tag_points_at(wt, object: str, verbose=False) -> subprocess.CompletedProcess
     return cp
 
 
-def catfile_batchcheck_batchallobjects(wt:str, verbose=False):
+def catfile_batchcheck_batchallobjects(wt:str, verbose=False) -> subprocess.CompletedProcess:
     """
     executes `git cat-file --batch-check --batch-all-objects`
     this command list all objects in the .git/objects directory regardless

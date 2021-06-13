@@ -289,6 +289,9 @@ $ pytest -s kazurayam/visualize_git_repository.py::test_4_index
 
 `git add`とやったとき、`git commit`とやったときGitレポジトリの中でデータがどのように変化していくのかをクリアに図示することができたとおもいます。
 
+具体的で細かい情報満載のグラフを9個作った。作画ツールでグラフを手書きするやりかたでは9個も作れなかっただろう。gitコマンドでGitレポジトリの状態を読み出してDOT言語に変換しGraphvizで図を描くというやり方だからできた。
+
+
 - author: kazurayam
 - date: June, 2021
 
