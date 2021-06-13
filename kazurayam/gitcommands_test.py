@@ -90,6 +90,18 @@ def test_revparse(wt_with_initial_commit):
     assert re.match(r'^[0-9a-f]{40}', cp.stdout)
 
 
+def test_lstree(wt_with_initial_commit):
+    stdout = GIT.lstree(wt_with_initial_commit, 'HEAD')
+    """
+    $ git ls-tree HEAD
+100644 blob fb7c93af634239c075b1b0c8c6c19bbeede0ed54    .DS_Store
+100644 blob 3e152b50e7ea36b543d598cf626fcd631cdc6c49    .gitignore
+...
+    """
+    assert len(stdout.splitlines()) > 0
+    assert re.match(r'^[0-9a-f]{40}', stdout.splitlines()[0].split()[2])
+
+
 def test_showref_heads(wt_with_initial_commit):
     o = GIT.showref_heads(wt_with_initial_commit, verbose=False)
     # o will be something like:

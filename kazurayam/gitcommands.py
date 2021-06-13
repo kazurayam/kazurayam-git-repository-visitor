@@ -62,11 +62,16 @@ def revparse(wt, gitobject: str, verbose=False) -> subprocess.CompletedProcess:
 
 
 def lstree(wt, gitobject: str, verbose=False) -> str:
+    args = ['git', 'ls-tree', gitobject]
+    cp = shell_command(wt, args, verbose=verbose)
+    return cp.stdout
+    """
     completed_process = subprocess.run(['git', 'ls-tree', gitobject], cwd=wt, stdout=PIPE, stderr=STDOUT)
     if verbose:
         print("\n% git ls-tree", gitobject)
         print_msg(completed_process)
     return decode_stdout(completed_process)
+    """
 
 
 def lsfiles_stage(wt, verbose=False) -> str:
