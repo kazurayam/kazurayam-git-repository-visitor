@@ -9,7 +9,7 @@ from .shellcommand import shell_command
 @pytest.fixture(scope="module")
 def wt_with_initial_commit(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'gitcommands_test')
-    GIT.init(wt, True)
+    GIT.init(wt)
     fileutils.write_file(wt, '.gitignore', '*~\n')
     fileutils.write_file(wt, "README.md", "# Read me please\n")
     fileutils.write_file(wt, "src/greeting.pl", "print(\"How do you do?\");\n")
@@ -23,7 +23,7 @@ def wt_with_initial_commit(basedir):
 
 def test_init(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_init')
-    stdout = GIT.init(wt, verbose=True)
+    stdout = GIT.init(wt)
     assert stdout.startswith("hint:")
 
 
@@ -39,7 +39,7 @@ def test_status(basedir):
     (wt, gr) = testutils.create_subject_dir(basedir, 'test_status')
     fileutils.write_file(wt, '.gitignore', '*~\n')
     stdout = GIT.init(wt)
-    stdout = GIT.status(wt, '.')
+    stdout = GIT.status(wt)
     assert stdout.startswith("On branch master")
 
 
@@ -49,7 +49,7 @@ def test_commit(basedir):
     stdout = GIT.init(wt)
     stdout = GIT.add(wt, '.')
     stdout = GIT.commit(wt, 'add .gitignore')
-    assert stdout.startswith("On branch master")
+    assert '.gitignore' in stdout
 
 
 def test_catfile_t(basedir):
@@ -69,12 +69,39 @@ def test_catfile_p(basedir):
     stdout = GIT.add(wt, '.')
     stdout = GIT.commit(wt, 'add .gitignore')
     stdout = GIT.catfile_p(wt, 'HEAD')
+    """
+    tree ...
+    author ...
+    committer ...
+    
+    message
+    """
     assert stdout.startswith('tree')
+
+
+def test_catfile_blob(basedir):
+    (wt, gr) = testutils.create_subject_dir(basedir, 'test_catfile_blob')
+    fileutils.write_file(wt, '.gitignore', '*~\n')
+    stdout = GIT.init(wt)
+    stdout = GIT.add(wt, '.')
+    stdout = GIT.commit(wt, 'add .gitignore')
+    cp = shell_command(wt, ['git', 'ls-tree', '-r', 'HEAD'])
+    """
+    $ git ls-tree -r HEAD
+    100644 blob fb7c93af634239c075b1b0c8c6c19bbeede0ed54    .DS_Store
+    100644 blob 3e152b50e7ea36b543d598cf626fcd631cdc6c49    .gitignore
+    ...
+    """
+    for line in cp.stdout.splitlines():
+        if line.split()[3] == '.gitignore':
+            gitignore_hash = line.split()[2]
+    assert gitignore_hash is not None
+    stdout = GIT.catfile_p(wt, gitignore_hash)
+    assert stdout.startswith('*~')
 
 
 def test_showref_heads(wt_with_initial_commit):
     o = GIT.showref_heads(wt_with_initial_commit, verbose=False)
-    print(o)
     # o will be something like:
     # 5a2ff8b69af20008486fab4423894b895c9aee77 refs/heads/master
     assert re.match(r'^[0-9a-f]{40}', o)
@@ -83,9 +110,7 @@ def test_showref_heads(wt_with_initial_commit):
 
 def test_branch_new_then_checkout(wt_with_initial_commit):
     o = GIT.branch_new(wt_with_initial_commit, "develop")
-    print(o)
     o = GIT.checkout(wt_with_initial_commit, "develop")
-    print(o)
     assert "Switched to branch 'develop'" in o
     o = GIT.branch_show_current(wt_with_initial_commit)
     assert "develop" in o
@@ -94,7 +119,6 @@ def test_branch_new_then_checkout(wt_with_initial_commit):
 def test_tag_points_at(wt_with_initial_commit):
     commit_object = GIT.revparse(wt_with_initial_commit, "HEAD")[0].strip()
     t = GIT.tag_points_at(wt_with_initial_commit, commit_object)
-    print(commit_object, t[0], t[1])
     assert t[1] == 0
     assert t[0] == '0.1.0'
 
