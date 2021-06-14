@@ -43,24 +43,26 @@ class GitRepositoryVisualizer:
         with g.subgraph(name="cluster_objects") as j:
             j.attr(label="ディレクトリ ./.git/objects", color="white")
             j.node("anchor_objects", shape="point", width="0", style="invis")
-            # check if the current working directory is `git init`ed or not.
+            # check if the current working directory has been `git init`ed
             completed_process = SH.shell_command(wt, ['ls', '.git'])
             if completed_process.returncode == 0:
                 # yes, we find the '.git' directory. we can go down into the ".git/objects" directory
 
-                # generate the "HEAD" node
-                j.node("HEAD", "HEAD", shape="doublecircle", width="0.5", fixedsize="true")
-                # generate the branch node like "master"
-                branch_name = GIT.branch_show_current(wt).stdout
-                j.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
-                # link the HEAD and the branch
-                j.edge("HEAD", branch_name, constraint="false", minlen="3", arrowhead="normal")
-                # generate the top commit node
-                top_commit_hash = GIT.revparse(wt, branch_name).stdout
-                j.node('j_' + top_commit_hash[0:7])
-                # generate a edge from the branch node to the top commit node
-                j.edge(branch_name + ':s', 'j_' + top_commit_hash[0:7],
-                       constraint="false", minlen="3", arrowhead="normal")
+                # check if at least one commit has been made
+                if GIT.catfile_p(wt, 'HEAD').returncode == 0:
+                    # generate the "HEAD" node
+                    j.node("HEAD", "HEAD", shape="doublecircle", width="0.5", fixedsize="true")
+                    # generate the branch node like "master"
+                    branch_name = GIT.branch_show_current(wt).stdout
+                    j.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
+                    # link the HEAD and the branch
+                    j.edge("HEAD", branch_name, constraint="false", minlen="3", arrowhead="normal")
+                    # generate the top commit node
+                    top_commit_hash = GIT.revparse(wt, branch_name).stdout
+                    j.node('j_' + top_commit_hash[0:7])
+                    # generate a edge from the branch node to the top commit node
+                    j.edge(branch_name + ':s', 'j_' + top_commit_hash[0:7],
+                           constraint="false", minlen="3", arrowhead="normal")
 
                 # gegerate nodes of all objects
                 completed_process = GIT.catfile_batchcheck_batchallobjects(wt)
