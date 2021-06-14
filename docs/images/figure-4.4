@@ -22,13 +22,18 @@ digraph index {
 	subgraph cluster_objects {
 		color=white label="ディレクトリ ./.git/objects"
 		anchor_objects [shape=point style=invis width=0]
+		HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+		master [label=master shape=doubleoctagon width=0.3]
+		HEAD -> master [arrowhead=normal constraint=false minlen=3]
+		j_d5d0a86
+		master:s -> j_d5d0a86 [arrowhead=normal constraint=false minlen=3]
 		j_3365c4a [label="tree 3365c4a\nsrc" shape=folder]
 		j_aadb69a [label="blob aadb69a\nREADME.md"]
 		j_b25c15b [label="blob b25c15b\n.gitignore"]
 		j_b371df9 [label="blob b371df9\nsrc/greeting.pl"]
 		j_c9b8214 [label="tree c9b8214\n" shape=folder]
-		j_dccdbc2 [label="commit dccdbc2\ninitial commit" shape=ellipse]
-		j_dccdbc2:e -> j_c9b8214:e [arrowhead=none constraint=false]
+		j_d5d0a86 [label="commit d5d0a86\ninitial commit" shape=ellipse]
+		j_d5d0a86:e -> j_c9b8214:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_b25c15b:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_aadb69a:e [arrowhead=none constraint=false]
 		j_c9b8214:e -> j_3365c4a:e [arrowhead=none constraint=false]

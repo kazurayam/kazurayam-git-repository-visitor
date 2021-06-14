@@ -46,7 +46,23 @@ class GitRepositoryVisualizer:
             # check if the current working directory is `git init`ed or not.
             completed_process = SH.shell_command(wt, ['ls', '.git'])
             if completed_process.returncode == 0:
-                # yes, we find the '.git' directory
+                # yes, we find the '.git' directory. we can go down into the ".git/objects" directory
+
+                # generate the "HEAD" node
+                j.node("HEAD", "HEAD", shape="doublecircle", width="0.5", fixedsize="true")
+                # generate the branch node like "master"
+                branch_name = GIT.branch_show_current(wt).stdout
+                j.node(branch_name, branch_name, shape="doubleoctagon", width="0.3")
+                # link the HEAD and the branch
+                j.edge("HEAD", branch_name, constraint="false", minlen="3", arrowhead="normal")
+                # generate the top commit node
+                top_commit_hash = GIT.revparse(wt, branch_name).stdout
+                j.node('j_' + top_commit_hash[0:7])
+                # generate a edge from the branch node to the top commit node
+                j.edge(branch_name + ':s', 'j_' + top_commit_hash[0:7],
+                       constraint="false", minlen="3", arrowhead="normal")
+
+                # gegerate nodes of all objects
                 completed_process = GIT.catfile_batchcheck_batchallobjects(wt)
                 for line in completed_process.stdout.splitlines():
                     object_hash = line.split()[0]
@@ -66,7 +82,6 @@ class GitRepositoryVisualizer:
                         node_label = object_type + ' ' + hash7 + '\\n' + \
                                      find_filepath_of_blob(wt, object_hash)
                         j.node(node_id, node_label)
-
                 # draw edges between the commit/tree/blob objects
                 cp = GIT.branch_show_current(wt)
                 branch_name = cp.stdout   # "master", "develop" etc
@@ -111,7 +126,7 @@ class GitRepositoryVisualizer:
                             parent_commits = get_parent_commits(wt, commit_hash)
                             for parent in parent_commits:
                                 cm_dq.append(parent)
-                                g.edge('j_' + commit_hash[0:7], 'j_' + parent[0:7],
+                                j.edge('j_' + commit_hash[0:7], 'j_' + parent[0:7],
                                        constraint="false", arrowhead="none")
                             if len(parent_commits) >= 2:
                                 in_detail = False

@@ -20,6 +20,11 @@ digraph index {
 	subgraph cluster_objects {
 		color=white label="ディレクトリ ./.git/objects"
 		anchor_objects [shape=point style=invis width=0]
+		HEAD [label=HEAD fixedsize=true shape=doublecircle width=0.5]
+		master [label=master shape=doubleoctagon width=0.3]
+		HEAD -> master [arrowhead=normal constraint=false minlen=3]
+		"j_fatal: "
+		master:s -> j_fatal:" " [arrowhead=normal constraint=false minlen=3]
 	}
 	graph [nodesep=0.1]
 	subgraph cluster_index {

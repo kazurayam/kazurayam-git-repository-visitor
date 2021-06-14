@@ -213,6 +213,7 @@ def test_4_index(basedir):
     GIT.commit(wt, 'initial commit', verbose=True)
     GRV().visualize_index(wt, sh_quotation, label='ステップ3 git commitしたらblobがツリーにつながった').render(
         os.path.join(gr, "figure-4.3"), format="png")
+
     # step4
     f = write_file(wt, "doc/TODO.txt", "Sleep well tonight.\n")
     sh_quotation = execute_tree_command(wt)
